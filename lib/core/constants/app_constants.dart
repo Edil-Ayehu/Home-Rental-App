@@ -3,8 +3,8 @@ class AppConstants {
   static const double defaultRadius = 12.0;
   static const double defaultSpacing = 8.0;
   
-  static const Duration animationDuration = Duration(milliseconds: 300);
-  static const Duration splashDuration = Duration(seconds: 2);
+  static const Duration animationDuration = Duration(milliseconds: 800);
+  static const Duration splashDuration = Duration(seconds: 3);
   
   // API endpoints can also go here
   // static const String baseUrl = 'your-api-base-url';
