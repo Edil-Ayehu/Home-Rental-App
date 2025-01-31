@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:home_rental_app/core/services/storage_service.dart';
 import '../../core/constants/app_constants.dart';
 import '../../core/constants/color_constants.dart';
 
@@ -51,12 +52,36 @@ class _SplashScreenState extends State<SplashScreen>
     _navigateToNextScreen();
   }
 
-  void _navigateToNextScreen() async {
+void _navigateToNextScreen() async {
+  try {
+    // Wait for animations to complete
+    await _controller.forward();
+    // Add delay after animation
     await Future.delayed(AppConstants.splashDuration);
+    
+    if (!mounted) return;
+
+    final isFirstTime = await StorageService.isFirstTimeUser();
+    if (!mounted) return;
+
+    if (isFirstTime) {
+      await StorageService.setFirstTimeUser(false);
+      if (!mounted) return;
+      if (context.mounted) {
+        context.pushReplacement('/onboarding');
+      }
+    } else {
+      if (context.mounted) {
+        context.pushReplacement('/auth');
+      }
+    }
+  } catch (e) {
+    debugPrint('Navigation error: $e');
     if (mounted) {
-      context.go('/onboarding');
+      context.pushReplacement('/onboarding');
     }
   }
+}
 
   @override
   void dispose() {
