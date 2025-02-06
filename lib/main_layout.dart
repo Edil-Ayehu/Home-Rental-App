@@ -23,28 +23,51 @@ class _MainLayoutState extends State<MainLayout> {
   int _currentIndex = 0;
 
   @override
+void didChangeDependencies() {
+  super.didChangeDependencies();
+  final router = GoRouter.of(context);
+  final String currentLocation = router.routeInformationProvider.value.location;
+  _updateIndexFromLocation(currentLocation);
+}
+
+  void _updateIndexFromLocation(String location) {
+    setState(() {
+      if (location.startsWith('/home/favorites')) {
+        _currentIndex = 1;
+      } else if (location.startsWith('/home/bookings')) {
+        _currentIndex = 2;
+      } else if (location.startsWith('/home/messages')) {
+        _currentIndex = 3;
+      } else if (location.startsWith('/home/profile')) {
+        _currentIndex = 4;
+      } else {
+        _currentIndex = 0;
+      }
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: widget.child,
       bottomNavigationBar: BottomNavigation(
         currentIndex: _currentIndex,
         onTap: (index) {
-          setState(() => _currentIndex = index);
           switch (index) {
             case 0:
-              context.pushReplacement('/home');
+              context.go('/home');
               break;
             case 1:
-              context.pushReplacement('/home/favorites');
+              context.go('/home/favorites');
               break;
             case 2:
-              context.pushReplacement('/home/bookings');
+              context.go('/home/bookings');
               break;
             case 3:
-              context.pushReplacement('/home/messages');
+              context.go('/home/messages');
               break;
             case 4:
-              context.pushReplacement('/home/profile');
+              context.go('/home/profile');
               break;
           }
         },
