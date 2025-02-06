@@ -42,7 +42,7 @@ class PropertyDetailsScreen extends StatelessWidget {
             ],
             flexibleSpace: FlexibleSpaceBar(
               background: Image.asset(
-                'assets/images/properties/property$propertyId.jpg',
+                'assets/images/house/villa.jpg',
                 fit: BoxFit.cover,
               ),
             ),

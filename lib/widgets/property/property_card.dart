@@ -66,7 +66,7 @@ class PropertyCard extends StatelessWidget {
                   Text(
                     property.title,
                     style: TextStyle(
-                      fontSize: 16.sp,
+                      fontSize: 14.sp,
                       fontWeight: FontWeight.w600,
                       color: AppColors.textPrimary,
                     ),
