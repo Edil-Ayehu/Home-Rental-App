@@ -6,6 +6,9 @@ import 'package:home_rental_app/core/services/storage_service.dart';
 import 'package:home_rental_app/views/auth/forgot_password_screen.dart';
 import 'package:home_rental_app/views/auth/login_screen.dart';
 import 'package:home_rental_app/views/auth/register_screen.dart';
+import 'package:home_rental_app/views/home/home_screen.dart';
+import 'package:home_rental_app/views/home/property_details_screen.dart';
+import 'package:home_rental_app/views/home/search_screen.dart';
 import 'package:home_rental_app/views/onboarding/onboarding_screen.dart';
 import 'core/constants/color_constants.dart';
 import 'views/splash/splash_screen.dart';
@@ -44,6 +47,23 @@ final GoRouter _router = GoRouter(
       path: '/forgot-password',
       name: 'forgot-password',
       builder: (context, state) => const ForgotPasswordScreen(),
+    ),
+GoRoute(
+  path: '/property/:id',
+  name: 'property_details',
+  builder: (context, state) => PropertyDetailsScreen(
+    propertyId: state.pathParameters['id']!, // Changed from params to pathParameters
+  ),
+),
+    GoRoute(
+      path: '/search',
+      name: 'search',
+      builder: (context, state) => const SearchScreen(),
+    ),
+        GoRoute(
+      path: '/home',
+      name: 'home',
+      builder: (context, state) => const HomeScreen(),
     ),
     // Add more routes here
   ],

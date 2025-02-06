@@ -87,6 +87,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
                         // Handle login
+                        context.go('/home'); 
                       }
                     },
                     style: ElevatedButton.styleFrom(
