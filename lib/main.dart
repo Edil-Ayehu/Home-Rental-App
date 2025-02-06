@@ -11,12 +11,14 @@ import 'package:home_rental_app/views/auth/register_screen.dart';
 import 'package:home_rental_app/views/booking/bookings_screen.dart';
 import 'package:home_rental_app/views/chat/messages_screen.dart';
 import 'package:home_rental_app/views/favorites/favorites_screen.dart';
+import 'package:home_rental_app/views/home/home_screen.dart';
 import 'package:home_rental_app/views/home/property_details_screen.dart';
 import 'package:home_rental_app/views/home/search_screen.dart';
 import 'package:home_rental_app/views/onboarding/onboarding_screen.dart';
 import 'package:home_rental_app/views/profile/profile_screen.dart';
 import 'core/constants/color_constants.dart';
 import 'views/splash/splash_screen.dart';
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -28,39 +30,44 @@ void main() async {
 final GoRouter _router = GoRouter(
   initialLocation: '/',
   routes: [
-    GoRoute(
-      path: '/home',
-      name: 'main',
-      builder: (context, state) => const MainLayout(),
+    ShellRoute(
+      builder: (context, state, child) => MainLayout(child: child),
       routes: [
         GoRoute(
-          path: 'property/:id',
-          name: 'property_details',
-          builder: (context, state) {
-            final property = state.extra as Property;
-            return PropertyDetailsScreen(
-              propertyId: state.pathParameters['id']!,
-              property: property,
-            );
-          },
+          path: '/home',
+          name: 'home',
+          builder: (context, state) => const HomeScreen(),
+          routes: [
+            GoRoute(
+              path: 'property/:id',
+              name: 'property_details',
+              builder: (context, state) {
+                final property = state.extra as Property;
+                return PropertyDetailsScreen(
+                  propertyId: state.pathParameters['id']!,
+                  property: property,
+                );
+              },
+            ),
+          ],
         ),
         GoRoute(
-          path: 'favorites',
+          path: '/home/favorites',
           name: 'favorites',
           builder: (context, state) => const FavoritesScreen(),
         ),
         GoRoute(
-          path: 'bookings',
+          path: '/home/bookings',
           name: 'bookings',
           builder: (context, state) => const BookingsScreen(),
         ),
         GoRoute(
-          path: 'messages',
+          path: '/home/messages',
           name: 'messages',
           builder: (context, state) => const MessagesScreen(),
         ),
         GoRoute(
-          path: 'profile',
+          path: '/home/profile',
           name: 'profile',
           builder: (context, state) => const ProfileScreen(),
         ),

@@ -8,7 +8,12 @@ import 'package:home_rental_app/views/profile/profile_screen.dart';
 import '../../widgets/common/bottom_navigation.dart';
 
 class MainLayout extends StatefulWidget {
-  const MainLayout({super.key});
+  final Widget child;
+  
+  const MainLayout({
+    super.key,
+    required this.child,
+  });
 
   @override
   State<MainLayout> createState() => _MainLayoutState();
@@ -17,37 +22,29 @@ class MainLayout extends StatefulWidget {
 class _MainLayoutState extends State<MainLayout> {
   int _currentIndex = 0;
 
-  final List<Widget> _screens = [
-    const HomeScreen(),
-    const FavoritesScreen(),
-    const BookingsScreen(),
-    const MessagesScreen(),
-    const ProfileScreen(),
-  ];
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _screens[_currentIndex],
+      body: widget.child,
       bottomNavigationBar: BottomNavigation(
         currentIndex: _currentIndex,
         onTap: (index) {
           setState(() => _currentIndex = index);
           switch (index) {
             case 0:
-              context.go('/home');
+              context.pushReplacement('/home');
               break;
             case 1:
-              context.go('/home/favorites');
+              context.pushReplacement('/home/favorites');
               break;
             case 2:
-              context.go('/home/bookings');
+              context.pushReplacement('/home/bookings');
               break;
             case 3:
-              context.go('/home/messages');
+              context.pushReplacement('/home/messages');
               break;
             case 4:
-              context.go('/home/profile');
+              context.pushReplacement('/home/profile');
               break;
           }
         },
