@@ -95,7 +95,7 @@ class _SearchScreenState extends State<SearchScreen> {
                   crossAxisCount: 2,
                   mainAxisSpacing: 16.h,
                   crossAxisSpacing: 16.w,
-                  childAspectRatio: 0.8,
+                  childAspectRatio: 0.7,
                 ),
                 itemCount: 10,
                 itemBuilder: (context, index) => PropertyCard(
@@ -105,7 +105,7 @@ class _SearchScreenState extends State<SearchScreen> {
                     title: 'Modern Apartment',
                     location: 'Downtown, SF',
                     price: 2500,
-                    imageUrl: 'assets/images/properties/property$index.jpg',
+                    imageUrl: 'assets/images/house/villa.jpg',
                     rating: 4.5,
                   ),
                 ),

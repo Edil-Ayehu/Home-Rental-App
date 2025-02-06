@@ -53,7 +53,8 @@ class PropertyDetailsScreen extends StatelessWidget {
               child: Container(
                 decoration: BoxDecoration(
                   color: AppColors.background,
-                  borderRadius: BorderRadius.vertical(top: Radius.circular(24.r)),
+                  borderRadius:
+                      BorderRadius.vertical(top: Radius.circular(24.r)),
                 ),
                 padding: EdgeInsets.all(24.w),
                 child: Column(
@@ -168,24 +169,29 @@ class PropertyDetailsScreen extends StatelessWidget {
   }
 
   Widget _buildFeatures() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: [
-        _buildFeatureItem(Icons.king_bed_outlined, '3 Bedrooms'),
-        _buildFeatureItem(Icons.bathtub_outlined, '2 Bathrooms'),
-        _buildFeatureItem(Icons.square_foot, '1,200 sqft'),
-      ],
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        children: [
+          _buildFeatureItem(Icons.king_bed_outlined, '3 Beds'),
+          SizedBox(width: 12.w),
+          _buildFeatureItem(Icons.bathtub_outlined, '2 Baths'),
+          SizedBox(width: 12.w),
+          _buildFeatureItem(Icons.square_foot, '1,200 ft²'),
+        ],
+      ),
     );
   }
 
   Widget _buildFeatureItem(IconData icon, String text) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+      padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 12.h),
       decoration: BoxDecoration(
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(12.r),
       ),
       child: Row(
+        mainAxisSize: MainAxisSize.min,
         children: [
           Icon(icon, color: AppColors.primary, size: 20.sp),
           SizedBox(width: 8.w),
