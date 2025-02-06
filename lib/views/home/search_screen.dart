@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:home_rental_app/models/property_model.dart';
 import '../../core/constants/color_constants.dart';
 import '../../widgets/property/property_card.dart';
 
@@ -97,40 +98,17 @@ class _SearchScreenState extends State<SearchScreen> {
                   crossAxisSpacing: 16.w,
                   childAspectRatio: 0.7,
                 ),
-                itemCount: 10,
-                itemBuilder: (context, index) => PropertyCard(
-                  onTap: () => context.push(
-                    '/property/$index',
-                    extra: Property(
-                      id: '$index',
-                      title: 'Modern Apartment',
-                      location: 'Downtown, SF',
-                      price: 2500,
-                      imageUrl: 'assets/images/house/villa.jpg',
-                      images: [
-                        'assets/images/house/villa.jpg',
-                        'assets/images/house/villa_1.jpg',
-                        'assets/images/house/villa.jpg',
-                        'assets/images/house/villa_1.jpg',
-                      ],
-                      rating: 4.5,
+                itemCount: Property.dummyProperties.length,
+                itemBuilder: (context, index) {
+                  final property = Property.dummyProperties[index];
+                  return PropertyCard(
+                    onTap: () => context.push(
+                      '/property/${property.id}',
+                      extra: property,
                     ),
-                  ),
-                  property: Property(
-                    id: '$index',
-                    title: 'Modern Apartment',
-                    location: 'Downtown, SF',
-                    price: 2500,
-                    imageUrl: 'assets/images/house/villa.jpg',
-                    images: [
-                      'assets/images/house/villa.jpg',
-                      'assets/images/house/villa_2.jpg',
-                      'assets/images/house/villa_3.jpg',
-                      'assets/images/house/villa_4.jpg',
-                    ],
-                    rating: 4.5,
-                  ),
-                ),
+                    property: property,
+                  );
+                },
               ),
             ),
           ],

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:home_rental_app/models/property_model.dart';
 import '../../core/constants/color_constants.dart';
 import '../../core/constants/text_constants.dart';
 import '../../widgets/property/property_card.dart';
@@ -155,30 +156,16 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 delegate: SliverChildBuilderDelegate(
                   (context, index) {
-                    final property = Property(
-                      id: '$index',
-                      title: 'Modern Apartment',
-                      location: 'Downtown, SF',
-                      price: 2500,
-                      imageUrl: 'assets/images/house/villa.jpg',
-                      images: [
-                        'assets/images/house/villa.jpg',
-                        'assets/images/house/villa_1.jpg',
-                        'assets/images/house/villa.jpg',
-                        'assets/images/house/villa_1.jpg',
-                      ],
-                      rating: 4.5,
-                    );
-                    
+                    final property = Property.dummyProperties[index];
                     return PropertyCard(
                       onTap: () => context.push(
-                        '/property/$index',
+                        '/property/${property.id}',
                         extra: property,
                       ),
                       property: property,
                     );
                   },
-                  childCount: 6,
+                  childCount: Property.dummyProperties.length,
                 ),
               ),
             ),

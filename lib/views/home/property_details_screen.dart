@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:home_rental_app/models/property_model.dart';
 import '../../core/constants/color_constants.dart';
-import '../../widgets/property/property_card.dart';
 
 class PropertyDetailsScreen extends StatefulWidget {
   final String propertyId;

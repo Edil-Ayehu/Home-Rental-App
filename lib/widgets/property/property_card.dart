@@ -1,26 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:home_rental_app/models/property_model.dart';
 import '../../core/constants/color_constants.dart';
-
-class Property {
-  final String id;
-  final String title;
-  final String location;
-  final double price;
-  final String imageUrl;
-  final List<String> images;
-  final double rating;
-
-  Property({
-    required this.id,
-    required this.title,
-    required this.location,
-    required this.price,
-    required this.imageUrl,
-    required this.images,
-    required this.rating,
-  });
-}
 
 class PropertyCard extends StatelessWidget {
   final Property property;

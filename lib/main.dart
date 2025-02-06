@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:go_router/go_router.dart';
 import 'package:home_rental_app/core/services/storage_service.dart';
+import 'package:home_rental_app/models/property_model.dart';
 import 'package:home_rental_app/views/auth/forgot_password_screen.dart';
 import 'package:home_rental_app/views/auth/login_screen.dart';
 import 'package:home_rental_app/views/auth/register_screen.dart';
