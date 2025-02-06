@@ -8,6 +8,7 @@ class Property {
   final String location;
   final double price;
   final String imageUrl;
+  final List<String> images;
   final double rating;
 
   Property({
@@ -16,6 +17,7 @@ class Property {
     required this.location,
     required this.price,
     required this.imageUrl,
+    required this.images,
     required this.rating,
   });
 }

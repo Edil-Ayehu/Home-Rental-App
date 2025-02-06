@@ -4,13 +4,22 @@ import 'package:go_router/go_router.dart';
 import '../../core/constants/color_constants.dart';
 import '../../widgets/property/property_card.dart';
 
-class PropertyDetailsScreen extends StatelessWidget {
+class PropertyDetailsScreen extends StatefulWidget {
   final String propertyId;
+  final Property property;
 
   const PropertyDetailsScreen({
     super.key,
     required this.propertyId,
+    required this.property,
   });
+
+  @override
+  State<PropertyDetailsScreen> createState() => _PropertyDetailsScreenState();
+}
+
+class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
+  int _selectedImageIndex = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +51,7 @@ class PropertyDetailsScreen extends StatelessWidget {
             ],
             flexibleSpace: FlexibleSpaceBar(
               background: Image.asset(
-                'assets/images/house/villa.jpg',
+                widget.property.images[_selectedImageIndex],
                 fit: BoxFit.cover,
               ),
             ),
@@ -60,6 +69,43 @@ class PropertyDetailsScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    SizedBox(
+                      height: 80.h,
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: widget.property.images.length,
+                        itemBuilder: (context, index) {
+                          final isSelected = _selectedImageIndex == index;
+                          return GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                _selectedImageIndex = index;
+                              });
+                            },
+                            child: Container(
+                              margin: EdgeInsets.only(right: 12.w),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(12.r),
+                                border: Border.all(
+                                  color: isSelected ? AppColors.primary : Colors.transparent,
+                                  width: 2,
+                                ),
+                              ),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(10.r),
+                                child: Image.asset(
+                                  widget.property.images[index],
+                                  width: 80.w,
+                                  height: 80.h,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                    SizedBox(height: 24.h),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -67,7 +113,7 @@ class PropertyDetailsScreen extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Modern Apartment',
+                              widget.property.title,
                               style: TextStyle(
                                 fontSize: 24.sp,
                                 fontWeight: FontWeight.bold,
@@ -84,7 +130,7 @@ class PropertyDetailsScreen extends StatelessWidget {
                                 ),
                                 SizedBox(width: 4.w),
                                 Text(
-                                  'Downtown, SF',
+                                  widget.property.location,
                                   style: TextStyle(
                                     fontSize: 14.sp,
                                     color: AppColors.textSecondary,
@@ -136,7 +182,7 @@ class PropertyDetailsScreen extends StatelessWidget {
                         height: 1.5,
                       ),
                     ),
-                    SizedBox(height: 32.h),
+                    SizedBox(height: 24.h),
                     SizedBox(
                       width: double.infinity,
                       height: 56.h,

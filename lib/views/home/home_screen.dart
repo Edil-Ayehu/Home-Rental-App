@@ -154,17 +154,30 @@ class _HomeScreenState extends State<HomeScreen> {
                   childAspectRatio: 0.7,
                 ),
                 delegate: SliverChildBuilderDelegate(
-                  (context, index) => PropertyCard(
-                    onTap: () => context.push('/property/$index'),
-                    property: Property(
+                  (context, index) {
+                    final property = Property(
                       id: '$index',
                       title: 'Modern Apartment',
                       location: 'Downtown, SF',
                       price: 2500,
                       imageUrl: 'assets/images/house/villa.jpg',
+                      images: [
+                        'assets/images/house/villa.jpg',
+                        'assets/images/house/villa_1.jpg',
+                        'assets/images/house/villa.jpg',
+                        'assets/images/house/villa_1.jpg',
+                      ],
                       rating: 4.5,
-                    ),
-                  ),
+                    );
+                    
+                    return PropertyCard(
+                      onTap: () => context.push(
+                        '/property/$index',
+                        extra: property,
+                      ),
+                      property: property,
+                    );
+                  },
                   childCount: 6,
                 ),
               ),

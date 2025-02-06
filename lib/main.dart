@@ -10,6 +10,7 @@ import 'package:home_rental_app/views/home/home_screen.dart';
 import 'package:home_rental_app/views/home/property_details_screen.dart';
 import 'package:home_rental_app/views/home/search_screen.dart';
 import 'package:home_rental_app/views/onboarding/onboarding_screen.dart';
+import 'package:home_rental_app/widgets/property/property_card.dart';
 import 'core/constants/color_constants.dart';
 import 'views/splash/splash_screen.dart';
 
@@ -51,9 +52,13 @@ final GoRouter _router = GoRouter(
 GoRoute(
   path: '/property/:id',
   name: 'property_details',
-  builder: (context, state) => PropertyDetailsScreen(
-    propertyId: state.pathParameters['id']!, // Changed from params to pathParameters
-  ),
+  builder: (context, state) {
+    final property = state.extra as Property;
+    return PropertyDetailsScreen(
+      propertyId: state.pathParameters['id']!,
+      property: property,
+    );
+  },
 ),
     GoRoute(
       path: '/search',
