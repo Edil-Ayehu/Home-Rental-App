@@ -2,115 +2,169 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import '../../core/constants/color_constants.dart';
-import '../../widgets/common/page_layout.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return PageLayout(
-      title: 'Profile',
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Container(
+    return Scaffold(
+      backgroundColor: AppColors.background,
+      body: CustomScrollView(
+        slivers: [
+          SliverAppBar(
+            expandedHeight: 200.h,
+            pinned: true,
+            backgroundColor: AppColors.primary,
+            flexibleSpace: FlexibleSpaceBar(
+              background: Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      AppColors.primary,
+                      AppColors.primary.withOpacity(0.8),
+                    ],
+                  ),
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    CircleAvatar(
+                      radius: 50.r,
+                      backgroundColor: AppColors.surface,
+                      backgroundImage: const AssetImage('assets/images/avatar.png'),
+                    ),
+                    SizedBox(height: 12.h),
+                    Text(
+                      'John Doe',
+                      style: TextStyle(
+                        fontSize: 24.sp,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.surface,
+                      ),
+                    ),
+                    Text(
+                      'john.doe@example.com',
+                      style: TextStyle(
+                        fontSize: 14.sp,
+                        color: AppColors.surface.withOpacity(0.8),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          SliverToBoxAdapter(
+            child: Padding(
               padding: EdgeInsets.all(16.w),
-              color: AppColors.surface,
               child: Column(
                 children: [
-                  CircleAvatar(
-                    radius: 50.r,
-                    backgroundImage: const AssetImage('assets/images/avatar.png'),
+                  _buildCard(
+                    title: 'Account',
+                    items: [
+                      _MenuItem(
+                        icon: Icons.person_outline,
+                        title: 'Personal Information',
+                        onTap: () {},
+                      ),
+                      _MenuItem(
+                        icon: Icons.payment_outlined,
+                        title: 'Payment Methods',
+                        onTap: () {},
+                      ),
+                      _MenuItem(
+                        icon: Icons.notifications_outlined,
+                        title: 'Notifications',
+                        onTap: () {},
+                      ),
+                    ],
                   ),
                   SizedBox(height: 16.h),
-                  Text(
-                    'John Doe',
-                    style: TextStyle(
-                      fontSize: 20.sp,
-                      fontWeight: FontWeight.w600,
-                      color: AppColors.textPrimary,
-                    ),
+                  _buildCard(
+                    title: 'Settings',
+                    items: [
+                      _MenuItem(
+                        icon: Icons.language_outlined,
+                        title: 'Language',
+                        subtitle: 'English',
+                        onTap: () {},
+                      ),
+                      _MenuItem(
+                        icon: Icons.dark_mode_outlined,
+                        title: 'Dark Mode',
+                        trailing: Switch(
+                          value: false,
+                          onChanged: (value) {},
+                          activeColor: AppColors.primary,
+                        ),
+                        onTap: () {},
+                      ),
+                    ],
                   ),
-                  SizedBox(height: 4.h),
-                  Text(
-                    'john.doe@example.com',
-                    style: TextStyle(
-                      fontSize: 14.sp,
-                      color: AppColors.textSecondary,
+                  SizedBox(height: 16.h),
+                  _buildCard(
+                    title: 'Support',
+                    items: [
+                      _MenuItem(
+                        icon: Icons.help_outline,
+                        title: 'Help Center',
+                        onTap: () {},
+                      ),
+                      _MenuItem(
+                        icon: Icons.policy_outlined,
+                        title: 'Privacy Policy',
+                        onTap: () {},
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 24.h),
+                  TextButton(
+                    onPressed: () => context.go('/auth'),
+                    style: TextButton.styleFrom(
+                      foregroundColor: AppColors.error,
+                      padding: EdgeInsets.symmetric(vertical: 12.h),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12.r),
+                        side: BorderSide(color: AppColors.error),
+                      ),
+                      minimumSize: Size(double.infinity, 48.h),
+                    ),
+                    child: Text(
+                      'Log Out',
+                      style: TextStyle(
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   ),
                 ],
               ),
             ),
-            SizedBox(height: 16.h),
-            _buildSection(
-              title: 'Account Settings',
-              items: [
-                _MenuItem(
-                  icon: Icons.person_outline,
-                  title: 'Personal Information',
-                  onTap: () {},
-                ),
-                _MenuItem(
-                  icon: Icons.payment,
-                  title: 'Payment Methods',
-                  onTap: () {},
-                ),
-                _MenuItem(
-                  icon: Icons.notifications_outlined,
-                  title: 'Notifications',
-                  onTap: () {},
-                ),
-              ],
-            ),
-            SizedBox(height: 16.h),
-            _buildSection(
-              title: 'App Settings',
-              items: [
-                _MenuItem(
-                  icon: Icons.language,
-                  title: 'Language',
-                  onTap: () {},
-                ),
-                _MenuItem(
-                  icon: Icons.dark_mode_outlined,
-                  title: 'Dark Mode',
-                  onTap: () {},
-                ),
-                _MenuItem(
-                  icon: Icons.help_outline,
-                  title: 'Help Center',
-                  onTap: () {},
-                ),
-              ],
-            ),
-            SizedBox(height: 16.h),
-            Padding(
-              padding: EdgeInsets.all(16.w),
-              child: TextButton(
-                onPressed: () => context.go('/auth'),
-                child: Text(
-                  'Log Out',
-                  style: TextStyle(
-                    color: AppColors.error,
-                    fontSize: 16.sp,
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
 
-  Widget _buildSection({
+  Widget _buildCard({
     required String title,
     required List<_MenuItem> items,
   }) {
     return Container(
-      color: AppColors.surface,
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(16.r),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 10,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -119,7 +173,7 @@ class ProfileScreen extends StatelessWidget {
             child: Text(
               title,
               style: TextStyle(
-                fontSize: 16.sp,
+                fontSize: 18.sp,
                 fontWeight: FontWeight.w600,
                 color: AppColors.textPrimary,
               ),
@@ -135,11 +189,15 @@ class ProfileScreen extends StatelessWidget {
 class _MenuItem extends StatelessWidget {
   final IconData icon;
   final String title;
+  final String? subtitle;
+  final Widget? trailing;
   final VoidCallback onTap;
 
   const _MenuItem({
     required this.icon,
     required this.title,
+    this.subtitle,
+    this.trailing,
     required this.onTap,
   });
 
@@ -147,33 +205,48 @@ class _MenuItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onTap,
-      child: Container(
+      child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
-        decoration: BoxDecoration(
-          border: Border(
-            bottom: BorderSide(
-              color: AppColors.border,
-              width: 1,
-            ),
-          ),
-        ),
         child: Row(
           children: [
-            Icon(icon, color: AppColors.textSecondary),
+            Container(
+              padding: EdgeInsets.all(8.w),
+              decoration: BoxDecoration(
+                color: AppColors.primary.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(8.r),
+              ),
+              child: Icon(icon, color: AppColors.primary),
+            ),
             SizedBox(width: 16.w),
             Expanded(
-              child: Text(
-                title,
-                style: TextStyle(
-                  fontSize: 14.sp,
-                  color: AppColors.textPrimary,
-                ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: TextStyle(
+                      fontSize: 16.sp,
+                      color: AppColors.textPrimary,
+                    ),
+                  ),
+                  if (subtitle != null) ...[
+                    SizedBox(height: 4.h),
+                    Text(
+                      subtitle!,
+                      style: TextStyle(
+                        fontSize: 14.sp,
+                        color: AppColors.textSecondary,
+                      ),
+                    ),
+                  ],
+                ],
               ),
             ),
-            Icon(
-              Icons.chevron_right,
-              color: AppColors.textSecondary,
-            ),
+            trailing ??
+                Icon(
+                  Icons.chevron_right,
+                  color: AppColors.textSecondary,
+                ),
           ],
         ),
       ),
