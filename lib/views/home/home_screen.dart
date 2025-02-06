@@ -159,7 +159,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     final property = Property.dummyProperties[index];
                     return PropertyCard(
                       onTap: () => context.push(
-                        '/property/${property.id}',
+                        '/home/property/${property.id}',
                         extra: property,
                       ),
                       property: property,

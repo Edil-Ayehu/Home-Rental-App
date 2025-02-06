@@ -3,15 +3,18 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:go_router/go_router.dart';
 import 'package:home_rental_app/core/services/storage_service.dart';
+import 'package:home_rental_app/main_layout.dart';
 import 'package:home_rental_app/models/property_model.dart';
 import 'package:home_rental_app/views/auth/forgot_password_screen.dart';
 import 'package:home_rental_app/views/auth/login_screen.dart';
 import 'package:home_rental_app/views/auth/register_screen.dart';
-import 'package:home_rental_app/views/home/home_screen.dart';
+import 'package:home_rental_app/views/booking/bookings_screen.dart';
+import 'package:home_rental_app/views/chat/messages_screen.dart';
+import 'package:home_rental_app/views/favorites/favorites_screen.dart';
 import 'package:home_rental_app/views/home/property_details_screen.dart';
 import 'package:home_rental_app/views/home/search_screen.dart';
 import 'package:home_rental_app/views/onboarding/onboarding_screen.dart';
-import 'package:home_rental_app/widgets/property/property_card.dart';
+import 'package:home_rental_app/views/profile/profile_screen.dart';
 import 'core/constants/color_constants.dart';
 import 'views/splash/splash_screen.dart';
 
@@ -25,6 +28,44 @@ void main() async {
 final GoRouter _router = GoRouter(
   initialLocation: '/',
   routes: [
+    GoRoute(
+      path: '/home',
+      name: 'main',
+      builder: (context, state) => const MainLayout(),
+      routes: [
+        GoRoute(
+          path: 'property/:id',
+          name: 'property_details',
+          builder: (context, state) {
+            final property = state.extra as Property;
+            return PropertyDetailsScreen(
+              propertyId: state.pathParameters['id']!,
+              property: property,
+            );
+          },
+        ),
+        GoRoute(
+          path: 'favorites',
+          name: 'favorites',
+          builder: (context, state) => const FavoritesScreen(),
+        ),
+        GoRoute(
+          path: 'bookings',
+          name: 'bookings',
+          builder: (context, state) => const BookingsScreen(),
+        ),
+        GoRoute(
+          path: 'messages',
+          name: 'messages',
+          builder: (context, state) => const MessagesScreen(),
+        ),
+        GoRoute(
+          path: 'profile',
+          name: 'profile',
+          builder: (context, state) => const ProfileScreen(),
+        ),
+      ],
+    ),
     GoRoute(
       path: '/',
       name: 'splash',
@@ -40,7 +81,7 @@ final GoRouter _router = GoRouter(
       name: 'auth',
       builder: (context, state) => const LoginScreen(),
     ),
-        GoRoute(
+    GoRoute(
       path: '/register',
       name: 'register',
       builder: (context, state) => const RegisterScreen(),
@@ -50,28 +91,11 @@ final GoRouter _router = GoRouter(
       name: 'forgot-password',
       builder: (context, state) => const ForgotPasswordScreen(),
     ),
-GoRoute(
-  path: '/property/:id',
-  name: 'property_details',
-  builder: (context, state) {
-    final property = state.extra as Property;
-    return PropertyDetailsScreen(
-      propertyId: state.pathParameters['id']!,
-      property: property,
-    );
-  },
-),
     GoRoute(
       path: '/search',
       name: 'search',
       builder: (context, state) => const SearchScreen(),
     ),
-        GoRoute(
-      path: '/home',
-      name: 'home',
-      builder: (context, state) => const HomeScreen(),
-    ),
-    // Add more routes here
   ],
 );
 
