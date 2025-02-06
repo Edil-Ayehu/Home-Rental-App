@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:home_rental_app/models/property_model.dart';
+import 'package:home_rental_app/widgets/common/banner_carousel.dart';
 import '../../core/constants/color_constants.dart';
 import '../../core/constants/text_constants.dart';
 import '../../widgets/property/property_card.dart';
@@ -115,6 +116,12 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ],
                 ),
+              ),
+            ),
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: EdgeInsets.only(top: 16.h),
+                child: const BannerCarousel(),
               ),
             ),
             SliverToBoxAdapter(
