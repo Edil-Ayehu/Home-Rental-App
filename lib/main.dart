@@ -4,11 +4,13 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:go_router/go_router.dart';
 import 'package:home_rental_app/core/services/storage_service.dart';
 import 'package:home_rental_app/main_layout.dart';
+import 'package:home_rental_app/models/message.dart';
 import 'package:home_rental_app/models/property_model.dart';
 import 'package:home_rental_app/views/auth/forgot_password_screen.dart';
 import 'package:home_rental_app/views/auth/login_screen.dart';
 import 'package:home_rental_app/views/auth/register_screen.dart';
 import 'package:home_rental_app/views/booking/bookings_screen.dart';
+import 'package:home_rental_app/views/chat/chat_detail_screen.dart';
 import 'package:home_rental_app/views/chat/messages_screen.dart';
 import 'package:home_rental_app/views/favorites/favorites_screen.dart';
 import 'package:home_rental_app/views/home/home_screen.dart';
@@ -59,10 +61,19 @@ final GoRouter _router = GoRouter(
           path: '/bookings',
           builder: (context, state) => const BookingsScreen(),
         ),
-        GoRoute(
-          path: '/messages',
-          builder: (context, state) => const MessagesScreen(),
-        ),
+GoRoute(
+  path: '/messages',
+  builder: (context, state) => const MessagesScreen(),
+  routes: [
+    GoRoute(
+      path: 'chat',
+      builder: (context, state) {
+        final message = state.extra as Message;
+        return ChatDetailScreen(message: message);
+      },
+    ),
+  ],
+),
         GoRoute(
           path: '/profile',
           builder: (context, state) => const ProfileScreen(),
