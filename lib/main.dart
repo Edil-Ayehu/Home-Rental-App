@@ -3,7 +3,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:go_router/go_router.dart';
 import 'package:home_rental_app/core/services/storage_service.dart';
+import 'package:home_rental_app/views/auth/forgot_password_screen.dart';
 import 'package:home_rental_app/views/auth/login_screen.dart';
+import 'package:home_rental_app/views/auth/register_screen.dart';
 import 'package:home_rental_app/views/onboarding/onboarding_screen.dart';
 import 'core/constants/color_constants.dart';
 import 'views/splash/splash_screen.dart';
@@ -32,6 +34,16 @@ final GoRouter _router = GoRouter(
       path: '/auth',
       name: 'auth',
       builder: (context, state) => const LoginScreen(),
+    ),
+        GoRoute(
+      path: '/register',
+      name: 'register',
+      builder: (context, state) => const RegisterScreen(),
+    ),
+    GoRoute(
+      path: '/forgot-password',
+      name: 'forgot-password',
+      builder: (context, state) => const ForgotPasswordScreen(),
     ),
     // Add more routes here
   ],
