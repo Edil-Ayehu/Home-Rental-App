@@ -1,18 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:home_rental_app/views/booking/bookings_screen.dart';
-import 'package:home_rental_app/views/chat/messages_screen.dart';
-import 'package:home_rental_app/views/favorites/favorites_screen.dart';
-import 'package:home_rental_app/views/home/home_screen.dart';
-import 'package:home_rental_app/views/profile/profile_screen.dart';
 import '../../widgets/common/bottom_navigation.dart';
 
 class MainLayout extends StatefulWidget {
   final Widget child;
+  final String location;
   
   const MainLayout({
     super.key,
     required this.child,
+    required this.location,
   });
 
   @override
@@ -20,30 +17,30 @@ class MainLayout extends StatefulWidget {
 }
 
 class _MainLayoutState extends State<MainLayout> {
-  int _currentIndex = 0;
+  late int _currentIndex;
 
   @override
-void didChangeDependencies() {
-  super.didChangeDependencies();
-  final router = GoRouter.of(context);
-  final String currentLocation = router.routeInformationProvider.value.location;
-  _updateIndexFromLocation(currentLocation);
-}
+  void initState() {
+    super.initState();
+    _currentIndex = _getIndexFromLocation(widget.location);
+  }
 
-  void _updateIndexFromLocation(String location) {
-    setState(() {
-      if (location.startsWith('/home/favorites')) {
-        _currentIndex = 1;
-      } else if (location.startsWith('/home/bookings')) {
-        _currentIndex = 2;
-      } else if (location.startsWith('/home/messages')) {
-        _currentIndex = 3;
-      } else if (location.startsWith('/home/profile')) {
-        _currentIndex = 4;
-      } else {
-        _currentIndex = 0;
-      }
-    });
+  @override
+  void didUpdateWidget(MainLayout oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.location != widget.location) {
+      setState(() {
+        _currentIndex = _getIndexFromLocation(widget.location);
+      });
+    }
+  }
+
+  int _getIndexFromLocation(String location) {
+    if (location.startsWith('/favorites')) return 1;
+    if (location.startsWith('/bookings')) return 2;
+    if (location.startsWith('/messages')) return 3;
+    if (location.startsWith('/profile')) return 4;
+    return 0; // Default to home
   }
 
   @override
@@ -58,16 +55,16 @@ void didChangeDependencies() {
               context.go('/home');
               break;
             case 1:
-              context.go('/home/favorites');
+              context.go('/favorites');
               break;
             case 2:
-              context.go('/home/bookings');
+              context.go('/bookings');
               break;
             case 3:
-              context.go('/home/messages');
+              context.go('/messages');
               break;
             case 4:
-              context.go('/home/profile');
+              context.go('/profile');
               break;
           }
         },

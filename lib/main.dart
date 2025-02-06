@@ -30,36 +30,41 @@ final GoRouter _router = GoRouter(
   initialLocation: '/',
   routes: [
     ShellRoute(
-      builder: (context, state, child) => MainLayout(child: child),
+      builder: (context, state, child) => MainLayout(
+        child: child,
+        location: state.uri.toString(),
+      ),
       routes: [
         GoRoute(
           path: '/home',
           builder: (context, state) => const HomeScreen(),
+          routes: [
+            GoRoute(
+              path: 'property/:id',
+              builder: (context, state) {
+                final property = state.extra as Property;
+                return PropertyDetailsScreen(
+                  propertyId: state.pathParameters['id']!,
+                  property: property,
+                );
+              },
+            ),
+          ],
         ),
         GoRoute(
-          path: '/home/property/:id',
-          builder: (context, state) {
-            final property = state.extra as Property;
-            return PropertyDetailsScreen(
-              propertyId: state.pathParameters['id']!,
-              property: property,
-            );
-          },
-        ),
-        GoRoute(
-          path: '/home/favorites',
+          path: '/favorites',
           builder: (context, state) => const FavoritesScreen(),
         ),
         GoRoute(
-          path: '/home/bookings',
+          path: '/bookings',
           builder: (context, state) => const BookingsScreen(),
         ),
         GoRoute(
-          path: '/home/messages',
+          path: '/messages',
           builder: (context, state) => const MessagesScreen(),
         ),
         GoRoute(
-          path: '/home/profile',
+          path: '/profile',
           builder: (context, state) => const ProfileScreen(),
         ),
       ],
