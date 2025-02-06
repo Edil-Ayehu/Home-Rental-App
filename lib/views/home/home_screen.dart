@@ -66,7 +66,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: IconButton(
                     icon: const Icon(Icons.notifications_outlined),
                     color: AppColors.textPrimary,
-                    onPressed: () {},
+                    onPressed: () => context.push('/notifications'),
                   ),
                 ),
                 SizedBox(width: 16.w),

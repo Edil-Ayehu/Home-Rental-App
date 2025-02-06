@@ -16,6 +16,7 @@ import 'package:home_rental_app/views/favorites/favorites_screen.dart';
 import 'package:home_rental_app/views/home/home_screen.dart';
 import 'package:home_rental_app/views/home/property_details_screen.dart';
 import 'package:home_rental_app/views/home/search_screen.dart';
+import 'package:home_rental_app/views/notifications/notifications_screen.dart';
 import 'package:home_rental_app/views/onboarding/onboarding_screen.dart';
 import 'package:home_rental_app/views/profile/profile_screen.dart';
 import 'core/constants/color_constants.dart';
@@ -61,6 +62,10 @@ final GoRouter _router = GoRouter(
           path: '/bookings',
           builder: (context, state) => const BookingsScreen(),
         ),
+        GoRoute(
+  path: '/notifications',
+  builder: (context, state) => const NotificationsScreen(),
+),
 GoRoute(
   path: '/messages',
   builder: (context, state) => const MessagesScreen(),

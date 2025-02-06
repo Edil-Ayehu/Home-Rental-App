@@ -21,116 +21,147 @@ class _LoginScreenState extends State<LoginScreen> {
       backgroundColor: AppColors.background,
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: EdgeInsets.symmetric(horizontal: 24.w),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(height: 60.h),
-                Text(
-                  AppTexts.welcomeBack,
-                  style: TextStyle(
-                    fontSize: 32.sp,
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.textPrimary,
-                  ),
-                ),
-                SizedBox(height: 12.h),
-                Text(
-                  'Sign in to continue',
-                  style: TextStyle(
-                    fontSize: 16.sp,
-                    color: AppColors.textSecondary,
-                  ),
-                ),
-                SizedBox(height: 40.h),
-                _buildTextField(
-                  label: 'Email',
-                  prefixIcon: Icons.email_outlined,
-                  keyboardType: TextInputType.emailAddress,
-                ),
-                SizedBox(height: 20.h),
-                _buildTextField(
-                  label: 'Password',
-                  prefixIcon: Icons.lock_outline,
-                  obscureText: _obscurePassword,
-                  suffixIcon: IconButton(
-                    icon: Icon(
-                      _obscurePassword ? Icons.visibility : Icons.visibility_off,
-                      color: AppColors.textSecondary,
-                    ),
-                    onPressed: () {
-                      setState(() => _obscurePassword = !_obscurePassword);
-                    },
-                  ),
-                ),
-                SizedBox(height: 16.h),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: TextButton(
-                    onPressed: () => context.push('/forgot-password'),
-                    child: Text(
-                      AppTexts.forgotPassword,
-                      style: TextStyle(
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 24.w),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(height: 60.h),
+                  Center(
+                    child: Container(
+                      width: 80.w,
+                      height: 80.w,
+                      decoration: BoxDecoration(
+                        color: AppColors.primary.withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(20.r),
+                      ),
+                      child: Icon(
+                        Icons.home_rounded,
+                        size: 40.w,
                         color: AppColors.primary,
-                        fontSize: 14.sp,
                       ),
                     ),
                   ),
-                ),
-                SizedBox(height: 24.h),
-                SizedBox(
-                  width: double.infinity,
-                  height: 56.h,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        // Handle login
-                        context.go('/home'); 
-                      }
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.primary,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16.r),
-                      ),
-                    ),
-                    child: Text(
-                      'Sign In',
-                      style: TextStyle(
-                        color: AppColors.surface,
-                        fontSize: 16.sp,
-                        fontWeight: FontWeight.w600,
-                      ),
+                  SizedBox(height: 40.h),
+                  Text(
+                    AppTexts.welcomeBack,
+                    style: TextStyle(
+                      fontSize: 32.sp,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.textPrimary,
+                      letterSpacing: -0.5,
                     ),
                   ),
-                ),
-                SizedBox(height: 20.h),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      'Don\'t have an account? ',
-                      style: TextStyle(
+                  SizedBox(height: 8.h),
+                  Text(
+                    'Sign in to continue',
+                    style: TextStyle(
+                      fontSize: 16.sp,
+                      color: AppColors.textSecondary,
+                      letterSpacing: 0.2,
+                    ),
+                  ),
+                  SizedBox(height: 40.h),
+                  _buildTextField(
+                    label: 'Email',
+                    prefixIcon: Icons.email_outlined,
+                    keyboardType: TextInputType.emailAddress,
+                  ),
+                  SizedBox(height: 16.h),
+                  _buildTextField(
+                    label: 'Password',
+                    prefixIcon: Icons.lock_outline,
+                    obscureText: _obscurePassword,
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                        _obscurePassword
+                            ? Icons.visibility
+                            : Icons.visibility_off,
                         color: AppColors.textSecondary,
-                        fontSize: 14.sp,
+                        size: 20.sp,
                       ),
+                      onPressed: () =>
+                          setState(() => _obscurePassword = !_obscurePassword),
                     ),
-                    TextButton(
-                      onPressed: () => context.push('/register'),
+                  ),
+                  SizedBox(height: 16.h),
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: TextButton(
+                      onPressed: () => context.push('/forgot-password'),
+                      style: TextButton.styleFrom(
+                        foregroundColor: AppColors.primary,
+                        padding: EdgeInsets.symmetric(horizontal: 8.w),
+                      ),
                       child: Text(
-                        'Sign Up',
+                        AppTexts.forgotPassword,
                         style: TextStyle(
-                          color: AppColors.primary,
                           fontSize: 14.sp,
-                          fontWeight: FontWeight.w600,
+                          fontWeight: FontWeight.w500,
                         ),
                       ),
                     ),
-                  ],
-                ),
-              ],
+                  ),
+                  SizedBox(height: 24.h),
+                  AnimatedContainer(
+                    duration: const Duration(milliseconds: 300),
+                    width: double.infinity,
+                    height: 56.h,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        if (_formKey.currentState!.validate()) {
+                          context.go('/home');
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.primary,
+                        elevation: 0,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16.r),
+                        ),
+                      ),
+                      child: Text(
+                        'Sign In',
+                        style: TextStyle(
+                          color: AppColors.surface,
+                          fontSize: 16.sp,
+                          fontWeight: FontWeight.w600,
+                          letterSpacing: 0.5,
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 24.h),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Don\'t have an account? ',
+                        style: TextStyle(
+                          color: AppColors.textSecondary,
+                          fontSize: 14.sp,
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: () => context.push('/register'),
+                        style: TextButton.styleFrom(
+                          foregroundColor: AppColors.primary,
+                          padding: EdgeInsets.symmetric(horizontal: 8.w),
+                        ),
+                        child: Text(
+                          'Sign Up',
+                          style: TextStyle(
+                            fontSize: 14.sp,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -148,9 +179,21 @@ class _LoginScreenState extends State<LoginScreen> {
     return TextFormField(
       keyboardType: keyboardType,
       obscureText: obscureText,
+      style: TextStyle(
+        fontSize: 16.sp,
+        color: AppColors.textPrimary,
+      ),
       decoration: InputDecoration(
         labelText: label,
-        prefixIcon: Icon(prefixIcon, color: AppColors.textSecondary),
+        labelStyle: TextStyle(
+          color: AppColors.textSecondary,
+          fontSize: 14.sp,
+        ),
+        prefixIcon: Icon(
+          prefixIcon,
+          color: AppColors.textSecondary,
+          size: 20.sp,
+        ),
         suffixIcon: suffixIcon,
         filled: true,
         fillColor: AppColors.surface,
@@ -164,8 +207,9 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16.r),
-          borderSide: BorderSide(color: AppColors.primary, width: 1),
+          borderSide: BorderSide(color: AppColors.primary, width: 1.5),
         ),
+        contentPadding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
       ),
       validator: (value) {
         if (value == null || value.isEmpty) {
