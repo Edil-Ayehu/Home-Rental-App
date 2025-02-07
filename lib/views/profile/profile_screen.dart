@@ -34,7 +34,7 @@ class ProfileScreen extends StatelessWidget {
                     CircleAvatar(
                       radius: 50.r,
                       backgroundColor: AppColors.surface,
-                      backgroundImage: const AssetImage('assets/images/avatar.png'),
+                      backgroundImage: const AssetImage('assets/images/user_avatar.jpg'),
                     ),
                     SizedBox(height: 12.h),
                     Text(
@@ -68,7 +68,7 @@ class ProfileScreen extends StatelessWidget {
                       _MenuItem(
                         icon: Icons.person_outline,
                         title: 'Personal Information',
-                        onTap: () {},
+                        onTap: () => context.push('/profile/personal-information'),
                       ),
                       _MenuItem(
                         icon: Icons.payment_outlined,

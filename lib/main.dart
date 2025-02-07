@@ -18,6 +18,7 @@ import 'package:home_rental_app/views/home/property_details_screen.dart';
 import 'package:home_rental_app/views/home/search_screen.dart';
 import 'package:home_rental_app/views/notifications/notifications_screen.dart';
 import 'package:home_rental_app/views/onboarding/onboarding_screen.dart';
+import 'package:home_rental_app/views/profile/personal_information_screen.dart';
 import 'package:home_rental_app/views/profile/profile_screen.dart';
 import 'core/constants/color_constants.dart';
 import 'views/splash/splash_screen.dart';
@@ -79,10 +80,16 @@ GoRoute(
     ),
   ],
 ),
-        GoRoute(
-          path: '/profile',
-          builder: (context, state) => const ProfileScreen(),
-        ),
+GoRoute(
+  path: '/profile',
+  builder: (context, state) => const ProfileScreen(),
+  routes: [
+    GoRoute(
+      path: 'personal-information',
+      builder: (context, state) => const PersonalInformationScreen(),
+    ),
+  ],
+),
       ],
     ),
     GoRoute(
