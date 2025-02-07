@@ -50,7 +50,7 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
               SizedBox(width: 16.w),
             ],
             flexibleSpace: FlexibleSpaceBar(
-              background: Image.asset(
+              background: Image.network(
                 widget.property.images[_selectedImageIndex],
                 fit: BoxFit.cover,
               ),
@@ -93,7 +93,7 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                               ),
                               child: ClipRRect(
                                 borderRadius: BorderRadius.circular(10.r),
-                                child: Image.asset(
+                                child: Image.network(
                                   widget.property.images[index],
                                   width: 80.w,
                                   height: 80.h,

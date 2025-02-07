@@ -128,7 +128,7 @@ class ProfileScreen extends StatelessWidget {
                       padding: EdgeInsets.symmetric(vertical: 12.h),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12.r),
-                        side: BorderSide(color: AppColors.error),
+                        side: const BorderSide(color: AppColors.error),
                       ),
                       minimumSize: Size(double.infinity, 48.h),
                     ),

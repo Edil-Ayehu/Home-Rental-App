@@ -115,7 +115,7 @@ class _BookingsList extends StatelessWidget {
               children: [
                 ClipRRect(
                   borderRadius: BorderRadius.vertical(top: Radius.circular(16.r)),
-                  child: Image.asset(
+                  child: Image.network(
                     booking.property.imageUrl,
                     height: 150.h,
                     width: double.infinity,
