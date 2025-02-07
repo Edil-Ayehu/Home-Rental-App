@@ -75,7 +75,7 @@ class ProfileScreen extends StatelessWidget {
                       _MenuItem(
                         icon: Icons.payment_outlined,
                         title: 'Payment Methods',
-                        onTap: () {},
+                        onTap: () => context.push('/profile/payment-methods'),
                       ),
                       _MenuItem(
                         icon: Icons.notifications_outlined,
