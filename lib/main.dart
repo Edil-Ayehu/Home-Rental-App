@@ -18,6 +18,7 @@ import 'package:home_rental_app/views/home/property_details_screen.dart';
 import 'package:home_rental_app/views/home/search_screen.dart';
 import 'package:home_rental_app/views/notifications/notifications_screen.dart';
 import 'package:home_rental_app/views/onboarding/onboarding_screen.dart';
+import 'package:home_rental_app/views/profile/add_payment_method_screen.dart';
 import 'package:home_rental_app/views/profile/payment_methods_screen.dart';
 import 'package:home_rental_app/views/profile/personal_information_screen.dart';
 import 'package:home_rental_app/views/profile/profile_screen.dart';
@@ -65,36 +66,40 @@ final GoRouter _router = GoRouter(
           builder: (context, state) => const BookingsScreen(),
         ),
         GoRoute(
-  path: '/notifications',
-  builder: (context, state) => const NotificationsScreen(),
-),
-GoRoute(
-  path: '/messages',
-  builder: (context, state) => const MessagesScreen(),
-  routes: [
-    GoRoute(
-      path: 'chat',
-      builder: (context, state) {
-        final message = state.extra as Message;
-        return ChatDetailScreen(message: message);
-      },
-    ),
-  ],
-),
-GoRoute(
-  path: '/profile',
-  builder: (context, state) => const ProfileScreen(),
-  routes: [
-    GoRoute(
-      path: 'personal-information',
-      builder: (context, state) => const PersonalInformationScreen(),
-    ),
+          path: '/notifications',
+          builder: (context, state) => const NotificationsScreen(),
+        ),
         GoRoute(
-      path: 'payment-methods',
-      builder: (context, state) => const PaymentMethodsScreen(),
-    ),
-  ],
-),
+          path: '/messages',
+          builder: (context, state) => const MessagesScreen(),
+          routes: [
+            GoRoute(
+              path: 'chat',
+              builder: (context, state) {
+                final message = state.extra as Message;
+                return ChatDetailScreen(message: message);
+              },
+            ),
+          ],
+        ),
+        GoRoute(
+          path: '/profile',
+          builder: (context, state) => const ProfileScreen(),
+          routes: [
+            GoRoute(
+              path: 'personal-information',
+              builder: (context, state) => const PersonalInformationScreen(),
+            ),
+            GoRoute(
+              path: 'payment-methods',
+              builder: (context, state) => const PaymentMethodsScreen(),
+            ),
+            GoRoute(
+              path: 'payment-methods/add',
+              builder: (context, state) => const AddPaymentMethodScreen(),
+            ),
+          ],
+        ),
       ],
     ),
     GoRoute(

@@ -77,9 +77,7 @@ class PaymentMethodsScreen extends StatelessWidget {
               ),
               SizedBox(height: 32.h),
               ElevatedButton(
-                onPressed: () {
-                  // Add new payment method logic
-                },
+                onPressed: () => context.push('/profile/payment-methods/add'),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.primary,
                   minimumSize: Size(double.infinity, 56.h),
