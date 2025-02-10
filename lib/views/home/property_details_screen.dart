@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:home_rental_app/models/property_model.dart';
+import 'package:home_rental_app/widgets/common/custom_button.dart';
 import '../../core/constants/color_constants.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:shimmer/shimmer.dart';
@@ -32,24 +33,34 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
           SliverAppBar(
             expandedHeight: 300.h,
             pinned: true,
-            leading: CircleAvatar(
-              backgroundColor: AppColors.surface.withOpacity(0.5),
-              child: IconButton(
-                icon: const Icon(Icons.arrow_back_ios),
-                color: AppColors.textPrimary,
-                onPressed: () => context.pop(),
+            leading: Padding(
+              padding: EdgeInsets.all(8.w),
+              child: CircleAvatar(
+                radius: 18.r,
+                backgroundColor: AppColors.surface.withOpacity(0.5),
+                child: IconButton(
+                  icon: const Icon(Icons.arrow_back_ios, size: 18),
+                  color: AppColors.textPrimary,
+                  onPressed: () => context.pop(),
+                  padding: EdgeInsets.zero,
+                ),
               ),
             ),
             actions: [
-              CircleAvatar(
-                backgroundColor: AppColors.surface.withOpacity(0.5),
-                child: IconButton(
-                  icon: const Icon(Icons.favorite_border),
-                  color: AppColors.textPrimary,
-                  onPressed: () {},
+              Padding(
+                padding: EdgeInsets.all(8.w),
+                child: CircleAvatar(
+                  radius: 18.r,
+                  backgroundColor: AppColors.surface.withOpacity(0.5),
+                  child: IconButton(
+                    icon: const Icon(Icons.favorite_border, size: 18),
+                    color: AppColors.textPrimary,
+                    onPressed: () {},
+                    padding: EdgeInsets.zero,
+                  ),
                 ),
               ),
-              SizedBox(width: 16.w),
+              SizedBox(width: 8.w),
             ],
             flexibleSpace: FlexibleSpaceBar(
               background: CachedNetworkImage(
@@ -58,7 +69,7 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                 placeholder: (context, url) => _buildShimmerEffect(),
                 errorWidget: (context, url, error) => Container(
                   color: Colors.grey[300],
-                  child: Icon(
+                  child: const Icon(
                     Icons.error_outline,
                     color: AppColors.textPrimary,
                   ),
@@ -115,7 +126,7 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                                   errorWidget: (context, url, error) =>
                                       Container(
                                     color: Colors.grey[300],
-                                    child: Icon(
+                                    child: const Icon(
                                       Icons.error_outline,
                                       color: AppColors.textPrimary,
                                     ),
@@ -205,26 +216,10 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                       ),
                     ),
                     SizedBox(height: 24.h),
-                    SizedBox(
-                      width: double.infinity,
+                    CustomButton(
+                      text: 'Book Now',
+                      onPressed: () => context.push('/home/book', extra: widget.property),
                       height: 56.h,
-                      child: ElevatedButton(
-  onPressed: () => context.push('/home/book', extra: widget.property),
-  style: ElevatedButton.styleFrom(
-    backgroundColor: AppColors.primary,
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(16.r),
-    ),
-  ),
-  child: Text(
-    'Book Now',
-    style: TextStyle(
-      color: AppColors.surface,
-      fontSize: 16.sp,
-      fontWeight: FontWeight.w600,
-    ),
-  ),
-),
                     ),
                   ],
                 ),

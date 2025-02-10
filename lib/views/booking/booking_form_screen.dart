@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:home_rental_app/widgets/common/custom_button.dart';
 import 'package:intl/intl.dart';
 import '../../core/constants/color_constants.dart';
 import '../../models/property_model.dart';
@@ -39,10 +40,11 @@ class _BookingFormScreenState extends State<BookingFormScreen> {
   Future<void> _selectDate(BuildContext context, bool isCheckIn) async {
     final DateTime? picked = await showDatePicker(
       context: context,
-      initialDate: isCheckIn 
+      initialDate: isCheckIn
           ? DateTime.now().add(const Duration(days: 1))
-          : (checkInDate?.add(const Duration(days: 1)) ?? DateTime.now().add(const Duration(days: 2))),
-      firstDate: isCheckIn 
+          : (checkInDate?.add(const Duration(days: 1)) ??
+              DateTime.now().add(const Duration(days: 2))),
+      firstDate: isCheckIn
           ? DateTime.now()
           : (checkInDate ?? DateTime.now()).add(const Duration(days: 1)),
       lastDate: DateTime.now().add(const Duration(days: 365)),
@@ -53,17 +55,20 @@ class _BookingFormScreenState extends State<BookingFormScreen> {
         if (isCheckIn) {
           checkInDate = picked;
           // Reset checkout date if it's before or equal to check-in
-          if (checkOutDate != null && 
-              (checkOutDate!.isBefore(picked) || checkOutDate!.isAtSameMoment(picked))) {
+          if (checkOutDate != null &&
+              (checkOutDate!.isBefore(picked) ||
+                  checkOutDate!.isAtSameMoment(picked))) {
             checkOutDate = null;
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
-                content: Text('Check-out date has been reset as it was before the new check-in date'),
+                content: Text(
+                    'Check-out date has been reset as it was before the new check-in date'),
               ),
             );
           }
         } else {
-          if (picked.isBefore(checkInDate!) || picked.isAtSameMoment(checkInDate!)) {
+          if (picked.isBefore(checkInDate!) ||
+              picked.isAtSameMoment(checkInDate!)) {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
                 content: Text('Check-out date must be after check-in date'),
@@ -80,7 +85,8 @@ class _BookingFormScreenState extends State<BookingFormScreen> {
   Future<void> _handleBooking() async {
     if (checkInDate == null || checkOutDate == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please select check-in and check-out dates')),
+        const SnackBar(
+            content: Text('Please select check-in and check-out dates')),
       );
       return;
     }
@@ -90,7 +96,7 @@ class _BookingFormScreenState extends State<BookingFormScreen> {
     try {
       // Simulate API call
       await Future.delayed(const Duration(seconds: 2));
-      
+
       final newBooking = Booking(
         id: DateTime.now().millisecondsSinceEpoch.toString(),
         property: widget.property,
@@ -112,7 +118,8 @@ class _BookingFormScreenState extends State<BookingFormScreen> {
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Failed to create booking. Please try again.')),
+          const SnackBar(
+              content: Text('Failed to create booking. Please try again.')),
         );
       }
     } finally {
@@ -143,28 +150,11 @@ class _BookingFormScreenState extends State<BookingFormScreen> {
             SizedBox(height: 24.h),
             _buildPriceSummary(),
             SizedBox(height: 32.h),
-            SizedBox(
-              width: double.infinity,
+            CustomButton(
+              text: 'Confirm Booking',
+              onPressed: _handleBooking,
+              isLoading: isLoading,
               height: 56.h,
-              child: ElevatedButton(
-                onPressed: isLoading ? null : _handleBooking,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.primary,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16.r),
-                  ),
-                ),
-                child: isLoading
-                    ? const CircularProgressIndicator(color: AppColors.surface)
-                    : Text(
-                        'Confirm Booking',
-                        style: TextStyle(
-                          color: AppColors.surface,
-                          fontSize: 16.sp,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-              ),
             ),
           ],
         ),
