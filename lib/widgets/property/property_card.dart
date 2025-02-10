@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:home_rental_app/models/property_model.dart';
 import '../../core/constants/color_constants.dart';
 
@@ -12,6 +14,21 @@ class PropertyCard extends StatelessWidget {
     required this.property,
     required this.onTap,
   });
+
+  Widget _buildShimmerEffect() {
+    return Shimmer.fromColors(
+      baseColor: Colors.grey[300]!,
+      highlightColor: Colors.grey[100]!,
+      child: Container(
+        height: 120.h,
+        width: double.infinity,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.vertical(top: Radius.circular(16.r)),
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,11 +51,22 @@ class PropertyCard extends StatelessWidget {
           children: [
             ClipRRect(
               borderRadius: BorderRadius.vertical(top: Radius.circular(16.r)),
-              child: Image.network(
-                property.imageUrl,
+              child: CachedNetworkImage(
+                imageUrl: property.imageUrl,
                 height: 120.h,
                 width: double.infinity,
                 fit: BoxFit.cover,
+                placeholder: (context, url) => _buildShimmerEffect(),
+                errorWidget: (context, url, error) => Container(
+                  height: 120.h,
+                  width: double.infinity,
+                  color: Colors.grey[300],
+                  child: Icon(
+                    Icons.error_outline,
+                    color: AppColors.error,
+                    size: 32.sp,
+                  ),
+                ),
               ),
             ),
             Padding(
