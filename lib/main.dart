@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:home_rental_app/core/router/router.dart';
 import 'package:home_rental_app/core/services/storage_service.dart';
-import 'core/constants/color_constants.dart';
+import 'package:home_rental_app/core/theme/app_theme.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -26,27 +25,7 @@ class MyApp extends StatelessWidget {
           title: 'Home Rental App',
           debugShowCheckedModeBanner: false,
           routerConfig: router,
-          theme: ThemeData(
-            useMaterial3: true,
-            colorScheme: ColorScheme.fromSeed(
-              seedColor: AppColors.primary,
-              background: AppColors.background,
-            ),
-            textTheme: GoogleFonts.poppinsTextTheme(
-              Theme.of(context).textTheme,
-            ),
-            appBarTheme: const AppBarTheme(
-              backgroundColor: AppColors.surface,
-              elevation: 0,
-              centerTitle: true,
-              iconTheme: IconThemeData(color: AppColors.secondary),
-              titleTextStyle: TextStyle(
-                color: AppColors.textPrimary,
-                fontSize: 18,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ),
+          theme: AppTheme.lightTheme(context),
         );
       },
     );
