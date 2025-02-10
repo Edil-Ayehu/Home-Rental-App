@@ -15,6 +15,7 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
   bool _obscurePassword = true;
+  bool _isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -112,11 +113,8 @@ class _LoginScreenState extends State<LoginScreen> {
                     height: 56.h,
                     child: CustomButton(
                       text: 'Sign In',
-                      onPressed: () {
-                        if (_formKey.currentState!.validate()) {
-                          context.go('/home');
-                        }
-                      },
+                      onPressed: _handleLogin,
+                      isLoading: _isLoading,
                     ),
                   ),
                   SizedBox(height: 24.h),
@@ -204,5 +202,19 @@ class _LoginScreenState extends State<LoginScreen> {
         return null;
       },
     );
+  }
+
+  Future<void> _handleLogin() async {
+    if (_formKey.currentState!.validate()) {
+      setState(() => _isLoading = true);
+      try {
+        await Future.delayed(const Duration(seconds: 2));
+        if (mounted) context.go('/home');
+      } catch (e) {
+        // Handle error
+      } finally {
+        if (mounted) setState(() => _isLoading = false);
+      }
+    }
   }
 }

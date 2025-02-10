@@ -16,6 +16,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final _formKey = GlobalKey<FormState>();
   bool _obscurePassword = true;
   bool _obscureConfirmPassword = true;
+  bool _isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -118,11 +119,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     height: 56.h,
                     child: CustomButton(
                       text: 'Create Account',
-                      onPressed: () {
-                        if (_formKey.currentState!.validate()) {
-                          // Handle registration
-                        }
-                      },
+                      onPressed: _handleRegister,
+                      isLoading: _isLoading,
                     ),
                   ),
                   SizedBox(height: 24.h),
@@ -210,5 +208,20 @@ class _RegisterScreenState extends State<RegisterScreen> {
         return null;
       },
     );
+  }
+
+  Future<void> _handleRegister() async {
+    if (_formKey.currentState!.validate()) {
+      setState(() => _isLoading = true);
+      try {
+        // Simulate API call
+        await Future.delayed(const Duration(seconds: 2));
+        if (mounted) context.go('/home');
+      } catch (e) {
+        // Handle error
+      } finally {
+        if (mounted) setState(() => _isLoading = false);
+      }
+    }
   }
 }

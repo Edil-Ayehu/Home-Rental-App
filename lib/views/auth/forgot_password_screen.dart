@@ -13,6 +13,22 @@ class ForgotPasswordScreen extends StatefulWidget {
 
 class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   final _formKey = GlobalKey<FormState>();
+  bool _isLoading = false;
+
+  Future<void> _handlePasswordReset() async {
+    if (_formKey.currentState!.validate()) {
+      setState(() => _isLoading = true);
+      try {
+        // Simulate API call
+        await Future.delayed(const Duration(seconds: 2));
+        if (mounted) context.pop();
+      } catch (e) {
+        // Handle error
+      } finally {
+        if (mounted) setState(() => _isLoading = false);
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -91,11 +107,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                   height: 56.h,
                   child: CustomButton(
                     text: 'Reset Password',
-                    onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        // Handle password reset
-                      }
-                    },
+                    onPressed: _handlePasswordReset,
+                    isLoading: _isLoading,
                   ),
                 ),
                 SizedBox(height: 24.h),
