@@ -144,6 +144,12 @@ class HelpCenterScreen extends StatelessWidget {
         ],
       ),
       child: ExpansionTile(
+        shape: const RoundedRectangleBorder(
+          side: BorderSide.none,
+        ),
+        collapsedShape: const RoundedRectangleBorder(
+          side: BorderSide.none,
+        ),
         title: Text(
           question,
           style: TextStyle(
