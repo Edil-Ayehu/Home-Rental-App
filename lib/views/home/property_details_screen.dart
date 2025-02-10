@@ -3,6 +3,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:home_rental_app/models/property_model.dart';
 import '../../core/constants/color_constants.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:shimmer/shimmer.dart';
 
 class PropertyDetailsScreen extends StatefulWidget {
   final String propertyId;
@@ -50,9 +52,17 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
               SizedBox(width: 16.w),
             ],
             flexibleSpace: FlexibleSpaceBar(
-              background: Image.network(
-                widget.property.images[_selectedImageIndex],
+              background: CachedNetworkImage(
+                imageUrl: widget.property.images[_selectedImageIndex],
                 fit: BoxFit.cover,
+                placeholder: (context, url) => _buildShimmerEffect(),
+                errorWidget: (context, url, error) => Container(
+                  color: Colors.grey[300],
+                  child: Icon(
+                    Icons.error_outline,
+                    color: AppColors.textPrimary,
+                  ),
+                ),
               ),
             ),
           ),
@@ -87,17 +97,29 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(12.r),
                                 border: Border.all(
-                                  color: isSelected ? AppColors.primary : Colors.transparent,
+                                  color: isSelected
+                                      ? AppColors.primary
+                                      : Colors.transparent,
                                   width: 2,
                                 ),
                               ),
                               child: ClipRRect(
                                 borderRadius: BorderRadius.circular(10.r),
-                                child: Image.network(
-                                  widget.property.images[index],
+                                child: CachedNetworkImage(
+                                  imageUrl: widget.property.images[index],
                                   width: 80.w,
                                   height: 80.h,
                                   fit: BoxFit.cover,
+                                  placeholder: (context, url) =>
+                                      _buildShimmerEffect(),
+                                  errorWidget: (context, url, error) =>
+                                      Container(
+                                    color: Colors.grey[300],
+                                    child: Icon(
+                                      Icons.error_outline,
+                                      color: AppColors.textPrimary,
+                                    ),
+                                  ),
                                 ),
                               ),
                             ),
@@ -249,6 +271,18 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildShimmerEffect({double? width, double? height}) {
+    return Shimmer.fromColors(
+      baseColor: Colors.grey[300]!,
+      highlightColor: Colors.grey[100]!,
+      child: Container(
+        width: width ?? double.infinity,
+        height: height ?? double.infinity,
+        color: Colors.white,
       ),
     );
   }
