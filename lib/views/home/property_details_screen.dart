@@ -209,22 +209,22 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                       width: double.infinity,
                       height: 56.h,
                       child: ElevatedButton(
-                        onPressed: () {},
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColors.primary,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16.r),
-                          ),
-                        ),
-                        child: Text(
-                          'Book Now',
-                          style: TextStyle(
-                            color: AppColors.surface,
-                            fontSize: 16.sp,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ),
+  onPressed: () => context.push('/home/book', extra: widget.property),
+  style: ElevatedButton.styleFrom(
+    backgroundColor: AppColors.primary,
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(16.r),
+    ),
+  ),
+  child: Text(
+    'Book Now',
+    style: TextStyle(
+      color: AppColors.surface,
+      fontSize: 16.sp,
+      fontWeight: FontWeight.w600,
+    ),
+  ),
+),
                     ),
                   ],
                 ),

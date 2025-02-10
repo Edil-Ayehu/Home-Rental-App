@@ -6,6 +6,7 @@ import 'package:home_rental_app/models/property_model.dart';
 import 'package:home_rental_app/views/auth/forgot_password_screen.dart';
 import 'package:home_rental_app/views/auth/login_screen.dart';
 import 'package:home_rental_app/views/auth/register_screen.dart';
+import 'package:home_rental_app/views/booking/booking_form_screen.dart';
 import 'package:home_rental_app/views/booking/bookings_screen.dart';
 import 'package:home_rental_app/views/chat/chat_detail_screen.dart';
 import 'package:home_rental_app/views/chat/messages_screen.dart';
@@ -44,6 +45,13 @@ final router = GoRouter(
                   propertyId: state.pathParameters['id']!,
                   property: property,
                 );
+              },
+            ),
+            GoRoute(
+              path: 'book',
+              builder: (context, state) {
+                final property = state.extra as Property;
+                return BookingFormScreen(property: property);
               },
             ),
           ],
