@@ -113,20 +113,18 @@ class ProfileScreen extends StatelessWidget {
                       _MenuItem(
                         icon: Icons.help_outline,
                         title: 'Help Center',
-                        onTap: () =>
-                            context.push('/profile/help-center'),
+                        onTap: () => context.push('/profile/help-center'),
                       ),
                       _MenuItem(
                         icon: Icons.policy_outlined,
                         title: 'Privacy Policy',
-                        onTap: () =>
-                            context.push('/profile/privacy-policy'),
+                        onTap: () => context.push('/profile/privacy-policy'),
                       ),
                     ],
                   ),
                   SizedBox(height: 24.h),
                   TextButton(
-                    onPressed: () => context.go('/auth'),
+                    onPressed: () => _showLogoutDialog(context),
                     style: TextButton.styleFrom(
                       foregroundColor: AppColors.error,
                       padding: EdgeInsets.symmetric(vertical: 12.h),
@@ -150,6 +148,68 @@ class ProfileScreen extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+
+  void _showLogoutDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: AppColors.surface,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16.r),
+          ),
+          title: Text(
+            'Logout',
+            style: TextStyle(
+              color: AppColors.textPrimary,
+              fontSize: 18.sp,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          content: Text(
+            'Are you sure you want to logout?',
+            style: TextStyle(
+              color: AppColors.textSecondary,
+              fontSize: 14.sp,
+            ),
+          ),
+          actions: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                TextButton(
+                  onPressed: () => context.pop(),
+                  child: Text(
+                    'Cancel',
+                    style: TextStyle(
+                      color: AppColors.textSecondary,
+                      fontSize: 14.sp,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ),
+                SizedBox(width: 8.w),
+                TextButton(
+                  onPressed: () {
+                    context.pop();
+                    context.go('/auth');
+                  },
+                  child: Text(
+                    'Logout',
+                    style: TextStyle(
+                      color: AppColors.error,
+                      fontSize: 14.sp,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        );
+      },
     );
   }
 
