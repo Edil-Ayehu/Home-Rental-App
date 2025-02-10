@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:home_rental_app/widgets/common/custom_button.dart';
+import 'package:home_rental_app/widgets/common/custom_textfield.dart';
 import '../../core/constants/color_constants.dart';
 import '../../core/constants/text_constants.dart';
 
@@ -66,28 +67,25 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
                   SizedBox(height: 40.h),
-                  _buildTextField(
+                  const CustomTextField(
                     label: 'Email',
                     prefixIcon: Icons.email_outlined,
                     keyboardType: TextInputType.emailAddress,
                   ),
                   SizedBox(height: 16.h),
-                  _buildTextField(
-                    label: 'Password',
-                    prefixIcon: Icons.lock_outline,
-                    obscureText: _obscurePassword,
-                    suffixIcon: IconButton(
-                      icon: Icon(
-                        _obscurePassword
-                            ? Icons.visibility
-                            : Icons.visibility_off,
-                        color: AppColors.textSecondary,
-                        size: 20.sp,
-                      ),
-                      onPressed: () =>
-                          setState(() => _obscurePassword = !_obscurePassword),
-                    ),
-                  ),
+CustomTextField(
+  label: 'Password',
+  prefixIcon: Icons.lock_outline,
+  obscureText: _obscurePassword,
+  suffixIcon: IconButton(
+    icon: Icon(
+      _obscurePassword ? Icons.visibility : Icons.visibility_off,
+      color: AppColors.textSecondary,
+      size: 20.sp,
+    ),
+    onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
+  ),
+),
                   SizedBox(height: 16.h),
                   Align(
                     alignment: Alignment.centerRight,

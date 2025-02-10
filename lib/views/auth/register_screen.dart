@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:home_rental_app/widgets/common/custom_button.dart';
+import 'package:home_rental_app/widgets/common/custom_textfield.dart';
 import '../../core/constants/color_constants.dart';
 import '../../core/constants/text_constants.dart';
 
@@ -68,18 +69,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ),
                   ),
                   SizedBox(height: 32.h),
-                  _buildTextField(
+                  CustomTextField(
                     label: 'Full Name',
                     prefixIcon: Icons.person_outline,
                   ),
                   SizedBox(height: 16.h),
-                  _buildTextField(
+                  CustomTextField(
                     label: 'Email',
                     prefixIcon: Icons.email_outlined,
                     keyboardType: TextInputType.emailAddress,
                   ),
                   SizedBox(height: 16.h),
-                  _buildTextField(
+                  CustomTextField(
                     label: 'Password',
                     prefixIcon: Icons.lock_outline,
                     obscureText: _obscurePassword,
@@ -96,7 +97,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ),
                   ),
                   SizedBox(height: 16.h),
-                  _buildTextField(
+                  CustomTextField(
                     label: 'Confirm Password',
                     prefixIcon: Icons.lock_outline,
                     obscureText: _obscureConfirmPassword,
