@@ -113,12 +113,14 @@ class ProfileScreen extends StatelessWidget {
                       _MenuItem(
                         icon: Icons.help_outline,
                         title: 'Help Center',
-                        onTap: () {},
+                        onTap: () =>
+                            context.push('/profile/help-center'),
                       ),
                       _MenuItem(
                         icon: Icons.policy_outlined,
                         title: 'Privacy Policy',
-                        onTap: () {},
+                        onTap: () =>
+                            context.push('/profile/privacy-policy'),
                       ),
                     ],
                   ),

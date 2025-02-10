@@ -19,8 +19,10 @@ import 'package:home_rental_app/views/home/search_screen.dart';
 import 'package:home_rental_app/views/notifications/notifications_screen.dart';
 import 'package:home_rental_app/views/onboarding/onboarding_screen.dart';
 import 'package:home_rental_app/views/profile/add_payment_method_screen.dart';
+import 'package:home_rental_app/views/profile/help_center_screen.dart';
 import 'package:home_rental_app/views/profile/payment_methods_screen.dart';
 import 'package:home_rental_app/views/profile/personal_information_screen.dart';
+import 'package:home_rental_app/views/profile/privacy_policy_screen.dart';
 import 'package:home_rental_app/views/profile/profile_screen.dart';
 import 'core/constants/color_constants.dart';
 import 'views/splash/splash_screen.dart';
@@ -98,6 +100,14 @@ final GoRouter _router = GoRouter(
               path: 'payment-methods/add',
               builder: (context, state) => const AddPaymentMethodScreen(),
             ),
+            GoRoute(
+  path: 'help-center',
+  builder: (context, state) => const HelpCenterScreen(),
+),
+GoRoute(
+  path: 'privacy-policy',
+  builder: (context, state) => const PrivacyPolicyScreen(),
+),
           ],
         ),
       ],
