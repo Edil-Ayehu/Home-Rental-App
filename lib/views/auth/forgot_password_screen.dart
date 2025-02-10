@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:home_rental_app/widgets/common/custom_button.dart';
 import '../../core/constants/color_constants.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
@@ -88,28 +89,13 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                   duration: const Duration(milliseconds: 300),
                   width: double.infinity,
                   height: 56.h,
-                  child: ElevatedButton(
+                  child: CustomButton(
+                    text: 'Reset Password',
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
                         // Handle password reset
                       }
                     },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.primary,
-                      elevation: 0,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16.r),
-                      ),
-                    ),
-                    child: Text(
-                      'Reset Password',
-                      style: TextStyle(
-                        color: AppColors.surface,
-                        fontSize: 16.sp,
-                        fontWeight: FontWeight.w600,
-                        letterSpacing: 0.5,
-                      ),
-                    ),
                   ),
                 ),
                 SizedBox(height: 24.h),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:home_rental_app/widgets/common/custom_button.dart';
 import '../../core/constants/color_constants.dart';
 import '../../core/constants/text_constants.dart';
 
@@ -109,28 +110,13 @@ class _LoginScreenState extends State<LoginScreen> {
                     duration: const Duration(milliseconds: 300),
                     width: double.infinity,
                     height: 56.h,
-                    child: ElevatedButton(
+                    child: CustomButton(
+                      text: 'Sign In',
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
                           context.go('/home');
                         }
                       },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.primary,
-                        elevation: 0,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(16.r),
-                        ),
-                      ),
-                      child: Text(
-                        'Sign In',
-                        style: TextStyle(
-                          color: AppColors.surface,
-                          fontSize: 16.sp,
-                          fontWeight: FontWeight.w600,
-                          letterSpacing: 0.5,
-                        ),
-                      ),
                     ),
                   ),
                   SizedBox(height: 24.h),
