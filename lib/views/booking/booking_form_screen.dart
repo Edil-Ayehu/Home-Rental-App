@@ -6,6 +6,12 @@ import '../../core/constants/color_constants.dart';
 import '../../models/property_model.dart';
 import '../../models/booking_model.dart';
 
+extension DateTimeComparison on DateTime {
+  bool isAtSameMoment(DateTime other) {
+    return year == other.year && month == other.month && day == other.day;
+  }
+}
+
 class BookingFormScreen extends StatefulWidget {
   final Property property;
 
@@ -33,8 +39,12 @@ class _BookingFormScreenState extends State<BookingFormScreen> {
   Future<void> _selectDate(BuildContext context, bool isCheckIn) async {
     final DateTime? picked = await showDatePicker(
       context: context,
-      initialDate: DateTime.now().add(const Duration(days: 1)),
-      firstDate: DateTime.now(),
+      initialDate: isCheckIn 
+          ? DateTime.now().add(const Duration(days: 1))
+          : (checkInDate?.add(const Duration(days: 1)) ?? DateTime.now().add(const Duration(days: 2))),
+      firstDate: isCheckIn 
+          ? DateTime.now()
+          : (checkInDate ?? DateTime.now()).add(const Duration(days: 1)),
       lastDate: DateTime.now().add(const Duration(days: 365)),
     );
 
@@ -42,11 +52,25 @@ class _BookingFormScreenState extends State<BookingFormScreen> {
       setState(() {
         if (isCheckIn) {
           checkInDate = picked;
-          // Reset checkout date if it's before check-in
-          if (checkOutDate != null && checkOutDate!.isBefore(picked)) {
+          // Reset checkout date if it's before or equal to check-in
+          if (checkOutDate != null && 
+              (checkOutDate!.isBefore(picked) || checkOutDate!.isAtSameMoment(picked))) {
             checkOutDate = null;
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Check-out date has been reset as it was before the new check-in date'),
+              ),
+            );
           }
         } else {
+          if (picked.isBefore(checkInDate!) || picked.isAtSameMoment(checkInDate!)) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Check-out date must be after check-in date'),
+              ),
+            );
+            return;
+          }
           checkOutDate = picked;
         }
       });
