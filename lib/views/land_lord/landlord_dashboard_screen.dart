@@ -93,7 +93,7 @@ class LandlordDashboardScreen extends StatelessWidget {
               ),
             ),
             TextButton(
-              onPressed: () => context.push('/landlord/add-property'),
+              onPressed: () => context.push('/landlord/properties/add'),
               child: Text(
                 'Add New',
                 style: TextStyle(
