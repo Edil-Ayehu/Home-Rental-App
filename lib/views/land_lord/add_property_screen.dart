@@ -1,13 +1,15 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:home_rental_app/models/property_model.dart';
+import 'package:home_rental_app/controllers/property_controller.dart';
+import 'package:image_picker/image_picker.dart';
+import '../../models/property_model.dart';
 import '../../core/constants/color_constants.dart';
 import '../../widgets/common/custom_button.dart';
 import '../../widgets/common/custom_textfield.dart';
 
 class AddPropertyScreen extends StatefulWidget {
   final Property? property; // For editing existing property
-
 
   const AddPropertyScreen({super.key, this.property});
 
@@ -17,7 +19,11 @@ class AddPropertyScreen extends StatefulWidget {
 
 class _AddPropertyScreenState extends State<AddPropertyScreen> {
   final _formKey = GlobalKey<FormState>();
+  final _propertyController = PropertyController();
   bool _isLoading = false;
+  File? _thumbnailImage;
+  List<File> _additionalImages = [];
+  final _picker = ImagePicker();
   
   // Add controllers
   final _titleController = TextEditingController();
@@ -43,6 +49,34 @@ class _AddPropertyScreenState extends State<AddPropertyScreen> {
     super.dispose();
   }
 
+Future<void> _pickImage(bool isThumbnail) async {
+  try {
+    final XFile? image = await _picker.pickImage(
+      source: ImageSource.gallery,
+      imageQuality: 80,
+      maxWidth: 1000,
+      maxHeight: 1000,
+    );
+    
+    if (image != null) {
+      setState(() {
+        if (isThumbnail) {
+          _thumbnailImage = File(image.path);
+        } else {
+          _additionalImages.add(File(image.path));
+        }
+      });
+    }
+  } catch (e) {
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error picking image: $e')),
+      );
+    }
+    debugPrint('Error picking image: $e');
+  }
+}
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -54,8 +88,27 @@ class _AddPropertyScreenState extends State<AddPropertyScreen> {
         child: Form(
           key: _formKey,
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _buildImageUpload(),
+              Text(
+                'Thumbnail Image',
+                style: TextStyle(
+                  fontSize: 16.sp,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              SizedBox(height: 8.h),
+              _buildThumbnailUpload(),
+              SizedBox(height: 24.h),
+              Text(
+                'Additional Images',
+                style: TextStyle(
+                  fontSize: 16.sp,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              SizedBox(height: 8.h),
+              _buildAdditionalImagesUpload(),
               SizedBox(height: 24.h),
               CustomTextField(
                 label: 'Title',
@@ -109,34 +162,156 @@ class _AddPropertyScreenState extends State<AddPropertyScreen> {
     );
   }
 
-  Widget _buildImageUpload() {
-    return Container(
-      height: 200.h,
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.circular(16.r),
-        border: Border.all(color: AppColors.primary.withOpacity(0.2)),
-      ),
-      child: Center(
-        child: Icon(
-          Icons.add_photo_alternate_outlined,
-          size: 48.sp,
-          color: AppColors.primary,
+  Widget _buildThumbnailUpload() {
+    return GestureDetector(
+      onTap: () => _pickImage(true),
+      child: Container(
+        height: 200.h,
+        decoration: BoxDecoration(
+          color: AppColors.surface,
+          borderRadius: BorderRadius.circular(16.r),
+          border: Border.all(color: AppColors.primary.withOpacity(0.2)),
         ),
+        child: _thumbnailImage != null
+            ? ClipRRect(
+                borderRadius: BorderRadius.circular(16.r),
+                child: Image.file(
+                  _thumbnailImage!,
+                  fit: BoxFit.cover,
+                ),
+              )
+            : Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.add_photo_alternate_outlined,
+                      size: 48.sp,
+                      color: AppColors.primary,
+                    ),
+                    SizedBox(height: 8.h),
+                    Text(
+                      'Add Thumbnail Image',
+                      style: TextStyle(
+                        color: AppColors.primary,
+                        fontSize: 14.sp,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
       ),
     );
   }
 
-  Future<void> _handleSubmit() async {
-    if (_formKey.currentState!.validate()) {
-      setState(() => _isLoading = true);
-      try {
-        // Add property logic
-        await Future.delayed(const Duration(seconds: 2));
-        if (mounted) Navigator.pop(context);
-      } finally {
-        if (mounted) setState(() => _isLoading = false);
+  Widget _buildAdditionalImagesUpload() {
+    return Container(
+      height: 120.h,
+      child: ListView(
+        scrollDirection: Axis.horizontal,
+        children: [
+          ...List.generate(
+            _additionalImages.length,
+            (index) => Padding(
+              padding: EdgeInsets.only(right: 8.w),
+              child: Stack(
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(8.r),
+                    child: Image.file(
+                      _additionalImages[index],
+                      width: 120.w,
+                      height: 120.h,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                  Positioned(
+                    top: 4,
+                    right: 4,
+                    child: IconButton(
+                      icon: Icon(Icons.close, color: Colors.white),
+                      onPressed: () {
+                        setState(() {
+                          _additionalImages.removeAt(index);
+                        });
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          GestureDetector(
+            onTap: () => _pickImage(false),
+            child: Container(
+              width: 120.w,
+              height: 120.h,
+              decoration: BoxDecoration(
+                color: AppColors.surface,
+                borderRadius: BorderRadius.circular(8.r),
+                border: Border.all(color: AppColors.primary.withOpacity(0.2)),
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.add_photo_alternate_outlined,
+                    size: 32.sp,
+                    color: AppColors.primary,
+                  ),
+                  SizedBox(height: 4.h),
+                  Text(
+                    'Add Image',
+                    style: TextStyle(
+                      color: AppColors.primary,
+                      fontSize: 12.sp,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+Future<void> _handleSubmit() async {
+  if (_formKey.currentState!.validate()) {
+    if (_thumbnailImage == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please add a thumbnail image')),
+      );
+      return;
+    }
+    if (_additionalImages.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please add at least one additional image')),
+      );
+      return;
+    }
+
+    setState(() => _isLoading = true);
+    try {
+      await _propertyController.addProperty(
+        title: _titleController.text,
+        location: _locationController.text,
+        price: double.parse(_priceController.text),
+        thumbnailImage: _thumbnailImage!,
+        additionalImages: _additionalImages,
+        ownerId: '2', // Using Jane Smith's ID for demo
+      );
+      if (mounted) Navigator.pop(context);
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error: ${e.toString()}')),
+        );
       }
+    } finally {
+      if (mounted) setState(() => _isLoading = false);
     }
   }
+}
+
 }
