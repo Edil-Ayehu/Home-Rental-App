@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:home_rental_app/controllers/auth_controller.dart';
 import 'package:home_rental_app/widgets/common/custom_button.dart';
 import 'package:home_rental_app/widgets/common/custom_textfield.dart';
 import '../../core/constants/color_constants.dart';
+
 
 class ForgotPasswordScreen extends StatefulWidget {
   const ForgotPasswordScreen({super.key});
@@ -14,17 +16,39 @@ class ForgotPasswordScreen extends StatefulWidget {
 
 class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   final _formKey = GlobalKey<FormState>();
+  final _emailController = TextEditingController();
+  final _authController = AuthController();
   bool _isLoading = false;
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    super.dispose();
+  }
 
   Future<void> _handlePasswordReset() async {
     if (_formKey.currentState!.validate()) {
       setState(() => _isLoading = true);
       try {
-        // Simulate API call
-        await Future.delayed(const Duration(seconds: 2));
-        if (mounted) context.pop();
+        await _authController.resetPassword(_emailController.text);
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Password reset link sent to your email'),
+              backgroundColor: Colors.green,
+            ),
+          );
+          context.pop();
+        }
       } catch (e) {
-        // Handle error
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(e.toString()),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
       } finally {
         if (mounted) setState(() => _isLoading = false);
       }
@@ -96,20 +120,22 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                   ),
                 ),
                 SizedBox(height: 40.h),
-CustomTextField(
-  label: 'Email',
-  prefixIcon: Icons.email_outlined,
-  keyboardType: TextInputType.emailAddress,
-  validator: (value) {
-    if (value == null || value.isEmpty) {
-      return 'Please enter your email';
-    }
-    if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
-      return 'Please enter a valid email';
-    }
-    return null;
-  },
-),
+                CustomTextField(
+                  label: 'Email',
+                  controller: _emailController,
+                  prefixIcon: Icons.email_outlined,
+                  keyboardType: TextInputType.emailAddress,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter your email';
+                    }
+                    if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
+                        .hasMatch(value)) {
+                      return 'Please enter a valid email';
+                    }
+                    return null;
+                  },
+                ),
                 SizedBox(height: 40.h),
                 AnimatedContainer(
                   duration: const Duration(milliseconds: 300),
@@ -153,57 +179,6 @@ CustomTextField(
           ),
         ),
       ),
-    );
-  }
-
-  Widget _buildTextField({
-    required String label,
-    required IconData prefixIcon,
-    TextInputType? keyboardType,
-  }) {
-    return TextFormField(
-      keyboardType: keyboardType,
-      style: TextStyle(
-        fontSize: 16.sp,
-        color: AppColors.textPrimary,
-      ),
-      decoration: InputDecoration(
-        labelText: label,
-        labelStyle: TextStyle(
-          color: AppColors.textSecondary,
-          fontSize: 14.sp,
-        ),
-        prefixIcon: Icon(
-          prefixIcon,
-          color: AppColors.textSecondary,
-          size: 20.sp,
-        ),
-        filled: true,
-        fillColor: AppColors.surface,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(16.r),
-          borderSide: BorderSide.none,
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(16.r),
-          borderSide: BorderSide.none,
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(16.r),
-          borderSide: BorderSide(color: AppColors.primary, width: 1.5),
-        ),
-        contentPadding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
-      ),
-      validator: (value) {
-        if (value == null || value.isEmpty) {
-          return 'Please enter your email';
-        }
-        // Add email validation
-        if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
-          return 'Please enter a valid email';
-        }
-        return null;
-      },
     );
   }
 }

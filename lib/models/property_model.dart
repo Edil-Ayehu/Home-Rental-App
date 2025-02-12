@@ -1,83 +1,105 @@
 class Property {
   final String id;
+  final String ownerId;
   final String title;
   final String location;
   final double price;
   final String imageUrl;
   final List<String> images;
   final double rating;
+  final bool isAvailable;
+  final List<String> amenities;
+  final String description;
 
   Property({
     required this.id,
+    required this.ownerId,
     required this.title,
     required this.location,
     required this.price,
     required this.imageUrl,
     required this.images,
     required this.rating,
+    this.isAvailable = true,
+    this.amenities = const [],
+    this.description = '',
   });
 
-  static List<Property> dummyProperties = [
+   static List<Property> dummyProperties = [
     Property(
       id: '1',
-      title: 'Modern Villa',
-      location: 'Beverly Hills, LA',
+      ownerId: '2', // Jane Smith's ID
+      title: 'Modern Apartment in Downtown',
+      location: 'Downtown, City',
       price: 3500,
-      imageUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS9fAiRxHn4fyYp0nmFPzbTLolhJxdTdzzKRg&s',
+      imageUrl: 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267',
       images: [
-        'https://media.inmobalia.com/imgV1/B98Le8~d7M9k3DegpEFZhS0lI_F8U4XZVz~HWxt~mGgYekxX9nCAxh0ZjtE2u9zqepXEUrVLqfm8KeIGW6Gtyd4X89rFFK10v85qQta1cATBDN7qKfuT2L9OiVHyxuhoOOKveWlHqxMf6akqXhMqmr2txEX9e2aFKA--.jpg',
-        'https://rqitects.com/wp-content/uploads/2024/08/01_VILLA_ISMAIL_FRONT1.webp',
-
+        'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267',
+        'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688',
       ],
       rating: 4.8,
+      amenities: ['WiFi', 'Pool', 'Gym', 'Parking'],
+      description: 'A beautiful modern apartment in the heart of the city.',
     ),
     Property(
       id: '2',
-      title: 'Luxury Apartment',
-      location: 'Manhattan, NY',
+      ownerId: '2', // Jane Smith's ID
+      title: 'Cozy Beach House',
+      location: 'Beachfront, Coast City',
       price: 2800,
-      imageUrl: 'https://st3.idealista.pt/news/arquivos/styles/fullwidth_xl/public/2023-02/media/image/200912673.jpg?VersionId=TvjBUnAHtEUTlc7w7tv6NcN6HdrYFszJ&itok=oM5UI4FD',
+      imageUrl: 'https://images.unsplash.com/photo-1499793983690-e29da59ef1c2',
       images: [
-        'https://www.elitehavens.com/magazine/wp-content/uploads/2021/05/Header.jpg',
-        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQHtxvrgJOj6I7cnXdEJ_hhjsCKM3fLkjPJ7w&s',
+        'https://images.unsplash.com/photo-1499793983690-e29da59ef1c2',
+        'https://images.unsplash.com/photo-1499793983690-e29da59ef1c3',
       ],
       rating: 4.5,
+      amenities: ['Beach Access', 'WiFi', 'Kitchen', 'BBQ'],
+      description: 'Beautiful beachfront property with amazing ocean views.',
     ),
-     Property(
+    Property(
       id: '3',
-      title: 'Elegant Villa',
-      location: 'New York, NY',
-      price: 4500,
-      imageUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRAAo-63fa3jWHwtYEgxOkUzHA7sdDvGQ3r8Q&s',
+      ownerId: '3',
+      title: 'Mountain Cabin',
+      location: 'Mountain View, Highland',
+      price: 2200,
+      imageUrl: 'https://images.unsplash.com/photo-1449158743715-0a90ebb6d2d8',
       images: [
-        'https://www.akvillas.com/-/media/akvillas/properties/spain/andalucia/villa-ana-may24/1-villa-ana-pool.jpg?la=en&hash=7EFACF66A7B6FB37BC4A0E6DD3423A36AC990D7B',
-        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSGpC6N4fsMlT85a8QBOc1aqztKs0CL3ugRKg&s',
+        'https://images.unsplash.com/photo-1449158743715-0a90ebb6d2d8',
+        'https://images.unsplash.com/photo-1449158743715-0a90ebb6d2d7',
       ],
-      rating: 4.5,
+      rating: 4.7,
+      amenities: ['Fireplace', 'Hiking Trails', 'Scenic View'],
+      description: 'Cozy cabin with breathtaking mountain views.',
     ),
-     Property(
+    Property(
       id: '4',
-      title: 'Modern Villa',
-      location: 'Beverlly',
-      price: 2800,
-      imageUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRL0_OwmghtJfDVhpP9oF7JKzHX9KVessOz3Q&s',
+      ownerId: '3',
+      title: 'Luxury Villa',
+      location: 'Suburban Area, Green City',
+      price: 5000,
+      imageUrl: 'https://images.unsplash.com/photo-1580587771525-78b9dba3b914',
       images: [
-        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRA5BitmD80mP0MPiR9_iEhJHFxLQEjO7Dn6w&s',
-        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQkYTk5RmDxnvNSlkVRWUaXIcNFDhD653zFKg&s',
+        'https://images.unsplash.com/photo-1580587771525-78b9dba3b914',
+        'https://images.unsplash.com/photo-1580587771525-78b9dba3b915',
       ],
-      rating: 4.5,
+      rating: 4.9,
+      amenities: ['Pool', 'Garden', 'Tennis Court', 'Security'],
+      description: 'Luxurious villa with private pool and tennis court.',
     ),
-     Property(
+    Property(
       id: '5',
-      title: 'Luxury Apartment',
-      location: 'Manhattan, NY',
-      price: 2800,
-      imageUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRuGp_pgxNeU3XIQyVz2we63XNOG1iTDMPPMw&s',
+      ownerId: '2',
+      title: 'Studio Apartment',
+      location: 'University District, Education City',
+      price: 1600,
+      imageUrl: 'https://images.unsplash.com/photo-1522156373667-4c7234bbd804',
       images: [
-        'https://www.elitehavens.com/magazine/wp-content/uploads/2021/05/Header.jpg',
-        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQHtxvrgJOj6I7cnXdEJ_hhjsCKM3fLkjPJ7w&s',
+        'https://images.unsplash.com/photo-1522156373667-4c7234bbd804',
+        'https://images.unsplash.com/photo-1522156373667-4c7234bbd805',
       ],
-      rating: 4.5,
+      rating: 4.3,
+      amenities: ['WiFi', 'Study Area', 'Laundry'],
+      description: 'Perfect for students, close to university campus.',
     ),
   ];
 }

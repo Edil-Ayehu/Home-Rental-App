@@ -5,6 +5,8 @@ import 'package:home_rental_app/widgets/common/custom_button.dart';
 import 'package:home_rental_app/widgets/common/custom_textfield.dart';
 import '../../core/constants/color_constants.dart';
 import '../../core/constants/text_constants.dart';
+import '../../controllers/auth_controller.dart';
+import '../../models/user_model.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -18,6 +20,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
   bool _obscurePassword = true;
   bool _obscureConfirmPassword = true;
   bool _isLoading = false;
+  final _fullNameController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  final _confirmPasswordController = TextEditingController();
+  final _authController = AuthController();
+  UserRole _selectedRole = UserRole.tenant;
 
   @override
   Widget build(BuildContext context) {
@@ -69,15 +77,42 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ),
                   ),
                   SizedBox(height: 32.h),
+                  DropdownButtonFormField<UserRole>(
+                    value: _selectedRole,
+                    decoration: InputDecoration(
+                      labelText: 'I want to',
+                      prefixIcon: Icon(Icons.person_outline),
+                      filled: true,
+                      fillColor: AppColors.surface,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(16.r),
+                        borderSide: BorderSide.none,
+                      ),
+                    ),
+                    items: UserRole.values.map((role) {
+                      return DropdownMenuItem(
+                        value: role,
+                        child: Text(role == UserRole.tenant ? 'Rent a property' : 'List my property'),
+                      );
+                    }).toList(),
+                    onChanged: (value) {
+                      if (value != null) {
+                        setState(() => _selectedRole = value);
+                      }
+                    },
+                  ),
+                  SizedBox(height: 16.h),
                   CustomTextField(
                     label: 'Full Name',
                     prefixIcon: Icons.person_outline,
+                    controller: _fullNameController,
                   ),
                   SizedBox(height: 16.h),
                   CustomTextField(
                     label: 'Email',
                     prefixIcon: Icons.email_outlined,
                     keyboardType: TextInputType.emailAddress,
+                    controller: _emailController,
                   ),
                   SizedBox(height: 16.h),
                   CustomTextField(
@@ -95,6 +130,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       onPressed: () =>
                           setState(() => _obscurePassword = !_obscurePassword),
                     ),
+                    controller: _passwordController,
                   ),
                   SizedBox(height: 16.h),
                   CustomTextField(
@@ -112,6 +148,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       onPressed: () => setState(() =>
                           _obscureConfirmPassword = !_obscureConfirmPassword),
                     ),
+                    controller: _confirmPasswordController,
                   ),
                   SizedBox(height: 32.h),
                   AnimatedContainer(
@@ -160,66 +197,33 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 
-  Widget _buildTextField({
-    required String label,
-    required IconData prefixIcon,
-    TextInputType? keyboardType,
-    bool obscureText = false,
-    Widget? suffixIcon,
-  }) {
-    return TextFormField(
-      keyboardType: keyboardType,
-      obscureText: obscureText,
-      style: TextStyle(
-        fontSize: 16.sp,
-        color: AppColors.textPrimary,
-      ),
-      decoration: InputDecoration(
-        labelText: label,
-        labelStyle: TextStyle(
-          color: AppColors.textSecondary,
-          fontSize: 14.sp,
-        ),
-        prefixIcon: Icon(
-          prefixIcon,
-          color: AppColors.textSecondary,
-          size: 20.sp,
-        ),
-        suffixIcon: suffixIcon,
-        filled: true,
-        fillColor: AppColors.surface,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(16.r),
-          borderSide: BorderSide.none,
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(16.r),
-          borderSide: BorderSide.none,
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(16.r),
-          borderSide: BorderSide(color: AppColors.primary, width: 1.5),
-        ),
-        contentPadding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
-      ),
-      validator: (value) {
-        if (value == null || value.isEmpty) {
-          return 'Please enter $label';
-        }
-        return null;
-      },
-    );
-  }
-
   Future<void> _handleRegister() async {
     if (_formKey.currentState!.validate()) {
+      if (_passwordController.text != _confirmPasswordController.text) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Passwords do not match')),
+        );
+        return;
+      }
+
       setState(() => _isLoading = true);
       try {
-        // Simulate API call
-        await Future.delayed(const Duration(seconds: 2));
-        if (mounted) context.go('/home');
+        final user = await _authController.register(
+          fullName: _fullNameController.text,
+          email: _emailController.text,
+          password: _passwordController.text,
+          role: _selectedRole,
+        );
+        
+        if (mounted && user != null) {
+          context.go(_selectedRole == UserRole.landlord ? '/landlord/dashboard' : '/home');
+        }
       } catch (e) {
-        // Handle error
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(e.toString())),
+          );
+        }
       } finally {
         if (mounted) setState(() => _isLoading = false);
       }

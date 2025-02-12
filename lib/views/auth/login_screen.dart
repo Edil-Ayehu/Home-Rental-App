@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:home_rental_app/controllers/auth_controller.dart';
+import 'package:home_rental_app/models/user_model.dart';
 import 'package:home_rental_app/widgets/common/custom_button.dart';
 import 'package:home_rental_app/widgets/common/custom_textfield.dart';
 import '../../core/constants/color_constants.dart';
 import '../../core/constants/text_constants.dart';
+
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -14,6 +17,9 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  final _emailController = TextEditingController();
+final _passwordController = TextEditingController();
+final _authController = AuthController();
   final _formKey = GlobalKey<FormState>();
   bool _obscurePassword = true;
   bool _isLoading = false;
@@ -73,19 +79,22 @@ class _LoginScreenState extends State<LoginScreen> {
                     keyboardType: TextInputType.emailAddress,
                   ),
                   SizedBox(height: 16.h),
-CustomTextField(
-  label: 'Password',
-  prefixIcon: Icons.lock_outline,
-  obscureText: _obscurePassword,
-  suffixIcon: IconButton(
-    icon: Icon(
-      _obscurePassword ? Icons.visibility : Icons.visibility_off,
-      color: AppColors.textSecondary,
-      size: 20.sp,
-    ),
-    onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
-  ),
-),
+                  CustomTextField(
+                    label: 'Password',
+                    prefixIcon: Icons.lock_outline,
+                    obscureText: _obscurePassword,
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                        _obscurePassword
+                            ? Icons.visibility
+                            : Icons.visibility_off,
+                        color: AppColors.textSecondary,
+                        size: 20.sp,
+                      ),
+                      onPressed: () =>
+                          setState(() => _obscurePassword = !_obscurePassword),
+                    ),
+                  ),
                   SizedBox(height: 16.h),
                   Align(
                     alignment: Alignment.centerRight,
@@ -151,68 +160,27 @@ CustomTextField(
     );
   }
 
-  Widget _buildTextField({
-    required String label,
-    required IconData prefixIcon,
-    TextInputType? keyboardType,
-    bool obscureText = false,
-    Widget? suffixIcon,
-  }) {
-    return TextFormField(
-      keyboardType: keyboardType,
-      obscureText: obscureText,
-      style: TextStyle(
-        fontSize: 16.sp,
-        color: AppColors.textPrimary,
-      ),
-      decoration: InputDecoration(
-        labelText: label,
-        labelStyle: TextStyle(
-          color: AppColors.textSecondary,
-          fontSize: 14.sp,
-        ),
-        prefixIcon: Icon(
-          prefixIcon,
-          color: AppColors.textSecondary,
-          size: 20.sp,
-        ),
-        suffixIcon: suffixIcon,
-        filled: true,
-        fillColor: AppColors.surface,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(16.r),
-          borderSide: BorderSide.none,
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(16.r),
-          borderSide: BorderSide.none,
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(16.r),
-          borderSide: BorderSide(color: AppColors.primary, width: 1.5),
-        ),
-        contentPadding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
-      ),
-      validator: (value) {
-        if (value == null || value.isEmpty) {
-          return 'Please enter $label';
-        }
-        return null;
-      },
-    );
-  }
-
-  Future<void> _handleLogin() async {
-    if (_formKey.currentState!.validate()) {
-      setState(() => _isLoading = true);
-      try {
-        await Future.delayed(const Duration(seconds: 2));
-        if (mounted) context.go('/home');
-      } catch (e) {
-        // Handle error
-      } finally {
-        if (mounted) setState(() => _isLoading = false);
+Future<void> _handleLogin() async {
+  if (_formKey.currentState!.validate()) {
+    setState(() => _isLoading = true);
+    try {
+      final user = await _authController.login(
+        _emailController.text,
+        _passwordController.text,
+      );
+      
+      if (mounted && user != null) {
+        context.go(user.role == UserRole.landlord ? '/landlord/dashboard' : '/home');
       }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(e.toString())),
+        );
+      }
+    } finally {
+      if (mounted) setState(() => _isLoading = false);
     }
   }
+}
 }

@@ -14,6 +14,8 @@ import 'package:home_rental_app/views/favorites/favorites_screen.dart';
 import 'package:home_rental_app/views/home/home_screen.dart';
 import 'package:home_rental_app/views/home/property_details_screen.dart';
 import 'package:home_rental_app/views/home/search_screen.dart';
+import 'package:home_rental_app/views/land_lord/add_property_screen.dart';
+import 'package:home_rental_app/views/land_lord/landlord_dashboard_screen.dart';
 import 'package:home_rental_app/views/notifications/notifications_screen.dart';
 import 'package:home_rental_app/views/onboarding/onboarding_screen.dart';
 import 'package:home_rental_app/views/profile/add_payment_method_screen.dart';
@@ -106,6 +108,21 @@ final router = GoRouter(
               builder: (context, state) => const PrivacyPolicyScreen(),
             ),
           ],
+        ),
+                GoRoute(
+          path: '/landlord/dashboard',
+          builder: (context, state) => const LandlordDashboardScreen(),
+        ),
+        GoRoute(
+          path: '/landlord/add-property',
+          builder: (context, state) => const AddPropertyScreen(),
+        ),
+        GoRoute(
+          path: '/landlord/edit-property/:id',
+          builder: (context, state) {
+            final property = state.extra as Property;
+            return AddPropertyScreen(property: property);
+          },
         ),
       ],
     ),
