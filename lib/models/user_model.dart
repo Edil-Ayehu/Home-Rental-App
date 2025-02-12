@@ -26,13 +26,13 @@ class User {
     User(
       id: '1',
       fullName: 'John Doe',
-      email: 'john.doe@example.com',
+      email: 'e@gmail.com',
       role: UserRole.tenant,
     ),
     User(
       id: '2',
       fullName: 'Jane Smith',
-      email: 'jane.smith@example.com',
+      email: 'h@gmail.com',
       role: UserRole.landlord,
       ownedPropertyIds: ['1', '2'],
     ),

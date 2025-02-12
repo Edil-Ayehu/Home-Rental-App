@@ -17,6 +17,10 @@ class LandlordDashboardScreen extends StatelessWidget {
       title: 'Dashboard',
       actions: [
         IconButton(
+          onPressed: () => context.push('/landlord/messages'),
+          icon: const Icon(Icons.message_outlined),
+        ),
+        IconButton(
           onPressed: () => context.push('/landlord/add-property'),
           icon: const Icon(Icons.add),
         ),

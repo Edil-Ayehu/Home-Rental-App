@@ -30,7 +30,9 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
             CircleAvatar(
               backgroundColor: AppColors.primary.withOpacity(0.1),
               child: Text(
-                widget.message.senderId[0].toUpperCase(),
+                widget.message.senderId == '2' 
+                    ? widget.message.receiverName[0]
+                    : widget.message.senderName[0],
                 style: TextStyle(
                   color: AppColors.primary,
                   fontWeight: FontWeight.w600,
@@ -38,7 +40,9 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
               ),
             ),
             SizedBox(width: 12.w),
-            Text('Host ${widget.message.senderId.substring(4)}'),
+            Text(widget.message.senderId == '2' 
+                ? widget.message.receiverName
+                : widget.message.senderName),
           ],
         ),
       ),
