@@ -73,13 +73,15 @@ final _authController = AuthController();
                     ),
                   ),
                   SizedBox(height: 40.h),
-                  const CustomTextField(
+                  CustomTextField(
+                    controller: _emailController,
                     label: 'Email',
                     prefixIcon: Icons.email_outlined,
                     keyboardType: TextInputType.emailAddress,
                   ),
                   SizedBox(height: 16.h),
                   CustomTextField(
+                    controller: _passwordController,
                     label: 'Password',
                     prefixIcon: Icons.lock_outline,
                     obscureText: _obscurePassword,
