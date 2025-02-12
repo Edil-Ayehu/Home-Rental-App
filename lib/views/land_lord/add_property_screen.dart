@@ -51,21 +51,33 @@ class _AddPropertyScreenState extends State<AddPropertyScreen> {
 
 Future<void> _pickImage(bool isThumbnail) async {
   try {
-    final XFile? image = await _picker.pickImage(
-      source: ImageSource.gallery,
-      imageQuality: 80,
-      maxWidth: 1000,
-      maxHeight: 1000,
-    );
-    
-    if (image != null) {
-      setState(() {
-        if (isThumbnail) {
+    if (isThumbnail) {
+      final XFile? image = await _picker.pickImage(
+        source: ImageSource.gallery,
+        imageQuality: 80,
+        maxWidth: 1000,
+        maxHeight: 1000,
+      );
+      
+      if (image != null) {
+        setState(() {
           _thumbnailImage = File(image.path);
-        } else {
-          _additionalImages.add(File(image.path));
-        }
-      });
+        });
+      }
+    } else {
+      final List<XFile> images = await _picker.pickMultiImage(
+        imageQuality: 80,
+        maxWidth: 1000,
+        maxHeight: 1000,
+      );
+      
+      if (images.isNotEmpty) {
+        setState(() {
+          _additionalImages.addAll(
+            images.map((image) => File(image.path)),
+          );
+        });
+      }
     }
   } catch (e) {
     if (mounted) {
