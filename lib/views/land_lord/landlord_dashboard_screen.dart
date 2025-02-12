@@ -15,16 +15,6 @@ class LandlordDashboardScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return PageLayout(
       title: 'Dashboard',
-      actions: [
-        IconButton(
-          onPressed: () => context.push('/landlord/messages'),
-          icon: const Icon(Icons.message_outlined),
-        ),
-        IconButton(
-          onPressed: () => context.push('/landlord/add-property'),
-          icon: const Icon(Icons.add),
-        ),
-      ],
       body: SingleChildScrollView(
         padding: EdgeInsets.all(16.w),
         child: Column(

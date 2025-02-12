@@ -161,32 +161,6 @@ final router = GoRouter(
         ),
       ],
     ),
-    // GoRoute(
-    //   path: '/landlord/dashboard',
-    //   builder: (context, state) => LandlordDashboardScreen(),
-    // ),
-    // GoRoute(
-    //   path: '/landlord/add-property',
-    //   builder: (context, state) => const AddPropertyScreen(),
-    // ),
-    // GoRoute(
-    //   path: '/landlord/edit-property/:id',
-    //   builder: (context, state) {
-    //     final property = state.extra as Property;
-    //     return AddPropertyScreen(property: property);
-    //   },
-    // ),
-    // GoRoute(
-    //   path: '/landlord/messages',
-    //   builder: (context, state) => const LandlordMessagesScreen(),
-    // ),
-    // GoRoute(
-    //   path: '/landlord/messages/chat',
-    //   builder: (context, state) {
-    //     final message = state.extra as Message;
-    //     return ChatDetailScreen(message: message);
-    //   },
-    // ),
     GoRoute(
       path: '/',
       name: 'splash',
