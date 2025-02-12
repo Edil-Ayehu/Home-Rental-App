@@ -115,7 +115,7 @@ class LandlordDashboardScreen extends StatelessWidget {
             return PropertyCard(
               property: property,
               onTap: () => context.push(
-                '/landlord/edit-property/${property.id}',
+                '/landlord/properties/edit/${property.id}',
                 extra: property,
               ),
             );
