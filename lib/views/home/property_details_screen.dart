@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:home_rental_app/models/property_model.dart';
 import 'package:home_rental_app/widgets/common/custom_button.dart';
+import 'package:home_rental_app/widgets/common/rating_dialog.dart';
 import '../../core/constants/color_constants.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:shimmer/shimmer.dart';
@@ -61,6 +62,11 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                 ),
               ),
               SizedBox(width: 8.w),
+              IconButton(
+                icon: const Icon(Icons.star_border),
+                color: AppColors.textPrimary,
+                onPressed: () => _showRatingDialog(context),
+              ),
             ],
             flexibleSpace: FlexibleSpaceBar(
               background: CachedNetworkImage(
@@ -148,7 +154,7 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                             Text(
                               widget.property.title,
                               style: TextStyle(
-                                fontSize: 24.sp,
+                                fontSize: 22.sp,
                                 fontWeight: FontWeight.bold,
                                 color: AppColors.textPrimary,
                               ),
@@ -218,7 +224,8 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                     SizedBox(height: 24.h),
                     CustomButton(
                       text: 'Book Now',
-                      onPressed: () => context.push('/home/book', extra: widget.property),
+                      onPressed: () =>
+                          context.push('/home/book', extra: widget.property),
                       height: 56.h,
                     ),
                   ],
@@ -278,6 +285,22 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
         width: width ?? double.infinity,
         height: height ?? double.infinity,
         color: Colors.white,
+      ),
+    );
+  }
+
+  void _showRatingDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) => RatingDialog(
+        onSubmit: (rating, comment) {
+          // Here you would normally save the rating to your backend
+          // For now, we'll just show a success message
+          Navigator.pop(context);
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Thank you for your rating!')),
+          );
+        },
       ),
     );
   }

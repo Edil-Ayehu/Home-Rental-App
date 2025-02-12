@@ -10,6 +10,8 @@ class Property {
   final bool isAvailable;
   final List<String> amenities;
   final String description;
+  final double averageRating;
+  final int numberOfRatings;
 
   Property({
     required this.id,
@@ -23,9 +25,11 @@ class Property {
     this.isAvailable = true,
     this.amenities = const [],
     this.description = '',
+    this.averageRating = 0.0,
+    this.numberOfRatings = 0,
   });
 
-   static List<Property> dummyProperties = [
+  static List<Property> dummyProperties = [
     Property(
       id: '1',
       ownerId: '2', // Jane Smith's ID
