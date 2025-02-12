@@ -1,4 +1,5 @@
 import 'package:go_router/go_router.dart';
+import 'package:home_rental_app/landlord_layout.dart';
 import 'package:home_rental_app/main_layout.dart';
 import 'package:home_rental_app/models/message.dart';
 import 'package:home_rental_app/models/property_model.dart';
@@ -15,7 +16,10 @@ import 'package:home_rental_app/views/home/property_details_screen.dart';
 import 'package:home_rental_app/views/home/search_screen.dart';
 import 'package:home_rental_app/views/land_lord/add_property_screen.dart';
 import 'package:home_rental_app/views/land_lord/land_lord_messages_screen.dart';
+import 'package:home_rental_app/views/land_lord/landlord_bookings_screen.dart';
 import 'package:home_rental_app/views/land_lord/landlord_dashboard_screen.dart';
+import 'package:home_rental_app/views/land_lord/landlord_profile_screen.dart';
+import 'package:home_rental_app/views/land_lord/landlord_properties_screen.dart';
 import 'package:home_rental_app/views/notifications/notifications_screen.dart';
 import 'package:home_rental_app/views/onboarding/onboarding_screen.dart';
 import 'package:home_rental_app/views/profile/add_payment_method_screen.dart';
@@ -111,32 +115,78 @@ final router = GoRouter(
         ),
       ],
     ),
-    GoRoute(
-      path: '/landlord/dashboard',
-      builder: (context, state) => LandlordDashboardScreen(),
+        ShellRoute(
+      builder: (context, state, child) => LandlordLayout(
+        location: state.uri.toString(),
+        child: child,
+      ),
+      routes: [
+        GoRoute(
+          path: '/landlord/dashboard',
+          builder: (context, state) => LandlordDashboardScreen(),
+        ),
+        GoRoute(
+          path: '/landlord/properties',
+          builder: (context, state) => LandlordPropertiesScreen(),
+        ),
+        GoRoute(
+          path: '/landlord/properties/add',
+          builder: (context, state) => const AddPropertyScreen(),
+        ),
+        GoRoute(
+          path: '/landlord/properties/edit/:id',
+          builder: (context, state) {
+            final property = state.extra as Property;
+            return AddPropertyScreen(property: property);
+          },
+        ),
+        GoRoute(
+          path: '/landlord/messages',
+          builder: (context, state) => const LandlordMessagesScreen(),
+        ),
+        GoRoute(
+          path: '/landlord/messages/chat',
+          builder: (context, state) {
+            final message = state.extra as Message;
+            return ChatDetailScreen(message: message);
+          },
+        ),
+        GoRoute(
+          path: '/landlord/bookings',
+          builder: (context, state) => const LandlordBookingsScreen(),
+        ),
+        GoRoute(
+          path: '/landlord/profile',
+          builder: (context, state) => const LandlordProfileScreen(),
+        ),
+      ],
     ),
-    GoRoute(
-      path: '/landlord/add-property',
-      builder: (context, state) => const AddPropertyScreen(),
-    ),
-    GoRoute(
-      path: '/landlord/edit-property/:id',
-      builder: (context, state) {
-        final property = state.extra as Property;
-        return AddPropertyScreen(property: property);
-      },
-    ),
-    GoRoute(
-  path: '/landlord/messages',
-  builder: (context, state) => const LandlordMessagesScreen(),
-),
-GoRoute(
-  path: '/landlord/messages/chat',
-  builder: (context, state) {
-    final message = state.extra as Message;
-    return ChatDetailScreen(message: message);
-  },
-),
+    // GoRoute(
+    //   path: '/landlord/dashboard',
+    //   builder: (context, state) => LandlordDashboardScreen(),
+    // ),
+    // GoRoute(
+    //   path: '/landlord/add-property',
+    //   builder: (context, state) => const AddPropertyScreen(),
+    // ),
+    // GoRoute(
+    //   path: '/landlord/edit-property/:id',
+    //   builder: (context, state) {
+    //     final property = state.extra as Property;
+    //     return AddPropertyScreen(property: property);
+    //   },
+    // ),
+    // GoRoute(
+    //   path: '/landlord/messages',
+    //   builder: (context, state) => const LandlordMessagesScreen(),
+    // ),
+    // GoRoute(
+    //   path: '/landlord/messages/chat',
+    //   builder: (context, state) {
+    //     final message = state.extra as Message;
+    //     return ChatDetailScreen(message: message);
+    //   },
+    // ),
     GoRoute(
       path: '/',
       name: 'splash',
