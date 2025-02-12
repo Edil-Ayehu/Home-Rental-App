@@ -146,58 +146,45 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                     ),
                     SizedBox(height: 24.h),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              widget.property.title,
-                              style: TextStyle(
-                                fontSize: 22.sp,
-                                fontWeight: FontWeight.bold,
-                                color: AppColors.textPrimary,
-                              ),
+                        Expanded(
+                          flex: 2,
+                          child: Text(
+                            widget.property.title,
+                            style: TextStyle(
+                              fontSize: 24.sp,
+                              fontWeight: FontWeight.bold,
+                              color: AppColors.textPrimary,
                             ),
-                            SizedBox(height: 8.h),
-                            Row(
-                              children: [
-                                Icon(
-                                  Icons.location_on,
-                                  size: 16.sp,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                        SizedBox(width: 16.w),
+                        Expanded(
+                          flex: 1,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              Text(
+                                '\$${widget.property.price}',
+                                style: TextStyle(
+                                  fontSize: 24.sp,
+                                  fontWeight: FontWeight.bold,
+                                  color: AppColors.primary,
+                                ),
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              Text(
+                                '/month',
+                                style: TextStyle(
+                                  fontSize: 14.sp,
                                   color: AppColors.textSecondary,
                                 ),
-                                SizedBox(width: 4.w),
-                                Text(
-                                  widget.property.location,
-                                  style: TextStyle(
-                                    fontSize: 14.sp,
-                                    color: AppColors.textSecondary,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            Text(
-                              '\$2,500',
-                              style: TextStyle(
-                                fontSize: 24.sp,
-                                fontWeight: FontWeight.bold,
-                                color: AppColors.primary,
                               ),
-                            ),
-                            Text(
-                              'per month',
-                              style: TextStyle(
-                                fontSize: 12.sp,
-                                color: AppColors.textSecondary,
-                              ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ],
                     ),
