@@ -95,7 +95,7 @@ class _MessageCard extends StatelessWidget {
           children: [
             Expanded(
               child: Text(
-                'Host ${message.senderId.substring(4)}',
+                message.senderName,
                 style: TextStyle(
                   fontSize: 16.sp,
                   fontWeight: FontWeight.w600,
