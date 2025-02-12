@@ -3,9 +3,13 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import '../../core/constants/color_constants.dart';
 import '../../widgets/common/page_layout.dart';
+import '../../controllers/property_controller.dart';
+import '../../widgets/property/property_card.dart';
 
 class LandlordDashboardScreen extends StatelessWidget {
-  const LandlordDashboardScreen({super.key});
+  final _propertyController = PropertyController();
+  
+  LandlordDashboardScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +30,7 @@ class LandlordDashboardScreen extends StatelessWidget {
             SizedBox(height: 24.h),
             _buildRecentBookings(),
             SizedBox(height: 24.h),
-            _buildMyProperties(),
+            _buildMyProperties(context),
           ],
         ),
       ),
@@ -77,19 +81,52 @@ class LandlordDashboardScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildMyProperties() {
+  Widget _buildMyProperties(BuildContext context) {
+    // Using Jane Smith's ID (2) for demo
+    final properties = _propertyController.getPropertiesByOwnerId('2');
+    
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          'My Properties',
-          style: TextStyle(
-            fontSize: 18.sp,
-            fontWeight: FontWeight.w600,
-          ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              'My Properties',
+              style: TextStyle(
+                fontSize: 18.sp,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            TextButton(
+              onPressed: () => context.push('/landlord/add-property'),
+              child: Text(
+                'Add New',
+                style: TextStyle(
+                  fontSize: 14.sp,
+                  color: AppColors.primary,
+                ),
+              ),
+            ),
+          ],
         ),
         SizedBox(height: 16.h),
-        // List of properties
+        ListView.separated(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          itemCount: properties.length,
+          separatorBuilder: (context, index) => SizedBox(height: 16.h),
+          itemBuilder: (context, index) {
+            final property = properties[index];
+            return PropertyCard(
+              property: property,
+              onTap: () => context.push(
+                '/landlord/edit-property/${property.id}',
+                extra: property,
+              ),
+            );
+          },
+        ),
       ],
     );
   }
