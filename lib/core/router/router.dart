@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:home_rental_app/main_layout.dart';
 import 'package:home_rental_app/models/message.dart';
@@ -109,22 +108,22 @@ final router = GoRouter(
             ),
           ],
         ),
-                GoRoute(
-          path: '/landlord/dashboard',
-          builder: (context, state) => const LandlordDashboardScreen(),
-        ),
-        GoRoute(
-          path: '/landlord/add-property',
-          builder: (context, state) => const AddPropertyScreen(),
-        ),
-        GoRoute(
-          path: '/landlord/edit-property/:id',
-          builder: (context, state) {
-            final property = state.extra as Property;
-            return AddPropertyScreen(property: property);
-          },
-        ),
       ],
+    ),
+    GoRoute(
+      path: '/landlord/dashboard',
+      builder: (context, state) => const LandlordDashboardScreen(),
+    ),
+    GoRoute(
+      path: '/landlord/add-property',
+      builder: (context, state) => const AddPropertyScreen(),
+    ),
+    GoRoute(
+      path: '/landlord/edit-property/:id',
+      builder: (context, state) {
+        final property = state.extra as Property;
+        return AddPropertyScreen(property: property);
+      },
     ),
     GoRoute(
       path: '/',
