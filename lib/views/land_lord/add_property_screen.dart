@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:home_rental_app/controllers/property_controller.dart';
@@ -29,6 +30,7 @@ class _AddPropertyScreenState extends State<AddPropertyScreen> {
   final _titleController = TextEditingController();
   final _locationController = TextEditingController();
   final _priceController = TextEditingController();
+  List<String> _existingImages = [];
 
   @override
   void initState() {
@@ -38,6 +40,7 @@ class _AddPropertyScreenState extends State<AddPropertyScreen> {
       _titleController.text = widget.property!.title;
       _locationController.text = widget.property!.location;
       _priceController.text = widget.property!.price.toString();
+      _existingImages = widget.property!.images;
     }
   }
 
@@ -192,26 +195,42 @@ Future<void> _pickImage(bool isThumbnail) async {
                   fit: BoxFit.cover,
                 ),
               )
-            : Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      Icons.add_photo_alternate_outlined,
-                      size: 48.sp,
-                      color: AppColors.primary,
-                    ),
-                    SizedBox(height: 8.h),
-                    Text(
-                      'Add Thumbnail Image',
-                      style: TextStyle(
-                        color: AppColors.primary,
-                        fontSize: 14.sp,
+            : widget.property != null
+                ? ClipRRect(
+                    borderRadius: BorderRadius.circular(16.r),
+                    child: CachedNetworkImage(
+                      imageUrl: widget.property!.imageUrl,
+                      fit: BoxFit.cover,
+                      placeholder: (context, url) => Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                      errorWidget: (context, url, error) => Icon(
+                        Icons.error_outline,
+                        size: 48.sp,
+                        color: AppColors.error,
                       ),
                     ),
-                  ],
-                ),
-              ),
+                  )
+                : Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.add_photo_alternate_outlined,
+                          size: 48.sp,
+                          color: AppColors.primary,
+                        ),
+                        SizedBox(height: 8.h),
+                        Text(
+                          'Add Thumbnail Image',
+                          style: TextStyle(
+                            color: AppColors.primary,
+                            fontSize: 14.sp,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
       ),
     );
   }
@@ -245,6 +264,44 @@ Future<void> _pickImage(bool isThumbnail) async {
                       onPressed: () {
                         setState(() {
                           _additionalImages.removeAt(index);
+                        });
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          ...List.generate(
+            _existingImages.length,
+            (index) => Padding(
+              padding: EdgeInsets.only(right: 8.w),
+              child: Stack(
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(8.r),
+                    child: CachedNetworkImage(
+                      imageUrl: _existingImages[index],
+                      width: 120.w,
+                      height: 120.h,
+                      fit: BoxFit.cover,
+                      placeholder: (context, url) => Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                      errorWidget: (context, url, error) => Icon(
+                        Icons.error_outline,
+                        color: AppColors.error,
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    top: 4,
+                    right: 4,
+                    child: IconButton(
+                      icon: Icon(Icons.close, color: Colors.white),
+                      onPressed: () {
+                        setState(() {
+                          _existingImages.removeAt(index);
                         });
                       },
                     ),
