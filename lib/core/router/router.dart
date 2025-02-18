@@ -15,7 +15,6 @@ import 'package:home_rental_app/views/home/home_screen.dart';
 import 'package:home_rental_app/views/home/property_details_screen.dart';
 import 'package:home_rental_app/views/home/search_screen.dart';
 import 'package:home_rental_app/views/land_lord/add_property_screen.dart';
-import 'package:home_rental_app/views/land_lord/land_lord_messages_screen.dart';
 import 'package:home_rental_app/views/land_lord/landlord_bookings_screen.dart';
 import 'package:home_rental_app/views/land_lord/landlord_dashboard_screen.dart';
 import 'package:home_rental_app/views/land_lord/landlord_profile_screen.dart';
@@ -76,7 +75,10 @@ final router = GoRouter(
         ),
         GoRoute(
           path: '/messages',
-          builder: (context, state) => const MessagesScreen(),
+          builder: (context, state) => const MessagesScreen(
+            isLandlord: false,
+            userId: '1', // Tenant ID
+          ),
           routes: [
             GoRoute(
               path: 'chat',
@@ -115,7 +117,7 @@ final router = GoRouter(
         ),
       ],
     ),
-        ShellRoute(
+    ShellRoute(
       builder: (context, state, child) => LandlordLayout(
         location: state.uri.toString(),
         child: child,
@@ -142,14 +144,19 @@ final router = GoRouter(
         ),
         GoRoute(
           path: '/landlord/messages',
-          builder: (context, state) => const LandlordMessagesScreen(),
-        ),
-        GoRoute(
-          path: '/landlord/messages/chat',
-          builder: (context, state) {
-            final message = state.extra as Message;
-            return ChatDetailScreen(message: message);
-          },
+          builder: (context, state) => const MessagesScreen(
+            isLandlord: true,
+            userId: '2', // Landlord ID
+          ),
+          routes: [
+            GoRoute(
+              path: 'chat',
+              builder: (context, state) {
+                final message = state.extra as Message;
+                return ChatDetailScreen(message: message);
+              },
+            ),
+          ],
         ),
         GoRoute(
           path: '/landlord/bookings',

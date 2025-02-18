@@ -1,59 +1,109 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
-import 'package:home_rental_app/models/message.dart';
-import 'package:intl/intl.dart';
+import '../../models/message.dart';
 import '../../core/constants/color_constants.dart';
 import '../../widgets/common/page_layout.dart';
 
 class MessagesScreen extends StatelessWidget {
-  const MessagesScreen({super.key});
+  final bool isLandlord;
+  final String userId;
+  
+  const MessagesScreen({
+    super.key,
+    required this.isLandlord,
+    required this.userId,
+  });
 
   @override
   Widget build(BuildContext context) {
+    final userMessages = Message.dummyMessages.where(
+      (m) => m.senderId == userId || m.receiverId == userId
+    ).toList();
+
     return PageLayout(
       title: 'Messages',
-      body: Message.dummyMessages.isEmpty
-          ? _buildEmptyState()
-          : ListView.builder(
-              padding: EdgeInsets.all(16.w),
-              itemCount: Message.dummyMessages.length,
-              itemBuilder: (context, index) {
-                final message = Message.dummyMessages[index];
-                return _MessageCard(message: message);
-              },
-            ),
+      body: Container(
+        color: AppColors.surface,
+        child: userMessages.isEmpty
+            ? _buildEmptyState(isLandlord)
+            : CustomScrollView(
+                slivers: [
+                  SliverToBoxAdapter(
+                    child: Padding(
+                      padding: EdgeInsets.all(16.w),
+                      child: Text(
+                        'Recent Messages',
+                        style: TextStyle(
+                          fontSize: 20.sp,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.textPrimary,
+                        ),
+                      ),
+                    ),
+                  ),
+                  SliverList(
+                    delegate: SliverChildBuilderDelegate(
+                      (context, index) {
+                        final message = userMessages[index];
+                        return _MessageCard(
+                          message: message,
+                          isLandlord: isLandlord,
+                          userId: userId,
+                        );
+                      },
+                      childCount: userMessages.length,
+                    ),
+                  ),
+                ],
+              ),
+      ),
     );
   }
 
-  Widget _buildEmptyState() {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            Icons.message_outlined,
-            size: 64.sp,
-            color: AppColors.textSecondary,
-          ),
-          SizedBox(height: 16.h),
-          Text(
-            'No messages yet',
-            style: TextStyle(
-              fontSize: 18.sp,
-              color: AppColors.textPrimary,
-              fontWeight: FontWeight.w600,
+  Widget _buildEmptyState(bool isLandlord) {
+    return Container(
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(16.r),
+      ),
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              padding: EdgeInsets.all(24.w),
+              decoration: BoxDecoration(
+                color: AppColors.primary.withOpacity(0.1),
+                shape: BoxShape.circle,
+              ),
+              child: Icon(
+                Icons.message_outlined,
+                size: 48.sp,
+                color: AppColors.primary,
+              ),
             ),
-          ),
-          SizedBox(height: 8.h),
-          Text(
-            'Start chatting with property owners',
-            style: TextStyle(
-              fontSize: 14.sp,
-              color: AppColors.textSecondary,
+            SizedBox(height: 24.h),
+            Text(
+              'No Messages Yet',
+              style: TextStyle(
+                fontSize: 20.sp,
+                fontWeight: FontWeight.w600,
+                color: AppColors.textPrimary,
+              ),
             ),
-          ),
-        ],
+            if (!isLandlord) ...[
+              SizedBox(height: 12.h),
+              Text(
+                'Start chatting with property owners',
+                style: TextStyle(
+                  fontSize: 14.sp,
+                  color: AppColors.textSecondary,
+                ),
+              ),
+            ],
+          ],
+        ),
       ),
     );
   }
@@ -61,99 +111,102 @@ class MessagesScreen extends StatelessWidget {
 
 class _MessageCard extends StatelessWidget {
   final Message message;
+  final bool isLandlord;
+  final String userId;
 
-  const _MessageCard({required this.message});
+  const _MessageCard({
+    required this.message,
+    required this.isLandlord,
+    required this.userId,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.only(bottom: 12.h),
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.circular(16.r),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 10,
-            offset: const Offset(0, 2),
-          ),
-        ],
+    final otherPartyName = message.senderId == userId 
+        ? message.receiverName 
+        : message.senderName;
+    final isUnread = !message.isRead && message.receiverId == userId;
+
+    return Card(
+      margin: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+      elevation: 0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12.r),
+        side: BorderSide(
+          color: isUnread 
+              ? AppColors.primary.withOpacity(0.3)
+              : Colors.transparent,
+        ),
       ),
-      child: ListTile(
-        contentPadding: EdgeInsets.all(16.w),
-        leading: CircleAvatar(
-          backgroundColor: AppColors.primary.withOpacity(0.1),
-          child: Text(
-            message.senderId[0].toUpperCase(),
-            style: TextStyle(
-              color: AppColors.primary,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(12.r),
+        onTap: () => context.push(
+          isLandlord ? '/landlord/messages/chat' : '/messages/chat',
+          extra: message,
         ),
-        title: Row(
-          children: [
-            Expanded(
-              child: Text(
-                message.senderName,
-                style: TextStyle(
-                  fontSize: 16.sp,
-                  fontWeight: FontWeight.w600,
-                  color: AppColors.textPrimary,
-                ),
-              ),
-            ),
-            Text(
-              DateFormat('hh:mm a').format(message.timestamp),
-              style: TextStyle(
-                fontSize: 12.sp,
-                color: AppColors.textSecondary,
-              ),
-            ),
-          ],
-        ),
-        subtitle: Padding(
-          padding: EdgeInsets.only(top: 8.h),
+        child: Padding(
+          padding: EdgeInsets.all(16.w),
           child: Row(
             children: [
-              Expanded(
+              CircleAvatar(
+                radius: 24.r,
+                backgroundColor: isUnread 
+                    ? AppColors.primary.withOpacity(0.1)
+                    : AppColors.surface,
                 child: Text(
-                  message.content,
+                  otherPartyName[0].toUpperCase(),
                   style: TextStyle(
-                    fontSize: 14.sp,
-                    color: AppColors.textSecondary,
+                    color: AppColors.primary,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 16.sp,
                   ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
                 ),
               ),
-              if (!message.isRead)
-                Container(
-                  margin: EdgeInsets.only(left: 8.w),
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 8.w,
-                    vertical: 4.h,
-                  ),
-                  decoration: BoxDecoration(
-                    color: AppColors.primary,
-                    borderRadius: BorderRadius.circular(12.r),
-                  ),
-                  child: Text(
-                    'New',
-                    style: TextStyle(
-                      fontSize: 12.sp,
-                      color: AppColors.surface,
-                      fontWeight: FontWeight.w600,
+              SizedBox(width: 16.w),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          otherPartyName,
+                          style: TextStyle(
+                            fontSize: 16.sp,
+                            fontWeight: isUnread 
+                                ? FontWeight.w600 
+                                : FontWeight.w500,
+                            color: AppColors.textPrimary,
+                          ),
+                        ),
+                        if (isUnread)
+                          Container(
+                            width: 8.w,
+                            height: 8.w,
+                            decoration: const BoxDecoration(
+                              color: AppColors.primary,
+                              shape: BoxShape.circle,
+                            ),
+                          ),
+                      ],
                     ),
-                  ),
+                    SizedBox(height: 4.h),
+                    Text(
+                      message.content,
+                      style: TextStyle(
+                        fontSize: 14.sp,
+                        color: AppColors.textSecondary,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
                 ),
+              ),
             ],
           ),
         ),
-        onTap: () {
-          // Navigate to chat detail screen
-          context.push('/messages/chat', extra: message);
-        },
       ),
     );
   }
