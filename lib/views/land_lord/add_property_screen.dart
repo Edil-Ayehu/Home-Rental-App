@@ -13,6 +13,7 @@ class AddPropertyScreen extends StatefulWidget {
   final Property? property; // For editing existing property
 
 
+
   const AddPropertyScreen({super.key, this.property});
 
   @override
@@ -34,6 +35,8 @@ final _longitudeController = TextEditingController();
   final _locationController = TextEditingController();
   final _priceController = TextEditingController();
   List<String> _existingImages = [];
+  String _selectedType = 'Apartment';
+  final List<String> _propertyTypes = ['Apartment', 'House', 'Villa', 'Office'];
 
   @override
   void initState() {
@@ -46,6 +49,7 @@ final _longitudeController = TextEditingController();
       _existingImages = widget.property!.images;
       _latitudeController.text = widget.property!.latitude.toString();
       _longitudeController.text = widget.property!.longitude.toString();
+      _selectedType = widget.property!.type;
     }
   }
 
@@ -171,6 +175,8 @@ Future<void> _pickImage(bool isThumbnail) async {
                   return null;
                 },
               ),
+              SizedBox(height: 16.h),
+              _buildTypeSelector(),
               SizedBox(height: 16.h),
               Row(
                 children: [
@@ -392,6 +398,35 @@ Future<void> _pickImage(bool isThumbnail) async {
     );
   }
 
+  Widget _buildTypeSelector() {
+    return DropdownButtonFormField<String>(
+      value: _selectedType,
+      decoration: InputDecoration(
+        labelText: 'Property Type',
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8.r),
+        ),
+      ),
+      items: _propertyTypes.map((type) {
+        return DropdownMenuItem(
+          value: type,
+          child: Text(type),
+        );
+      }).toList(),
+      onChanged: (value) {
+        setState(() {
+          _selectedType = value!;
+        });
+      },
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return 'Please select a property type';
+        }
+        return null;
+      },
+    );
+  }
+
 Future<void> _handleSubmit() async {
   if (_formKey.currentState!.validate()) {
     if (_thumbnailImage == null) {
@@ -418,6 +453,7 @@ Future<void> _handleSubmit() async {
         ownerId: '2', // Using Jane Smith's ID for demo
         latitude: double.parse(_latitudeController.text),
         longitude: double.parse(_longitudeController.text),
+        type: _selectedType,
       );
       if (mounted) Navigator.pop(context);
     } catch (e) {

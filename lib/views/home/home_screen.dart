@@ -15,7 +15,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final TextEditingController _searchController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +52,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           fontWeight: FontWeight.w600,
                         ),
                       ),
-                      Icon(
+                      const Icon(
                         Icons.keyboard_arrow_down,
                         color: AppColors.textPrimary,
                       ),
@@ -89,7 +88,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     SizedBox(height: 16.h),
                     InkWell(
-                      onTap: () => context.push('/search'),
+                      onTap: () => context.push('/home/search'),
                       child: Container(
                         padding: EdgeInsets.all(16.w),
                         decoration: BoxDecoration(
@@ -98,7 +97,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                         child: Row(
                           children: [
-                            Icon(
+                            const Icon(
                               Icons.search,
                               color: AppColors.textSecondary,
                             ),
@@ -139,7 +138,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
                     TextButton(
-                      onPressed: () {},
+                      onPressed: () => context.push('/home/search'),
                       child: Text(
                         'See All',
                         style: TextStyle(

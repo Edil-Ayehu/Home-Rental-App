@@ -14,6 +14,7 @@ class Property {
   final int numberOfRatings;
   final double latitude;
   final double longitude;
+  final String type; 
 
   Property({
     required this.id,
@@ -31,6 +32,7 @@ class Property {
     this.numberOfRatings = 0,
     required this.latitude,
     required this.longitude,
+    required this.type,
   });
 
   static List<Property> dummyProperties = [
@@ -48,8 +50,9 @@ class Property {
       rating: 4.8,
       amenities: ['WiFi', 'Pool', 'Gym', 'Parking'],
       description: 'A beautiful modern apartment in the heart of the city.',
-            latitude: 37.7749,
-      longitude: -122.4194,
+      latitude: 9.0192,
+      longitude: 38.7525,
+      type: 'Apartment',
     ),
     Property(
       id: '2',
@@ -65,8 +68,9 @@ class Property {
       rating: 4.5,
       amenities: ['Beach Access', 'WiFi', 'Kitchen', 'BBQ'],
       description: 'Beautiful beachfront property with amazing ocean views.',
-            latitude: 77.7749,
-      longitude: -122.4194,
+      latitude: 48.8575,
+      longitude: 2.3514,
+      type: 'House',
     ),
     Property(
       id: '3',
@@ -82,8 +86,9 @@ class Property {
       rating: 4.7,
       amenities: ['Fireplace', 'Hiking Trails', 'Scenic View'],
       description: 'Cozy cabin with breathtaking mountain views.',
-            latitude: 17.7749,
-      longitude: -122.4194,
+      latitude: 51.5072,
+      longitude: 0.1276,
+      type: 'Villa',
     ),
     Property(
       id: '4',
@@ -99,8 +104,9 @@ class Property {
       rating: 4.9,
       amenities: ['Pool', 'Garden', 'Tennis Court', 'Security'],
       description: 'Luxurious villa with private pool and tennis court.',
-            latitude: 37.7749,
-      longitude: -102.4194,
+      latitude: 43.6532,
+      longitude: 79.3832,
+      type: 'Office',
     ),
     Property(
       id: '5',
@@ -116,8 +122,9 @@ class Property {
       rating: 4.3,
       amenities: ['WiFi', 'Study Area', 'Laundry'],
       description: 'Perfect for students, close to university campus.',
-            latitude: 37.7749,
-      longitude: -12.4194,
+      latitude: 0.7893,
+      longitude: 113.9213,
+      type: 'Apartment',
     ),
   ];
 }

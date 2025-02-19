@@ -243,6 +243,8 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
       scrollDirection: Axis.horizontal,
       child: Row(
         children: [
+          _buildFeatureItem(Icons.home_outlined, widget.property.type),
+          SizedBox(width: 12.w),
           _buildFeatureItem(Icons.king_bed_outlined, '3 Beds'),
           SizedBox(width: 12.w),
           _buildFeatureItem(Icons.bathtub_outlined, '2 Baths'),

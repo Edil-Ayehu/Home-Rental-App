@@ -12,10 +12,26 @@ class SearchScreen extends StatefulWidget {
   State<SearchScreen> createState() => _SearchScreenState();
 }
 
+
 class _SearchScreenState extends State<SearchScreen> {
   final TextEditingController _searchController = TextEditingController();
   String _selectedFilter = 'All';
-  final List<String> _filters = ['All', 'House', 'Apartment', 'Villa', 'Office'];
+  final List<String> _filters = [
+    'All',
+    'House',
+    'Apartment',
+    'Villa',
+    'Office'
+  ];
+
+  List<Property> get filteredProperties {
+    if (_selectedFilter == 'All') {
+      return Property.dummyProperties;
+    }
+    return Property.dummyProperties.where((property) => 
+      property.type == _selectedFilter
+    ).toList();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -80,7 +96,9 @@ class _SearchScreenState extends State<SearchScreen> {
                       backgroundColor: AppColors.surface,
                       selectedColor: AppColors.primary,
                       labelStyle: TextStyle(
-                        color: isSelected ? AppColors.surface : AppColors.textSecondary,
+                        color: isSelected
+                            ? AppColors.surface
+                            : AppColors.textSecondary,
                         fontSize: 14.sp,
                       ),
                     ),
@@ -96,14 +114,14 @@ class _SearchScreenState extends State<SearchScreen> {
                   crossAxisCount: 2,
                   mainAxisSpacing: 16.h,
                   crossAxisSpacing: 16.w,
-                  childAspectRatio: 0.7,
+                  childAspectRatio: 0.65,
                 ),
-                itemCount: Property.dummyProperties.length,
+                itemCount: filteredProperties.length,
                 itemBuilder: (context, index) {
-                  final property = Property.dummyProperties[index];
+                  final property = filteredProperties[index];
                   return PropertyCard(
                     onTap: () => context.push(
-                      '/property/${property.id}',
+                      '/home/property/${property.id}',
                       extra: property,
                     ),
                     property: property,

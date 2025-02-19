@@ -34,14 +34,18 @@ final router = GoRouter(
   routes: [
     ShellRoute(
       builder: (context, state, child) => MainLayout(
-        child: child,
         location: state.uri.toString(),
+        child: child,
       ),
       routes: [
         GoRoute(
           path: '/home',
           builder: (context, state) => const HomeScreen(),
           routes: [
+            GoRoute(
+              path: 'search',
+              builder: (context, state) => const SearchScreen(),
+            ),
             GoRoute(
               path: 'property/:id',
               builder: (context, state) {
@@ -192,11 +196,6 @@ final router = GoRouter(
       path: '/forgot-password',
       name: 'forgot-password',
       builder: (context, state) => const ForgotPasswordScreen(),
-    ),
-    GoRoute(
-      path: '/search',
-      name: 'search',
-      builder: (context, state) => const SearchScreen(),
     ),
   ],
 );
