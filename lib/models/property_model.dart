@@ -12,6 +12,8 @@ class Property {
   final String description;
   final double averageRating;
   final int numberOfRatings;
+  final double latitude;
+  final double longitude;
 
   Property({
     required this.id,
@@ -27,6 +29,8 @@ class Property {
     this.description = '',
     this.averageRating = 0.0,
     this.numberOfRatings = 0,
+    required this.latitude,
+    required this.longitude,
   });
 
   static List<Property> dummyProperties = [
@@ -44,6 +48,8 @@ class Property {
       rating: 4.8,
       amenities: ['WiFi', 'Pool', 'Gym', 'Parking'],
       description: 'A beautiful modern apartment in the heart of the city.',
+            latitude: 37.7749,
+      longitude: -122.4194,
     ),
     Property(
       id: '2',
@@ -59,6 +65,8 @@ class Property {
       rating: 4.5,
       amenities: ['Beach Access', 'WiFi', 'Kitchen', 'BBQ'],
       description: 'Beautiful beachfront property with amazing ocean views.',
+            latitude: 77.7749,
+      longitude: -122.4194,
     ),
     Property(
       id: '3',
@@ -74,6 +82,8 @@ class Property {
       rating: 4.7,
       amenities: ['Fireplace', 'Hiking Trails', 'Scenic View'],
       description: 'Cozy cabin with breathtaking mountain views.',
+            latitude: 17.7749,
+      longitude: -122.4194,
     ),
     Property(
       id: '4',
@@ -89,6 +99,8 @@ class Property {
       rating: 4.9,
       amenities: ['Pool', 'Garden', 'Tennis Court', 'Security'],
       description: 'Luxurious villa with private pool and tennis court.',
+            latitude: 37.7749,
+      longitude: -102.4194,
     ),
     Property(
       id: '5',
@@ -104,6 +116,8 @@ class Property {
       rating: 4.3,
       amenities: ['WiFi', 'Study Area', 'Laundry'],
       description: 'Perfect for students, close to university campus.',
+            latitude: 37.7749,
+      longitude: -12.4194,
     ),
   ];
 }

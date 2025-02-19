@@ -7,6 +7,8 @@ import 'package:home_rental_app/widgets/common/rating_dialog.dart';
 import '../../core/constants/color_constants.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:shimmer/shimmer.dart';
+import '../../widgets/property/property_map.dart';
+
 
 class PropertyDetailsScreen extends StatefulWidget {
   final String propertyId;
@@ -208,6 +210,17 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                         height: 1.5,
                       ),
                     ),
+                    SizedBox(height: 24.h),
+                    Text(
+                      'Location',
+                      style: TextStyle(
+                        fontSize: 18.sp,
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.textPrimary,
+                      ),
+                    ),
+                    SizedBox(height: 12.h),
+                    PropertyMap(property: widget.property),
                     SizedBox(height: 24.h),
                     CustomButton(
                       text: 'Book Now',

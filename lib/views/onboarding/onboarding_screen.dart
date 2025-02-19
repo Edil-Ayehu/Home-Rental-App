@@ -91,33 +91,36 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                           ),
                         ),
                       ),
-                      ElevatedButton(
-                        onPressed: () {
-                          if (_currentPage == _contents.length - 1) {
-                            context.go('/auth');
-                          } else {
-                            _pageController.nextPage(
-                              duration: const Duration(milliseconds: 300),
-                              curve: Curves.easeInOut,
-                            );
-                          }
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColors.surface,
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 32.w,
-                            vertical: 16.h,
+                      SizedBox(
+                        width: 120.w,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            if (_currentPage == _contents.length - 1) {
+                              context.go('/auth');
+                            } else {
+                              _pageController.nextPage(
+                                duration: const Duration(milliseconds: 300),
+                                curve: Curves.easeInOut,
+                              );
+                            }
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColors.surface,
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 32.w,
+                              vertical: 16.h,
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30.r),
+                            ),
                           ),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30.r),
-                          ),
-                        ),
-                        child: Text(
-                          _currentPage == _contents.length - 1 ? 'Get Started' : 'Next',
-                          style: TextStyle(
-                            color: _contents[_currentPage].backgroundColor,
-                            fontSize: 16.sp,
-                            fontWeight: FontWeight.w600,
+                          child: Text(
+                            _currentPage == _contents.length - 1 ? 'Get Started' : 'Next',
+                            style: TextStyle(
+                              color: _contents[_currentPage].backgroundColor,
+                              fontSize: 16.sp,
+                              fontWeight: FontWeight.w600,
+                            ),
                           ),
                         ),
                       ),

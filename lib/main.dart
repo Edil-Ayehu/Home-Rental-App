@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:home_rental_app/core/router/router.dart';
 import 'package:home_rental_app/core/services/storage_service.dart';
 import 'package:home_rental_app/core/theme/app_theme.dart';
 
 void main() async {
+  await dotenv.load(fileName: ".env");
   WidgetsFlutterBinding.ensureInitialized();
   await StorageService.init();
   // Initialize Firebase here

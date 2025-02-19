@@ -21,6 +21,8 @@ class PropertyController extends ChangeNotifier {
     required File thumbnailImage,
     required List<File> additionalImages,
     required String ownerId,
+    required double latitude,
+    required double longitude,
   }) async {
     // Upload thumbnail
     final thumbnailUrl = await uploadImage(thumbnailImage);
@@ -41,6 +43,8 @@ class PropertyController extends ChangeNotifier {
       images: [thumbnailUrl, ...imageUrls],
       rating: 0,
       isAvailable: true,
+      latitude: latitude,
+      longitude: longitude,
     );
 
     // TODO: Add to backend

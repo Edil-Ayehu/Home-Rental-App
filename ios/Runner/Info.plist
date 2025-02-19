@@ -49,5 +49,11 @@
 	<string>This app needs access to your photo library to upload property images.</string>
 	<key>NSCameraUsageDescription</key>
 	<string>This app needs access to camera to take property photos.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>This app needs access to location when open to show nearby properties.</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>This app needs access to location when in the background to show nearby properties.</string>
+	<key>GoogleMapsApiKey</key>
+	<string>$(GOOGLE_MAPS_API_KEY)</string>
 </dict>
 </plist>

@@ -12,6 +12,7 @@ import '../../widgets/common/custom_textfield.dart';
 class AddPropertyScreen extends StatefulWidget {
   final Property? property; // For editing existing property
 
+
   const AddPropertyScreen({super.key, this.property});
 
   @override
@@ -21,6 +22,8 @@ class AddPropertyScreen extends StatefulWidget {
 class _AddPropertyScreenState extends State<AddPropertyScreen> {
   final _formKey = GlobalKey<FormState>();
   final _propertyController = PropertyController();
+  final _latitudeController = TextEditingController();
+final _longitudeController = TextEditingController();
   bool _isLoading = false;
   File? _thumbnailImage;
   List<File> _additionalImages = [];
@@ -41,6 +44,8 @@ class _AddPropertyScreenState extends State<AddPropertyScreen> {
       _locationController.text = widget.property!.location;
       _priceController.text = widget.property!.price.toString();
       _existingImages = widget.property!.images;
+      _latitudeController.text = widget.property!.latitude.toString();
+      _longitudeController.text = widget.property!.longitude.toString();
     }
   }
 
@@ -49,6 +54,8 @@ class _AddPropertyScreenState extends State<AddPropertyScreen> {
     _titleController.dispose();
     _locationController.dispose();
     _priceController.dispose();
+    _latitudeController.dispose();
+    _longitudeController.dispose();
     super.dispose();
   }
 
@@ -163,6 +170,46 @@ Future<void> _pickImage(bool isThumbnail) async {
                   }
                   return null;
                 },
+              ),
+              SizedBox(height: 16.h),
+              Row(
+                children: [
+                  Expanded(
+                    child: CustomTextField(
+                      label: 'Latitude',
+                      prefixIcon: Icons.location_on_outlined,
+                      controller: _latitudeController,
+                      keyboardType: TextInputType.number,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Required';
+                        }
+                        if (double.tryParse(value) == null) {
+                          return 'Invalid number';
+                        }
+                        return null;
+                      },
+                    ),
+                  ),
+                  SizedBox(width: 16.w),
+                  Expanded(
+                    child: CustomTextField(
+                      label: 'Longitude',
+                      prefixIcon: Icons.location_on_outlined,
+                      controller: _longitudeController,
+                      keyboardType: TextInputType.number,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Required';
+                        }
+                        if (double.tryParse(value) == null) {
+                          return 'Invalid number';
+                        }
+                        return null;
+                      },
+                    ),
+                  ),
+                ],
               ),
               SizedBox(height: 24.h),
               CustomButton(
@@ -369,6 +416,8 @@ Future<void> _handleSubmit() async {
         thumbnailImage: _thumbnailImage!,
         additionalImages: _additionalImages,
         ownerId: '2', // Using Jane Smith's ID for demo
+        latitude: double.parse(_latitudeController.text),
+        longitude: double.parse(_longitudeController.text),
       );
       if (mounted) Navigator.pop(context);
     } catch (e) {
