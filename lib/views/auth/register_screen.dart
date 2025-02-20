@@ -77,29 +77,21 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ),
                   ),
                   SizedBox(height: 32.h),
-                  DropdownButtonFormField<UserRole>(
-                    value: _selectedRole,
-                    decoration: InputDecoration(
-                      labelText: 'I want to',
-                      prefixIcon: Icon(Icons.person_outline),
-                      filled: true,
-                      fillColor: AppColors.surface,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(16.r),
-                        borderSide: BorderSide.none,
-                      ),
+                  Container(
+                    decoration: BoxDecoration(
+                      color: AppColors.surface,
+                      borderRadius: BorderRadius.circular(12.r),
                     ),
-                    items: UserRole.values.map((role) {
-                      return DropdownMenuItem(
-                        value: role,
-                        child: Text(role == UserRole.tenant ? 'Rent a property' : 'List my property'),
-                      );
-                    }).toList(),
-                    onChanged: (value) {
-                      if (value != null) {
-                        setState(() => _selectedRole = value);
-                      }
-                    },
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: _buildRoleTab(UserRole.tenant, 'Tenant'),
+                        ),
+                        Expanded(
+                          child: _buildRoleTab(UserRole.landlord, 'Landlord'),
+                        ),
+                      ],
+                    ),
                   ),
                   SizedBox(height: 16.h),
                   CustomTextField(
@@ -197,6 +189,29 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 
+  Widget _buildRoleTab(UserRole role, String label) {
+    final isSelected = _selectedRole == role;
+    return GestureDetector(
+      onTap: () => setState(() => _selectedRole = role),
+      child: Container(
+        padding: EdgeInsets.symmetric(vertical: 12.h),
+        decoration: BoxDecoration(
+          color: isSelected ? AppColors.primary : Colors.transparent,
+          borderRadius: BorderRadius.circular(12.r),
+        ),
+        child: Text(
+          label,
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontSize: 14.sp,
+            fontWeight: FontWeight.w500,
+            color: isSelected ? Colors.white : AppColors.textSecondary,
+          ),
+        ),
+      ),
+    );
+  }
+
   Future<void> _handleRegister() async {
     if (_formKey.currentState!.validate()) {
       if (_passwordController.text != _confirmPasswordController.text) {
@@ -214,9 +229,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
           password: _passwordController.text,
           role: _selectedRole,
         );
-        
+
         if (mounted && user != null) {
-          context.go(_selectedRole == UserRole.landlord ? '/landlord/dashboard' : '/home');
+          context.go(_selectedRole == UserRole.landlord
+              ? '/landlord/dashboard'
+              : '/home');
         }
       } catch (e) {
         if (mounted) {

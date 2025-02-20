@@ -9,28 +9,26 @@ class AuthController extends ChangeNotifier {
   bool get isLoading => _isLoading;
 
   // Simulated authentication methods (to be replaced with Firebase later)
-  Future<User?> login(String email, String password) async {
-    _isLoading = true;
-    notifyListeners();
+Future<User?> loginWithRole(String email, String password, UserRole expectedRole) async {
+  _isLoading = true;
+  notifyListeners();
 
-    try {
-      // Simulate API call
-      await Future.delayed(const Duration(seconds: 2));
-      
-      // Find user in dummy data (replace with Firebase auth)
-      _currentUser = User.dummyUsers.firstWhere(
-        (user) => user.email == email,
-        orElse: () => throw Exception('Invalid credentials'),
-      );
-      
-      return _currentUser;
-    } catch (e) {
-      rethrow;
-    } finally {
-      _isLoading = false;
-      notifyListeners();
-    }
+  try {
+    await Future.delayed(const Duration(seconds: 2));
+    
+    _currentUser = User.dummyUsers.firstWhere(
+      (user) => user.email == email && user.role == expectedRole,
+      orElse: () => throw Exception('Invalid credentials or role'),
+    );
+    
+    return _currentUser;
+  } catch (e) {
+    rethrow;
+  } finally {
+    _isLoading = false;
+    notifyListeners();
   }
+}
 
   Future<User?> register({
     required String fullName,

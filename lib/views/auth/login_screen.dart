@@ -8,7 +8,6 @@ import 'package:home_rental_app/widgets/common/custom_textfield.dart';
 import '../../core/constants/color_constants.dart';
 import '../../core/constants/text_constants.dart';
 
-
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
@@ -18,11 +17,12 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final _emailController = TextEditingController();
-final _passwordController = TextEditingController();
-final _authController = AuthController();
+  final _passwordController = TextEditingController();
+  final _authController = AuthController();
   final _formKey = GlobalKey<FormState>();
   bool _obscurePassword = true;
   bool _isLoading = false;
+  UserRole _selectedRole = UserRole.tenant;
 
   @override
   Widget build(BuildContext context) {
@@ -39,28 +39,30 @@ final _authController = AuthController();
                 children: [
                   SizedBox(height: 60.h),
                   Center(
-                    child: Container(
-                      width: 80.w,
-                      height: 80.w,
-                      decoration: BoxDecoration(
-                        color: AppColors.primary.withOpacity(0.1),
-                        borderRadius: BorderRadius.circular(20.r),
-                      ),
-                      child: Icon(
-                        Icons.home_rounded,
-                        size: 40.w,
-                        color: AppColors.primary,
-                      ),
+                    child: Column(
+                      children: [
+                        Container(
+                          padding: EdgeInsets.all(16.w),
+                          decoration: BoxDecoration(
+                            color: AppColors.primary.withOpacity(0.1),
+                            shape: BoxShape.circle,
+                          ),
+                          child: Icon(
+                            Icons.home_rounded,
+                            size: 48.w,
+                            color: AppColors.primary,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                  SizedBox(height: 40.h),
+                  SizedBox(height: 48.h),
                   Text(
                     AppTexts.welcomeBack,
                     style: TextStyle(
-                      fontSize: 32.sp,
+                      fontSize: 28.sp,
                       fontWeight: FontWeight.bold,
                       color: AppColors.textPrimary,
-                      letterSpacing: -0.5,
                     ),
                   ),
                   SizedBox(height: 8.h),
@@ -69,15 +71,37 @@ final _authController = AuthController();
                     style: TextStyle(
                       fontSize: 16.sp,
                       color: AppColors.textSecondary,
-                      letterSpacing: 0.2,
                     ),
                   ),
-                  SizedBox(height: 40.h),
+                  SizedBox(height: 32.h),
+                  Container(
+                    decoration: BoxDecoration(
+                      color: AppColors.surface,
+                      borderRadius: BorderRadius.circular(12.r),
+                    ),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: _buildRoleTab(UserRole.tenant, 'Tenant'),
+                        ),
+                        Expanded(
+                          child: _buildRoleTab(UserRole.landlord, 'Landlord'),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 24.h),
                   CustomTextField(
                     controller: _emailController,
                     label: 'Email',
                     prefixIcon: Icons.email_outlined,
                     keyboardType: TextInputType.emailAddress,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter your email';
+                      }
+                      return null;
+                    },
                   ),
                   SizedBox(height: 16.h),
                   CustomTextField(
@@ -85,11 +109,15 @@ final _authController = AuthController();
                     label: 'Password',
                     prefixIcon: Icons.lock_outline,
                     obscureText: _obscurePassword,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter your password';
+                      }
+                      return null;
+                    },
                     suffixIcon: IconButton(
                       icon: Icon(
-                        _obscurePassword
-                            ? Icons.visibility
-                            : Icons.visibility_off,
+                        _obscurePassword ? Icons.visibility : Icons.visibility_off,
                         color: AppColors.textSecondary,
                         size: 20.sp,
                       ),
@@ -115,16 +143,12 @@ final _authController = AuthController();
                       ),
                     ),
                   ),
-                  SizedBox(height: 24.h),
-                  AnimatedContainer(
-                    duration: const Duration(milliseconds: 300),
-                    width: double.infinity,
+                  SizedBox(height: 32.h),
+                  CustomButton(
+                    text: 'Sign In',
+                    onPressed: _handleLogin,
+                    isLoading: _isLoading,
                     height: 56.h,
-                    child: CustomButton(
-                      text: 'Sign In',
-                      onPressed: _handleLogin,
-                      isLoading: _isLoading,
-                    ),
                   ),
                   SizedBox(height: 24.h),
                   Row(
@@ -162,27 +186,51 @@ final _authController = AuthController();
     );
   }
 
-Future<void> _handleLogin() async {
-  if (_formKey.currentState!.validate()) {
-    setState(() => _isLoading = true);
-    try {
-      final user = await _authController.login(
-        _emailController.text,
-        _passwordController.text,
-      );
-      
-      if (mounted && user != null) {
-        context.go(user.role == UserRole.landlord ? '/landlord/dashboard' : '/home');
-      }
-    } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(e.toString())),
+  Widget _buildRoleTab(UserRole role, String label) {
+    final isSelected = _selectedRole == role;
+    return GestureDetector(
+      onTap: () => setState(() => _selectedRole = role),
+      child: Container(
+        padding: EdgeInsets.symmetric(vertical: 12.h),
+        decoration: BoxDecoration(
+          color: isSelected ? AppColors.primary : Colors.transparent,
+          borderRadius: BorderRadius.circular(12.r),
+        ),
+        child: Text(
+          label,
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontSize: 14.sp,
+            fontWeight: FontWeight.w500,
+            color: isSelected ? Colors.white : AppColors.textSecondary,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Future<void> _handleLogin() async {
+    if (_formKey.currentState!.validate()) {
+      setState(() => _isLoading = true);
+      try {
+        final user = await _authController.loginWithRole(
+          _emailController.text,
+          _passwordController.text,
+          _selectedRole,
         );
+        
+        if (mounted && user != null) {
+          context.go(user.role == UserRole.landlord ? '/landlord/dashboard' : '/home');
+        }
+      } catch (e) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(e.toString())),
+          );
+        }
+      } finally {
+        if (mounted) setState(() => _isLoading = false);
       }
-    } finally {
-      if (mounted) setState(() => _isLoading = false);
     }
   }
-}
 }
