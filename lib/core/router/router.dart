@@ -175,7 +175,7 @@ final router = GoRouter(
     GoRoute(
       path: '/',
       name: 'splash',
-      builder: (context, state) => const SplashScreen(),
+      builder: (context, state) => const OnboardingScreen(),
     ),
     GoRoute(
       path: '/onboarding',

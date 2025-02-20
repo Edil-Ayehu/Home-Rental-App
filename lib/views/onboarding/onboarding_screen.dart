@@ -26,13 +26,13 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       image: 'assets/images/onboarding/onboarding2.png',
       title: 'Easy Booking',
       description: 'Book your desired property with just a few taps',
-      backgroundColor: AppColors.accent,
+      backgroundColor: AppColors.primary,
     ),
     OnboardingContent(
       image: 'assets/images/onboarding/onboarding1.png',
       title: 'Move In Quickly',
       description: 'Quick and hassle-free move-in process for your comfort',
-      backgroundColor: AppColors.secondary,
+      backgroundColor: AppColors.primary,
     ),
   ];
 
@@ -107,7 +107,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                           style: ElevatedButton.styleFrom(
                             backgroundColor: AppColors.surface,
                             padding: EdgeInsets.symmetric(
-                              horizontal: 32.w,
+                              horizontal: 12.w,
                               vertical: 16.h,
                             ),
                             shape: RoundedRectangleBorder(
