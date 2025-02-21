@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:home_rental_app/models/property_model.dart';
+import 'package:home_rental_app/views/search/widgets/property_filter_chips.dart';
 import '../../core/constants/color_constants.dart';
 import '../../widgets/property/property_card.dart';
 
@@ -11,7 +12,6 @@ class SearchScreen extends StatefulWidget {
   @override
   State<SearchScreen> createState() => _SearchScreenState();
 }
-
 
 class _SearchScreenState extends State<SearchScreen> {
   final TextEditingController _searchController = TextEditingController();
@@ -28,9 +28,9 @@ class _SearchScreenState extends State<SearchScreen> {
     if (_selectedFilter == 'All') {
       return Property.dummyProperties;
     }
-    return Property.dummyProperties.where((property) => 
-      property.type == _selectedFilter
-    ).toList();
+    return Property.dummyProperties
+        .where((property) => property.type == _selectedFilter)
+        .toList();
   }
 
   @override
@@ -62,7 +62,7 @@ class _SearchScreenState extends State<SearchScreen> {
                           color: AppColors.textSecondary,
                           fontSize: 16.sp,
                         ),
-                        prefixIcon: Icon(
+                        prefixIcon: const Icon(
                           Icons.search,
                           color: AppColors.textSecondary,
                         ),
@@ -79,32 +79,12 @@ class _SearchScreenState extends State<SearchScreen> {
               ),
             ),
             SizedBox(height: 8.h),
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              padding: EdgeInsets.symmetric(horizontal: 16.w),
-              child: Row(
-                children: _filters.map((filter) {
-                  final isSelected = _selectedFilter == filter;
-                  return Padding(
-                    padding: EdgeInsets.only(right: 8.w),
-                    child: FilterChip(
-                      selected: isSelected,
-                      label: Text(filter),
-                      onSelected: (selected) {
-                        setState(() => _selectedFilter = filter);
-                      },
-                      backgroundColor: AppColors.surface,
-                      selectedColor: AppColors.primary,
-                      labelStyle: TextStyle(
-                        color: isSelected
-                            ? AppColors.surface
-                            : AppColors.textSecondary,
-                        fontSize: 14.sp,
-                      ),
-                    ),
-                  );
-                }).toList(),
-              ),
+            PropertyFilterChips(
+              filters: _filters,
+              selectedFilter: _selectedFilter,
+              onFilterSelected: (filter) {
+                setState(() => _selectedFilter = filter);
+              },
             ),
             SizedBox(height: 16.h),
             Expanded(

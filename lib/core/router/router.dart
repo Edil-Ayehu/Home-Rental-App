@@ -13,7 +13,7 @@ import 'package:home_rental_app/views/chat/messages_screen.dart';
 import 'package:home_rental_app/views/favorites/favorites_screen.dart';
 import 'package:home_rental_app/views/home/home_screen.dart';
 import 'package:home_rental_app/views/home/property_details_screen.dart';
-import 'package:home_rental_app/views/home/search_screen.dart';
+import 'package:home_rental_app/views/search/search_screen.dart';
 import 'package:home_rental_app/views/land_lord/add_property_screen.dart';
 import 'package:home_rental_app/views/land_lord/landlord_bookings_screen.dart';
 import 'package:home_rental_app/views/land_lord/landlord_dashboard_screen.dart';
@@ -175,7 +175,7 @@ final router = GoRouter(
     GoRoute(
       path: '/',
       name: 'splash',
-      builder: (context, state) => const OnboardingScreen(),
+      builder: (context, state) => const SplashScreen(),
     ),
     GoRoute(
       path: '/onboarding',
