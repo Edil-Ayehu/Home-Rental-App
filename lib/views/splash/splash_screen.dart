@@ -137,7 +137,7 @@ void _navigateToNextScreen() async {
                   child: SizedBox(
                     width: 40.w,
                     height: 40.w,
-                    child: CircularProgressIndicator(
+                    child: const CircularProgressIndicator(
                       valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary),
                       strokeWidth: 3,
                     ),

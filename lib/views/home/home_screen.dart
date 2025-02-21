@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:home_rental_app/models/property_model.dart';
-import 'package:home_rental_app/widgets/common/banner_carousel.dart';
+import 'package:home_rental_app/views/home/widgets/home_app_bar.dart';
+import 'package:home_rental_app/views/home/widgets/banner_carousel.dart';
+import 'package:home_rental_app/views/home/widgets/section_title.dart';
 import '../../core/constants/color_constants.dart';
 import '../../core/constants/text_constants.dart';
 import '../../widgets/property/property_card.dart';
@@ -15,7 +17,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,55 +24,7 @@ class _HomeScreenState extends State<HomeScreen> {
       body: SafeArea(
         child: CustomScrollView(
           slivers: [
-            SliverAppBar(
-              floating: true,
-              backgroundColor: AppColors.background,
-              title: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Location',
-                    style: TextStyle(
-                      color: AppColors.textSecondary,
-                      fontSize: 14.sp,
-                    ),
-                  ),
-                  Row(
-                    children: [
-                      Icon(
-                        Icons.location_on,
-                        color: AppColors.primary,
-                        size: 20.sp,
-                      ),
-                      SizedBox(width: 4.w),
-                      Text(
-                        'San Francisco, CA',
-                        style: TextStyle(
-                          color: AppColors.textPrimary,
-                          fontSize: 16.sp,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                      const Icon(
-                        Icons.keyboard_arrow_down,
-                        color: AppColors.textPrimary,
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-              actions: [
-                CircleAvatar(
-                  backgroundColor: AppColors.surface,
-                  child: IconButton(
-                    icon: const Icon(Icons.notifications_outlined),
-                    color: AppColors.textPrimary,
-                    onPressed: () => context.push('/notifications'),
-                  ),
-                ),
-                SizedBox(width: 16.w),
-              ],
-            ),
+            const HomeAppBar(),
             SliverToBoxAdapter(
               child: Padding(
                 padding: EdgeInsets.all(16.w),
@@ -126,28 +79,10 @@ class _HomeScreenState extends State<HomeScreen> {
             SliverToBoxAdapter(
               child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 16.w),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Popular Properties',
-                      style: TextStyle(
-                        fontSize: 18.sp,
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.textPrimary,
-                      ),
-                    ),
-                    TextButton(
-                      onPressed: () => context.push('/home/search'),
-                      child: Text(
-                        'See All',
-                        style: TextStyle(
-                          color: AppColors.primary,
-                          fontSize: 14.sp,
-                        ),
-                      ),
-                    ),
-                  ],
+                child: SectionTitle(
+                  title: 'Popular Properties',
+                  actionText: 'See All',
+                  onActionPressed: () => context.push('/home/search'),
                 ),
               ),
             ),
