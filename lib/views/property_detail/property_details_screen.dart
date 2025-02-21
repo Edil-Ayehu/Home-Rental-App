@@ -2,13 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:home_rental_app/models/property_model.dart';
+import 'package:home_rental_app/views/property_detail/widgets/property_features.dart';
+import 'package:home_rental_app/views/property_detail/widgets/property_reviews.dart';
 import 'package:home_rental_app/widgets/common/custom_button.dart';
-import 'package:home_rental_app/widgets/common/rating_dialog.dart';
+import 'package:home_rental_app/views/property_detail/widgets/rating_dialog.dart';
 import '../../core/constants/color_constants.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:shimmer/shimmer.dart';
-import '../../widgets/property/property_map.dart';
-
+import 'widgets/property_map.dart';
 
 class PropertyDetailsScreen extends StatefulWidget {
   final String propertyId;
@@ -64,10 +65,18 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                 ),
               ),
               SizedBox(width: 8.w),
-              IconButton(
-                icon: const Icon(Icons.star_border),
-                color: AppColors.textPrimary,
-                onPressed: () => _showRatingDialog(context),
+              Padding(
+                padding: EdgeInsets.all(8.w),
+                child: CircleAvatar(
+                  radius: 18.r,
+                  backgroundColor: AppColors.surface.withOpacity(0.5),
+                  child: IconButton(
+                    icon: const Icon(Icons.star_border, size: 18),
+                    color: AppColors.textPrimary,
+                    onPressed: () => _showRatingDialog(context),
+                    padding: EdgeInsets.zero,
+                  ),
+                ),
               ),
             ],
             flexibleSpace: FlexibleSpaceBar(
@@ -191,7 +200,7 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                       ],
                     ),
                     SizedBox(height: 24.h),
-                    _buildFeatures(),
+                    PropertyFeatures(propertyType: widget.property.type),
                     SizedBox(height: 24.h),
                     Text(
                       'Description',
@@ -222,6 +231,12 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                     SizedBox(height: 12.h),
                     PropertyMap(property: widget.property),
                     SizedBox(height: 24.h),
+                    PropertyReviews(
+                      propertyId: widget.propertyId,
+                      averageRating: widget.property.averageRating,
+                      numberOfRatings: widget.property.numberOfRatings,
+                    ),
+                    SizedBox(height: 24.h),
                     CustomButton(
                       text: 'Book Now',
                       onPressed: () =>
@@ -231,47 +246,6 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                   ],
                 ),
               ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildFeatures() {
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: Row(
-        children: [
-          _buildFeatureItem(Icons.home_outlined, widget.property.type),
-          SizedBox(width: 12.w),
-          _buildFeatureItem(Icons.king_bed_outlined, '3 Beds'),
-          SizedBox(width: 12.w),
-          _buildFeatureItem(Icons.bathtub_outlined, '2 Baths'),
-          SizedBox(width: 12.w),
-          _buildFeatureItem(Icons.square_foot, '1,200 ft²'),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildFeatureItem(IconData icon, String text) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 12.h),
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.circular(12.r),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(icon, color: AppColors.primary, size: 20.sp),
-          SizedBox(width: 8.w),
-          Text(
-            text,
-            style: TextStyle(
-              fontSize: 12.sp,
-              color: AppColors.textSecondary,
             ),
           ),
         ],

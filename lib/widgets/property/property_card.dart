@@ -123,7 +123,7 @@ class PropertyCard extends StatelessWidget {
                           ),
                           SizedBox(width: 4.w),
                           Text(
-                            property.rating.toString(),
+                            property.averageRating.toString(),
                             style: TextStyle(
                               fontSize: 12.sp,
                               color: AppColors.textSecondary,

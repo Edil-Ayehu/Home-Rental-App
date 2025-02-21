@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../core/constants/color_constants.dart';
+import '../../../core/constants/color_constants.dart';
 
 class RatingDialog extends StatefulWidget {
   final Function(double rating, String comment) onSubmit;

@@ -42,7 +42,6 @@ class PropertyController extends ChangeNotifier {
       price: price,
       imageUrl: thumbnailUrl,
       images: [thumbnailUrl, ...imageUrls],
-      rating: 0,
       isAvailable: true,
       latitude: latitude,
       longitude: longitude,

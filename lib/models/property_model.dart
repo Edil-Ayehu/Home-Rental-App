@@ -1,3 +1,5 @@
+import 'package:home_rental_app/models/rating_model.dart';
+
 class Property {
   final String id;
   final String ownerId;
@@ -6,7 +8,6 @@ class Property {
   final double price;
   final String imageUrl;
   final List<String> images;
-  final double rating;
   final bool isAvailable;
   final List<String> amenities;
   final String description;
@@ -24,16 +25,25 @@ class Property {
     required this.price,
     required this.imageUrl,
     required this.images,
-    required this.rating,
     this.isAvailable = true,
     this.amenities = const [],
     this.description = '',
-    this.averageRating = 0.0,
-    this.numberOfRatings = 0,
     required this.latitude,
     required this.longitude,
     required this.type,
-  });
+  }) : numberOfRatings = Rating.dummyRatings
+            .where((rating) => rating.propertyId == id)
+            .length,
+       averageRating = Rating.dummyRatings
+            .where((rating) => rating.propertyId == id)
+            .fold(0.0, (sum, item) => sum + item.rating) /
+            (Rating.dummyRatings
+                .where((rating) => rating.propertyId == id)
+                .length > 0
+                ? Rating.dummyRatings
+                    .where((rating) => rating.propertyId == id)
+                    .length
+                : 1);
 
   static List<Property> dummyProperties = [
     Property(
@@ -47,7 +57,6 @@ class Property {
         'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267',
         'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688',
       ],
-      rating: 4.8,
       amenities: ['WiFi', 'Pool', 'Gym', 'Parking'],
       description: 'A beautiful modern apartment in the heart of the city.',
       latitude: 9.0192,
@@ -65,7 +74,6 @@ class Property {
         'https://images.unsplash.com/photo-1499793983690-e29da59ef1c2',
         'https://images.unsplash.com/photo-1499793983690-e29da59ef1c3',
       ],
-      rating: 4.5,
       amenities: ['Beach Access', 'WiFi', 'Kitchen', 'BBQ'],
       description: 'Beautiful beachfront property with amazing ocean views.',
       latitude: 48.8575,
@@ -83,7 +91,6 @@ class Property {
         'https://images.unsplash.com/photo-1449158743715-0a90ebb6d2d8',
         'https://images.unsplash.com/photo-1449158743715-0a90ebb6d2d7',
       ],
-      rating: 4.7,
       amenities: ['Fireplace', 'Hiking Trails', 'Scenic View'],
       description: 'Cozy cabin with breathtaking mountain views.',
       latitude: 51.5072,
@@ -101,7 +108,6 @@ class Property {
         'https://images.unsplash.com/photo-1580587771525-78b9dba3b914',
         'https://images.unsplash.com/photo-1580587771525-78b9dba3b915',
       ],
-      rating: 4.9,
       amenities: ['Pool', 'Garden', 'Tennis Court', 'Security'],
       description: 'Luxurious villa with private pool and tennis court.',
       latitude: 43.6532,
@@ -119,7 +125,6 @@ class Property {
         'https://images.unsplash.com/photo-1522156373667-4c7234bbd804',
         'https://images.unsplash.com/photo-1522156373667-4c7234bbd805',
       ],
-      rating: 4.3,
       amenities: ['WiFi', 'Study Area', 'Laundry'],
       description: 'Perfect for students, close to university campus.',
       latitude: 0.7893,
