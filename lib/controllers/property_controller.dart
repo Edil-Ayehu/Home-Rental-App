@@ -1,11 +1,13 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import '../models/property_model.dart';
+import '../models/rating_model.dart';
 
 class PropertyController extends ChangeNotifier {
   List<Property> getPropertiesByOwnerId(String ownerId) {
     return Property.dummyProperties.where((p) => p.ownerId == ownerId).toList();
   }
+
 
   Future<String> uploadImage(File image) async {
     // TODO: Implement actual image upload to your backend/storage
@@ -53,5 +55,19 @@ class PropertyController extends ChangeNotifier {
     notifyListeners();
     
     return newProperty;
+  }
+
+  List<Rating> getPropertyReviews(String propertyId) {
+    return Rating.dummyRatings
+        .where((rating) => rating.propertyId == propertyId)
+        .toList();
+  }
+
+  double getPropertyAverageRating(String propertyId) {
+    final reviews = getPropertyReviews(propertyId);
+    if (reviews.isEmpty) return 0.0;
+    
+    final totalRating = reviews.fold(0.0, (sum, review) => sum + review.rating);
+    return totalRating / reviews.length;
   }
 }

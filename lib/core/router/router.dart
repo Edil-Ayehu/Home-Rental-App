@@ -12,6 +12,7 @@ import 'package:home_rental_app/views/chat/chat_detail_screen.dart';
 import 'package:home_rental_app/views/chat/messages_screen.dart';
 import 'package:home_rental_app/views/favorites/favorites_screen.dart';
 import 'package:home_rental_app/views/home/home_screen.dart';
+import 'package:home_rental_app/views/land_lord/landlord_property_details_screen.dart';
 import 'package:home_rental_app/views/property_detail/property_details_screen.dart';
 import 'package:home_rental_app/views/search/search_screen.dart';
 import 'package:home_rental_app/views/land_lord/add_property_screen.dart';
@@ -144,6 +145,13 @@ final router = GoRouter(
           builder: (context, state) {
             final property = state.extra as Property;
             return AddPropertyScreen(property: property);
+          },
+        ),
+        GoRoute(
+          path: '/landlord/properties/details/:id',
+          builder: (context, state) {
+            final property = state.extra as Property;
+            return LandlordPropertyDetailsScreen(property: property);
           },
         ),
         GoRoute(

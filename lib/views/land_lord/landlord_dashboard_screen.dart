@@ -8,7 +8,7 @@ import '../../widgets/property/property_card.dart';
 
 class LandlordDashboardScreen extends StatelessWidget {
   final _propertyController = PropertyController();
-  
+
   LandlordDashboardScreen({super.key});
 
   @override
@@ -78,7 +78,7 @@ class LandlordDashboardScreen extends StatelessWidget {
   Widget _buildMyProperties(BuildContext context) {
     // Using Jane Smith's ID (2) for demo
     final properties = _propertyController.getPropertiesByOwnerId('2');
-    
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -115,7 +115,7 @@ class LandlordDashboardScreen extends StatelessWidget {
             return PropertyCard(
               property: property,
               onTap: () => context.push(
-                '/landlord/properties/edit/${property.id}',
+                '/landlord/properties/details/${property.id}',
                 extra: property,
               ),
             );
