@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:home_rental_app/models/onboarding_content.dart';
+import 'package:home_rental_app/views/onboarding/widgets/onboarding_page.dart';
 import '../../core/constants/color_constants.dart';
-
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
@@ -20,19 +21,16 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       image: 'assets/images/onboarding/onboarding1.png',
       title: 'Find Perfect Home',
       description: 'Discover your perfect home from our vast collection of properties',
-      backgroundColor: AppColors.primary,
     ),
     OnboardingContent(
       image: 'assets/images/onboarding/onboarding2.png',
       title: 'Easy Booking',
       description: 'Book your desired property with just a few taps',
-      backgroundColor: AppColors.primary,
     ),
     OnboardingContent(
       image: 'assets/images/onboarding/onboarding1.png',
       title: 'Move In Quickly',
       description: 'Quick and hassle-free move-in process for your comfort',
-      backgroundColor: AppColors.primary,
     ),
   ];
 
@@ -117,7 +115,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                           child: Text(
                             _currentPage == _contents.length - 1 ? 'Get Started' : 'Next',
                             style: TextStyle(
-                              color: _contents[_currentPage].backgroundColor,
+                              color: AppColors.primary,
                               fontSize: 16.sp,
                               fontWeight: FontWeight.w600,
                             ),
@@ -134,66 +132,4 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       ),
     );
   }
-}
-
-class OnboardingPage extends StatelessWidget {
-  final OnboardingContent content;
-
-  const OnboardingPage({super.key, required this.content});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      color: content.backgroundColor,
-      child: SafeArea(
-        child: Column(
-          children: [
-            SizedBox(height: 60.h),
-            Image.asset(
-              content.image,
-              height: 300.h,
-              fit: BoxFit.contain,
-            ),
-            SizedBox(height: 60.h),
-            Text(
-              content.title,
-              style: TextStyle(
-                color: AppColors.surface,
-                fontSize: 28.sp,
-                fontWeight: FontWeight.bold,
-                letterSpacing: 0.5,
-              ),
-            ),
-            SizedBox(height: 16.h),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 40.w),
-              child: Text(
-                content.description,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: AppColors.surface.withOpacity(0.8),
-                  fontSize: 16.sp,
-                  height: 1.5,
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class OnboardingContent {
-  final String image;
-  final String title;
-  final String description;
-  final Color backgroundColor;
-
-  OnboardingContent({
-    required this.image,
-    required this.title,
-    required this.description,
-    required this.backgroundColor,
-  });
 }
