@@ -23,78 +23,73 @@ class BookingCard extends StatelessWidget {
         extra: booking.property,
       ),
       child: Container(
-        margin: EdgeInsets.only(bottom: 16.h),
+        margin: EdgeInsets.symmetric(horizontal: 6.w, vertical: 8.h),
         decoration: BoxDecoration(
           color: AppColors.surface,
-          borderRadius: BorderRadius.circular(16.r),
+          borderRadius: BorderRadius.circular(20.r),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.05),
-              blurRadius: 10,
-              offset: const Offset(0, 2),
+              color: Colors.black.withOpacity(0.03),
+              blurRadius: 15,
+              offset: const Offset(0, 5),
             ),
           ],
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            ClipRRect(
-              borderRadius: BorderRadius.vertical(top: Radius.circular(16.r)),
-              child: CachedNetworkImage(
-                imageUrl: booking.property.imageUrl,
-                height: 150.h,
-                width: double.infinity,
-                fit: BoxFit.cover,
-                placeholder: (context, url) => _buildShimmerEffect(),
-                errorWidget: (context, url, error) => Container(
-                  height: 150.h,
-                  width: double.infinity,
-                  color: Colors.grey[300],
-                  child: Icon(
-                    Icons.error_outline,
-                    color: AppColors.error,
-                    size: 32.sp,
+            Stack(
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
+                  child: CachedNetworkImage(
+                    imageUrl: booking.property.imageUrl,
+                    height: 180.h,
+                    width: double.infinity,
+                    fit: BoxFit.cover,
+                    placeholder: (context, url) => _buildShimmerEffect(),
+                    errorWidget: (context, url, error) => _buildErrorWidget(),
                   ),
                 ),
-              ),
+                Positioned(
+                  top: 16.h,
+                  right: 16.w,
+                  child: _buildStatusChip(booking.status),
+                ),
+              ],
             ),
             Padding(
               padding: EdgeInsets.all(16.w),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    booking.property.title,
-                    style: TextStyle(
-                      fontSize: 18.sp,
-                      fontWeight: FontWeight.w600,
-                      color: AppColors.textPrimary,
-                    ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: Text(
+                          booking.property.title,
+                          style: TextStyle(
+                            fontSize: 18.sp,
+                            fontWeight: FontWeight.w700,
+                            color: AppColors.textPrimary,
+                          ),
+                        ),
+                      ),
+                      Text(
+                        '\$${booking.totalPrice.toStringAsFixed(0)}',
+                        style: TextStyle(
+                          fontSize: 20.sp,
+                          fontWeight: FontWeight.w700,
+                          color: AppColors.primary,
+                        ),
+                      ),
+                    ],
                   ),
                   SizedBox(height: 8.h),
-                  _buildInfoRow(
-                    Icons.location_on_outlined,
-                    'Location',
-                    booking.property.location,
-                  ),
+                  _buildLocation(),
                   SizedBox(height: 16.h),
-                  _buildInfoRow(
-                    Icons.calendar_today_outlined,
-                    'Check-in',
-                    DateFormat('MMM dd, yyyy').format(booking.checkIn),
-                  ),
-                  SizedBox(height: 8.h),
-                  _buildInfoRow(
-                    Icons.calendar_today_outlined,
-                    'Check-out',
-                    DateFormat('MMM dd, yyyy').format(booking.checkOut),
-                  ),
-                  SizedBox(height: 8.h),
-                  _buildInfoRow(
-                    Icons.attach_money,
-                    'Total Price',
-                    '\$${booking.totalPrice.toStringAsFixed(2)}',
-                  ),
+                  _buildDateRange(),
                 ],
               ),
             ),
@@ -104,29 +99,97 @@ class BookingCard extends StatelessWidget {
     );
   }
 
-  Widget _buildInfoRow(IconData icon, String label, String value) {
+  Widget _buildStatusChip(BookingStatus status) {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
+      decoration: BoxDecoration(
+        color: AppColors.surface.withOpacity(0.9),
+        borderRadius: BorderRadius.circular(20.r),
+      ),
+      child: Text(
+        status.name[0].toUpperCase() + status.name.substring(1),
+        style: TextStyle(
+          fontSize: 12.sp,
+          fontWeight: FontWeight.w600,
+          color: AppColors.primary,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildLocation() {
     return Row(
       children: [
-        Icon(icon, size: 16.sp, color: AppColors.primary),
-        SizedBox(width: 8.w),
-        Text(
-          '$label: ',
-          style: TextStyle(
-            fontSize: 14.sp,
-            color: AppColors.textSecondary,
-          ),
+        Icon(
+          Icons.location_on_outlined,
+          size: 16.sp,
+          color: AppColors.primary,
         ),
+        SizedBox(width: 4.w),
         Expanded(
           child: Text(
-            value,
+            booking.property.location,
+            style: TextStyle(
+              fontSize: 14.sp,
+              color: AppColors.textSecondary,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildDateRange() {
+    return Container(
+      padding: EdgeInsets.all(12.w),
+      decoration: BoxDecoration(
+        color: AppColors.primary.withOpacity(0.05),
+        borderRadius: BorderRadius.circular(12.r),
+      ),
+      child: Row(
+        children: [
+          Icon(
+            Icons.calendar_today_outlined,
+            size: 16.sp,
+            color: AppColors.primary,
+          ),
+          SizedBox(width: 8.w),
+          Text(
+            '${DateFormat('MMM dd').format(booking.checkIn)} - ${DateFormat('MMM dd').format(booking.checkOut)}',
             style: TextStyle(
               fontSize: 14.sp,
               fontWeight: FontWeight.w600,
               color: AppColors.textPrimary,
             ),
           ),
-        ),
-      ],
+        ],
+      ),
+    );
+  }
+
+  Widget _buildErrorWidget() {
+    return Container(
+      height: 180.h,
+      width: double.infinity,
+      color: Colors.grey[100],
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            Icons.error_outline,
+            color: AppColors.error,
+            size: 32.sp,
+          ),
+          SizedBox(height: 8.h),
+          Text(
+            'Failed to load image',
+            style: TextStyle(
+              fontSize: 14.sp,
+              color: AppColors.textSecondary,
+            ),
+          ),
+        ],
+      ),
     );
   }
 
