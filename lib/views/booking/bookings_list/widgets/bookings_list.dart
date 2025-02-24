@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../../core/constants/color_constants.dart';
-import '../../../models/booking_model.dart';
+import '../../../../core/constants/color_constants.dart';
+import '../../../../models/booking_model.dart';
 import 'booking_card.dart';
 
 class BookingsList extends StatelessWidget {

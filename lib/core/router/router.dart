@@ -6,8 +6,8 @@ import 'package:home_rental_app/models/property_model.dart';
 import 'package:home_rental_app/views/auth/forgot_password_screen.dart';
 import 'package:home_rental_app/views/auth/login_screen.dart';
 import 'package:home_rental_app/views/auth/register_screen.dart';
-import 'package:home_rental_app/views/booking/booking_form_screen.dart';
-import 'package:home_rental_app/views/booking/bookings_screen.dart';
+import 'package:home_rental_app/views/booking/booking_form/booking_form_screen.dart';
+import 'package:home_rental_app/views/booking/bookings_list/bookings_list_screen.dart';
 import 'package:home_rental_app/views/chat/chat_detail_screen.dart';
 import 'package:home_rental_app/views/chat/messages_screen.dart';
 import 'package:home_rental_app/views/favorites/favorites_screen.dart';
@@ -72,7 +72,7 @@ final router = GoRouter(
         ),
         GoRoute(
           path: '/bookings',
-          builder: (context, state) => const BookingsScreen(),
+          builder: (context, state) => const BookingsListScreen(),
         ),
         GoRoute(
           path: '/notifications',

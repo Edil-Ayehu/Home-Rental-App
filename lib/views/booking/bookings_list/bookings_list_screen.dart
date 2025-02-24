@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
-import '../../core/constants/color_constants.dart';
-import '../../models/booking_model.dart';
-import '../../widgets/common/page_layout.dart';
+import '../../../core/constants/color_constants.dart';
+import '../../../models/booking_model.dart';
+import '../../../widgets/common/page_layout.dart';
 import 'widgets/bookings_list.dart';
 
-class BookingsScreen extends StatefulWidget {
-  const BookingsScreen({super.key});
+class BookingsListScreen extends StatefulWidget {
+  const BookingsListScreen({super.key});
 
   @override
-  State<BookingsScreen> createState() => _BookingsScreenState();
+  State<BookingsListScreen> createState() => _BookingsScreenState();
 }
 
-class _BookingsScreenState extends State<BookingsScreen> with SingleTickerProviderStateMixin {
+class _BookingsScreenState extends State<BookingsListScreen> with SingleTickerProviderStateMixin {
   late TabController _tabController;
   final List<BookingStatus> _tabs = [
     BookingStatus.upcoming,
