@@ -24,6 +24,7 @@ class _HomeScreenState extends State<HomeScreen> {
       body: SafeArea(
         child: CustomScrollView(
           slivers: [
+            
             const HomeAppBar(),
             SliverToBoxAdapter(
               child: Padding(
