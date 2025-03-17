@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../core/constants/color_constants.dart';
 import '../../../models/booking_model.dart';
 import '../../../widgets/common/page_layout.dart';
@@ -31,14 +32,36 @@ class _BookingsScreenState extends State<BookingsListScreen> with SingleTickerPr
       title: 'My Bookings',
       body: Column(
         children: [
-          TabBar(
-            controller: _tabController,
-            labelColor: AppColors.primary,
-            unselectedLabelColor: AppColors.textSecondary,
-            indicatorColor: AppColors.primary,
-            tabs: _tabs.map((status) => Tab(
-              text: status.name[0].toUpperCase() + status.name.substring(1),
-            )).toList(),
+          Container(
+            margin: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+            decoration: BoxDecoration(
+              color: Colors.grey.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(30.r),
+            ),
+            child: TabBar(
+              controller: _tabController,
+              tabs: _tabs.map((status) => Tab(
+                text: status.name[0].toUpperCase() + status.name.substring(1),
+              )).toList(),
+              labelColor: Colors.white,
+              unselectedLabelColor: AppColors.textSecondary,
+              indicator: BoxDecoration(
+                color: AppColors.primary,
+                borderRadius: BorderRadius.circular(30.r),
+              ),
+              dividerColor: Colors.transparent,
+              indicatorSize: TabBarIndicatorSize.tab,
+              labelStyle: TextStyle(
+                fontSize: 14.sp,
+                fontWeight: FontWeight.w600,
+              ),
+              unselectedLabelStyle: TextStyle(
+                fontSize: 14.sp,
+                fontWeight: FontWeight.w500,
+              ),
+              padding: EdgeInsets.symmetric(vertical: 4.h, horizontal: 4.w),
+              splashBorderRadius: BorderRadius.circular(30.r),
+            ),
           ),
           Expanded(
             child: TabBarView(
@@ -49,5 +72,11 @@ class _BookingsScreenState extends State<BookingsListScreen> with SingleTickerPr
         ],
       ),
     );
+  }
+  
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
   }
 }
