@@ -26,12 +26,12 @@ class MessagesScreen extends StatelessWidget {
       body: Container(
         color: AppColors.surface,
         child: userMessages.isEmpty
-            ? _buildEmptyState(isLandlord)
+            ? _buildEmptyState(context,isLandlord)
             : CustomScrollView(
                 slivers: [
                   SliverToBoxAdapter(
                     child: Padding(
-                      padding: EdgeInsets.all(16.w),
+                      padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
                       child: Text(
                         'Recent Messages',
                         style: TextStyle(
@@ -55,30 +55,43 @@ class MessagesScreen extends StatelessWidget {
                       childCount: userMessages.length,
                     ),
                   ),
+                  SliverToBoxAdapter(
+                    child: SizedBox(height: 16.h),
+                  ),
                 ],
               ),
       ),
     );
   }
 
-  Widget _buildEmptyState(bool isLandlord) {
-    return Container(
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.circular(16.r),
-      ),
-      child: Center(
+  Widget _buildEmptyState(BuildContext context,bool isLandlord) {
+    return Center(
+      child: Container(
+        padding: EdgeInsets.all(32.w),
+        margin: EdgeInsets.all(24.w),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(20.r),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.03),
+              blurRadius: 15,
+              offset: const Offset(0, 5),
+            ),
+          ],
+        ),
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
               padding: EdgeInsets.all(24.w),
               decoration: BoxDecoration(
-                color: AppColors.primary.withOpacity(0.1),
+                color: AppColors.primary.withOpacity(0.08),
                 shape: BoxShape.circle,
               ),
               child: Icon(
-                Icons.message_outlined,
+                Icons.chat_bubble_outline_rounded,
                 size: 48.sp,
                 color: AppColors.primary,
               ),
@@ -96,9 +109,34 @@ class MessagesScreen extends StatelessWidget {
               SizedBox(height: 12.h),
               Text(
                 'Start chatting with property owners',
+                textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 14.sp,
                   color: AppColors.textSecondary,
+                ),
+              ),
+              SizedBox(height: 24.h),
+              TextButton.icon(
+                onPressed: () => context.push('/properties'),
+                icon: Icon(
+                  Icons.search,
+                  size: 18.sp,
+                  color: AppColors.primary,
+                ),
+                label: Text(
+                  'Browse Properties',
+                  style: TextStyle(
+                    fontSize: 14.sp,
+                    fontWeight: FontWeight.w500,
+                    color: AppColors.primary,
+                  ),
+                ),
+                style: TextButton.styleFrom(
+                  padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30.r),
+                  ),
+                  backgroundColor: AppColors.primary.withOpacity(0.08),
                 ),
               ),
             ],
@@ -126,20 +164,31 @@ class _MessageCard extends StatelessWidget {
         ? message.receiverName 
         : message.senderName;
     final isUnread = !message.isRead && message.receiverId == userId;
+    final timestamp = DateTime.now().difference(message.timestamp).inHours < 24
+        ? '${DateTime.now().difference(message.timestamp).inHours}h ago'
+        : '${DateTime.now().difference(message.timestamp).inDays}d ago';
 
-    return Card(
-      margin: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
-      elevation: 0,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12.r),
-        side: BorderSide(
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 16.w, vertical: 6.h),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16.r),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.03),
+            blurRadius: 8,
+            offset: const Offset(0, 2),
+          ),
+        ],
+        border: Border.all(
           color: isUnread 
               ? AppColors.primary.withOpacity(0.3)
               : Colors.transparent,
+          width: 1.5,
         ),
       ),
       child: InkWell(
-        borderRadius: BorderRadius.circular(12.r),
+        borderRadius: BorderRadius.circular(16.r),
         onTap: () => context.push(
           isLandlord ? '/landlord/messages/chat' : '/messages/chat',
           extra: message,
@@ -152,11 +201,11 @@ class _MessageCard extends StatelessWidget {
                 radius: 24.r,
                 backgroundColor: isUnread 
                     ? AppColors.primary.withOpacity(0.1)
-                    : AppColors.surface,
+                    : Colors.grey.withOpacity(0.1),
                 child: Text(
                   otherPartyName[0].toUpperCase(),
                   style: TextStyle(
-                    color: AppColors.primary,
+                    color: isUnread ? AppColors.primary : Colors.grey[700],
                     fontWeight: FontWeight.w600,
                     fontSize: 16.sp,
                   ),
@@ -180,26 +229,45 @@ class _MessageCard extends StatelessWidget {
                             color: AppColors.textPrimary,
                           ),
                         ),
+                        Text(
+                          timestamp,
+                          style: TextStyle(
+                            fontSize: 12.sp,
+                            color: AppColors.textSecondary,
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 6.h),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            message.content,
+                            style: TextStyle(
+                              fontSize: 14.sp,
+                              color: isUnread 
+                                  ? AppColors.textPrimary
+                                  : AppColors.textSecondary,
+                              fontWeight: isUnread 
+                                  ? FontWeight.w500 
+                                  : FontWeight.w400,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
                         if (isUnread)
                           Container(
-                            width: 8.w,
-                            height: 8.w,
+                            margin: EdgeInsets.only(left: 8.w),
+                            width: 10.w,
+                            height: 10.w,
                             decoration: const BoxDecoration(
                               color: AppColors.primary,
                               shape: BoxShape.circle,
                             ),
                           ),
                       ],
-                    ),
-                    SizedBox(height: 4.h),
-                    Text(
-                      message.content,
-                      style: TextStyle(
-                        fontSize: 14.sp,
-                        color: AppColors.textSecondary,
-                      ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
                     ),
                   ],
                 ),
