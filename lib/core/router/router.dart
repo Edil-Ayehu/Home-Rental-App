@@ -172,7 +172,7 @@ final router = GoRouter(
         ),
         GoRoute(
           path: '/landlord/bookings',
-          builder: (context, state) => const LandlordBookingsScreen(),
+          builder: (context, state) => LandlordBookingsScreen(),
         ),
         GoRoute(
           path: '/landlord/profile',
