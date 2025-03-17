@@ -14,6 +14,7 @@ class Booking {
   final DateTime checkOut;
   final double totalPrice;
   final BookingStatus status;
+  final DateTime bookingDate;
 
   Booking({
     required this.id,
@@ -22,7 +23,8 @@ class Booking {
     required this.checkOut,
     required this.totalPrice,
     required this.status,
-  });
+    DateTime? bookingDate,
+  }) : this.bookingDate = bookingDate ?? DateTime.now();
 
   static List<Booking> dummyBookings = [
     Booking(
@@ -32,6 +34,7 @@ class Booking {
       checkOut: DateTime.now().add(const Duration(days: 10)),
       totalPrice: 3500 * 5,
       status: BookingStatus.upcoming,
+      bookingDate: DateTime.now().subtract(const Duration(days: 1)),
     ),
     Booking(
       id: '2',
@@ -40,6 +43,7 @@ class Booking {
       checkOut: DateTime.now().add(const Duration(days: 3)),
       totalPrice: 2800 * 5,
       status: BookingStatus.ongoing,
+      bookingDate: DateTime.now().subtract(const Duration(days: 5)),
     ),
     Booking(
       id: '3',
@@ -48,6 +52,7 @@ class Booking {
       checkOut: DateTime.now().subtract(const Duration(days: 10)),
       totalPrice: 2200 * 5,
       status: BookingStatus.completed,
+      bookingDate: DateTime.now().subtract(const Duration(days: 20)),
     ),
     Booking(
       id: '4',
@@ -56,6 +61,7 @@ class Booking {
       checkOut: DateTime.now().subtract(const Duration(days: 30)),
       totalPrice: 1600 * 5,
       status: BookingStatus.upcoming,
+      bookingDate: DateTime.now().subtract(const Duration(days: 25)),
     ),
   ];
 }

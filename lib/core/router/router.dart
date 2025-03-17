@@ -17,7 +17,7 @@ import 'package:home_rental_app/views/property_detail/property_details_screen.da
 import 'package:home_rental_app/views/search/search_screen.dart';
 import 'package:home_rental_app/views/land_lord/add_property_screen.dart';
 import 'package:home_rental_app/views/land_lord/landlord_bookings_screen.dart';
-import 'package:home_rental_app/views/land_lord/landlord_dashboard_screen.dart';
+import 'package:home_rental_app/views/land_lord/landlord_dashboard.dart/landlord_dashboard_screen.dart';
 import 'package:home_rental_app/views/land_lord/landlord_profile_screen.dart';
 import 'package:home_rental_app/views/land_lord/landlord_properties_screen.dart';
 import 'package:home_rental_app/views/notifications/notifications_screen.dart';
