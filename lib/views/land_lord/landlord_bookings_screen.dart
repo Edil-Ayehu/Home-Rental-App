@@ -54,8 +54,8 @@ class LandlordBookingsScreen extends StatelessWidget {
             Expanded(
               child: TabBarView(
                 children: [
-                  _buildBookingsList(isActive: true),
-                  _buildBookingsList(isActive: false),
+                  _buildBookingsList(context,isActive: true),
+                  _buildBookingsList(context,isActive: false),
                 ],
               ),
             ),
@@ -65,7 +65,7 @@ class LandlordBookingsScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildBookingsList({required bool isActive}) {
+  Widget _buildBookingsList(BuildContext context,{required bool isActive}) {
     // Using Jane Smith's ID (2) for demo
     final landlordId = '2';
     final allBookings = _bookingController.getBookingsByLandlordId(landlordId);
@@ -83,24 +83,83 @@ class LandlordBookingsScreen extends StatelessWidget {
     
     if (bookings.isEmpty) {
       return Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              Icons.book_outlined,
-              size: 64.sp,
-              color: AppColors.textSecondary,
-            ),
-            SizedBox(height: 16.h),
-            Text(
-              'No ${isActive ? 'active' : 'past'} bookings',
-              style: TextStyle(
-                fontSize: 18.sp,
-                color: AppColors.textPrimary,
-                fontWeight: FontWeight.w600,
+        child: Container(
+          padding: EdgeInsets.all(24.w),
+          margin: EdgeInsets.all(24.w),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(20.r),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.03),
+                blurRadius: 15,
+                offset: const Offset(0, 5),
               ),
-            ),
-          ],
+            ],
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                padding: EdgeInsets.all(16.w),
+                decoration: BoxDecoration(
+                  color: AppColors.primary.withOpacity(0.08),
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(
+                  isActive ? Icons.calendar_today_outlined : Icons.history_outlined,
+                  size: 40.sp,
+                  color: AppColors.primary,
+                ),
+              ),
+              SizedBox(height: 20.h),
+              Text(
+                'No ${isActive ? 'active' : 'past'} bookings',
+                style: TextStyle(
+                  fontSize: 18.sp,
+                  color: AppColors.textPrimary,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              SizedBox(height: 8.h),
+              Text(
+                isActive 
+                  ? 'Your upcoming and ongoing bookings will appear here'
+                  : 'Your completed and cancelled bookings will appear here',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 14.sp,
+                  color: AppColors.textSecondary,
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
+              SizedBox(height: 24.h),
+              TextButton.icon(
+                onPressed: () => context.push('/landlord/properties'),
+                icon: Icon(
+                  Icons.add_circle_outline,
+                  size: 18.sp,
+                  color: AppColors.primary,
+                ),
+                label: Text(
+                  'Add a new property',
+                  style: TextStyle(
+                    fontSize: 14.sp,
+                    fontWeight: FontWeight.w500,
+                    color: AppColors.primary,
+                  ),
+                ),
+                style: TextButton.styleFrom(
+                  padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30.r),
+                  ),
+                  backgroundColor: AppColors.primary.withOpacity(0.08),
+                ),
+              ),
+            ],
+          ),
         ),
       );
     }
