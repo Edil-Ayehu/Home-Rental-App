@@ -20,14 +20,36 @@ class LandlordBookingsScreen extends StatelessWidget {
         length: 2,
         child: Column(
           children: [
-            const TabBar(
-              tabs: [
-                Tab(text: 'Active'),
-                Tab(text: 'Past'),
-              ],
-              labelColor: AppColors.primary,
-              unselectedLabelColor: AppColors.textSecondary,
-              indicatorColor: AppColors.primary,
+            Container(
+              margin: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+              decoration: BoxDecoration(
+                color: Colors.grey.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(30.r),
+              ),
+              child: TabBar(
+                tabs: const [
+                  Tab(text: 'Active'),
+                  Tab(text: 'Past'),
+                ],
+                labelColor: Colors.white,
+                unselectedLabelColor: AppColors.textSecondary,
+                indicator: BoxDecoration(
+                  color: AppColors.primary,
+                  borderRadius: BorderRadius.circular(30.r),
+                ),
+                dividerColor: Colors.transparent,
+                indicatorSize: TabBarIndicatorSize.tab,
+                labelStyle: TextStyle(
+                  fontSize: 14.sp,
+                  fontWeight: FontWeight.w600,
+                ),
+                unselectedLabelStyle: TextStyle(
+                  fontSize: 14.sp,
+                  fontWeight: FontWeight.w500,
+                ),
+                padding: EdgeInsets.symmetric(vertical: 4.h, horizontal: 4.w),
+                splashBorderRadius: BorderRadius.circular(30.r),
+              ),
             ),
             Expanded(
               child: TabBarView(
