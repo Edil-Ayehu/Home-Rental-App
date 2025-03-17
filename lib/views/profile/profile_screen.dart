@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import '../../core/constants/color_constants.dart';
+import '../../widgets/common/custom_button.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -123,24 +124,13 @@ class ProfileScreen extends StatelessWidget {
                     ],
                   ),
                   SizedBox(height: 24.h),
-                  TextButton(
+                  CustomButton(
+                    text: 'Log Out',
                     onPressed: () => _showLogoutDialog(context),
-                    style: TextButton.styleFrom(
-                      foregroundColor: AppColors.error,
-                      padding: EdgeInsets.symmetric(vertical: 12.h),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12.r),
-                        side: const BorderSide(color: AppColors.error),
-                      ),
-                      minimumSize: Size(double.infinity, 48.h),
-                    ),
-                    child: Text(
-                      'Log Out',
-                      style: TextStyle(
-                        fontSize: 16.sp,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
+                    backgroundColor: Colors.red,
+                    textColor: Colors.white,
+                    height: 56.h,
+                    width: double.infinity,
                   ),
                 ],
               ),
