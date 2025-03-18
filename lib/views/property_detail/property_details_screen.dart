@@ -15,6 +15,7 @@ class PropertyDetailsScreen extends StatefulWidget {
   final String propertyId;
   final Property property;
 
+
   const PropertyDetailsScreen({
     super.key,
     required this.propertyId,
@@ -27,6 +28,13 @@ class PropertyDetailsScreen extends StatefulWidget {
 
 class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
   int _selectedImageIndex = 0;
+  bool _isFavorite = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _isFavorite = Property.favoritePropertyIds.contains(widget.property.id);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -57,9 +65,12 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                   radius: 18.r,
                   backgroundColor: AppColors.surface.withOpacity(0.5),
                   child: IconButton(
-                    icon: const Icon(Icons.favorite_border, size: 18),
-                    color: AppColors.textPrimary,
-                    onPressed: () {},
+                    icon: Icon(
+                      _isFavorite ? Icons.favorite : Icons.favorite_border,
+                      size: 18,
+                      color: _isFavorite ? Colors.red : AppColors.textPrimary,
+                    ),
+                    onPressed: _toggleFavorite,
                     padding: EdgeInsets.zero,
                   ),
                 ),
@@ -277,6 +288,23 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
             const SnackBar(content: Text('Thank you for your rating!')),
           );
         },
+      ),
+    );
+  }
+
+  void _toggleFavorite() {
+    setState(() {
+      Property.toggleFavorite(widget.property.id);
+      _isFavorite = !_isFavorite;
+    });
+    
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(_isFavorite 
+          ? 'Added to favorites' 
+          : 'Removed from favorites'),
+        duration: const Duration(seconds: 1),
+        behavior: SnackBarBehavior.floating,
       ),
     );
   }

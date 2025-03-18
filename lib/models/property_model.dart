@@ -17,6 +17,21 @@ class Property {
   final double longitude;
   final String type; 
 
+  // Add a static list to track favorite properties
+  static List<String> favoritePropertyIds = [];
+  
+  // Add a method to check if a property is favorited
+  bool get isFavorite => favoritePropertyIds.contains(id);
+  
+  // Add a method to toggle favorite status
+  static void toggleFavorite(String propertyId) {
+    if (favoritePropertyIds.contains(propertyId)) {
+      favoritePropertyIds.remove(propertyId);
+    } else {
+      favoritePropertyIds.add(propertyId);
+    }
+  }
+
   Property({
     required this.id,
     required this.ownerId,
