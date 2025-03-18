@@ -62,6 +62,7 @@ class PaymentMethodsScreen extends StatelessWidget {
               ),
               SizedBox(height: 24.h),
               _buildPaymentMethodCard(
+                context: context,
                 icon: Icons.credit_card,
                 cardType: 'Visa',
                 lastDigits: '4567',
@@ -70,6 +71,7 @@ class PaymentMethodsScreen extends StatelessWidget {
               ),
               SizedBox(height: 16.h),
               _buildPaymentMethodCard(
+                context: context,
                 icon: Icons.credit_card,
                 cardType: 'Mastercard',
                 lastDigits: '8901',
@@ -115,6 +117,7 @@ class PaymentMethodsScreen extends StatelessWidget {
   }
 
   Widget _buildPaymentMethodCard({
+    required BuildContext context,
     required IconData icon,
     required String cardType,
     required String lastDigits,
@@ -204,11 +207,206 @@ class PaymentMethodsScreen extends StatelessWidget {
               size: 20.sp,
             ),
             onPressed: () {
-              // Show card options
+              _showCardOptions(context, cardType, lastDigits, isDefault);
             },
           ),
         ],
       ),
     );
   }
+
+void _showCardOptions(BuildContext context, String cardType, String lastDigits, bool isDefault) {
+  showModalBottomSheet(
+    context: context,
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
+    ),
+    builder: (context) => Container(
+      padding: EdgeInsets.symmetric(vertical: 24.h),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16.w),
+            child: Row(
+              children: [
+                Text(
+                  '$cardType •••• $lastDigits',
+                  style: TextStyle(
+                    fontSize: 18.sp,
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.textPrimary,
+                  ),
+                ),
+                const Spacer(),
+                IconButton(
+                  icon: Icon(
+                    Icons.close,
+                    color: AppColors.textSecondary,
+                    size: 24.sp,
+                  ),
+                  onPressed: () => Navigator.pop(context),
+                ),
+              ],
+            ),
+          ),
+          const Divider(),
+          _buildOptionItem(
+            context,
+            icon: Icons.check_circle_outline,
+            title: 'Set as Default',
+            subtitle: 'Use this card for all payments',
+            onTap: () {
+              // Set as default logic
+              Navigator.pop(context);
+              if (!isDefault) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('$cardType •••• $lastDigits set as default payment method'),
+                    backgroundColor: AppColors.primary,
+                  ),
+                );
+              }
+            },
+            isDisabled: isDefault,
+          ),
+          _buildOptionItem(
+            context,
+            icon: Icons.edit_outlined,
+            title: 'Edit Card',
+            subtitle: 'Update card information',
+            onTap: () {
+              Navigator.pop(context);
+              context.push('/profile/payment-methods/edit', extra: {
+                'cardType': cardType,
+                'lastDigits': lastDigits,
+              });
+            },
+          ),
+          _buildOptionItem(
+            context,
+            icon: Icons.delete_outline,
+            title: 'Remove Card',
+            subtitle: 'Delete this payment method',
+            onTap: () {
+              Navigator.pop(context);
+              _showDeleteConfirmation(context, cardType, lastDigits);
+            },
+            isDestructive: true,
+          ),
+        ],
+      ),
+    ),
+  );
+}
+
+Widget _buildOptionItem(
+  BuildContext context, {
+  required IconData icon,
+  required String title,
+  required String subtitle,
+  required VoidCallback onTap,
+  bool isDestructive = false,
+  bool isDisabled = false,
+}) {
+  final Color textColor = isDestructive
+      ? AppColors.error
+      : isDisabled
+          ? AppColors.textSecondary
+          : AppColors.textPrimary;
+
+  return InkWell(
+    onTap: isDisabled ? null : onTap,
+    child: Padding(
+      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+      child: Row(
+        children: [
+          Container(
+            padding: EdgeInsets.all(10.w),
+            decoration: BoxDecoration(
+              color: isDestructive
+                  ? AppColors.error.withOpacity(0.1)
+                  : isDisabled
+                      ? Colors.grey.withOpacity(0.1)
+                      : AppColors.primary.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(10.r),
+            ),
+            child: Icon(
+              icon,
+              color: isDestructive
+                  ? AppColors.error
+                  : isDisabled
+                      ? Colors.grey
+                      : AppColors.primary,
+              size: 20.sp,
+            ),
+          ),
+          SizedBox(width: 16.w),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: TextStyle(
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.w500,
+                    color: textColor,
+                  ),
+                ),
+                SizedBox(height: 2.h),
+                Text(
+                  subtitle,
+                  style: TextStyle(
+                    fontSize: 12.sp,
+                    color: AppColors.textSecondary,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
+}
+
+void _showDeleteConfirmation(BuildContext context, String cardType, String lastDigits) {
+  showDialog(
+    context: context,
+    builder: (context) => AlertDialog(
+      title: Text('Remove Card'),
+      content: Text('Are you sure you want to remove $cardType •••• $lastDigits?'),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(context),
+          child: Text(
+            'Cancel',
+            style: TextStyle(
+              color: AppColors.textSecondary,
+            ),
+          ),
+        ),
+        TextButton(
+          onPressed: () {
+            Navigator.pop(context);
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('$cardType •••• $lastDigits has been removed'),
+                backgroundColor: AppColors.error,
+              ),
+            );
+          },
+          child: Text(
+            'Remove',
+            style: TextStyle(
+              color: AppColors.error,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+      ],
+    ),
+  );
+}
 }
