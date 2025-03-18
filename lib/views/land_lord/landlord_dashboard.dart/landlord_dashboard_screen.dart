@@ -3,11 +3,14 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:home_rental_app/models/booking_model.dart';
 import 'package:intl/intl.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:shimmer/shimmer.dart';
 import '../../../core/constants/color_constants.dart';
 import '../../../widgets/common/page_layout.dart';
 import '../../../controllers/property_controller.dart';
 import '../../../controllers/booking_controller.dart';
 import '../../../widgets/property/property_card.dart';
+
 
 class LandlordDashboardScreen extends StatelessWidget {
   final _propertyController = PropertyController();
@@ -190,6 +193,21 @@ class _BookingItem extends StatelessWidget {
 
   const _BookingItem({required this.booking});
 
+  Widget _buildShimmerEffect() {
+    return Shimmer.fromColors(
+      baseColor: Colors.grey[300]!,
+      highlightColor: Colors.grey[100]!,
+      child: Container(
+        width: 70.w,
+        height: 70.h,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12.r),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -212,19 +230,24 @@ class _BookingItem extends StatelessWidget {
           padding: EdgeInsets.all(12.w),
           child: Row(
             children: [
-              // Property Image
+              // Property Image with Shimmer
               ClipRRect(
                 borderRadius: BorderRadius.circular(12.r),
-                child: Image.network(
-                  booking.property.imageUrl,
+                child: CachedNetworkImage(
+                  imageUrl: booking.property.imageUrl,
                   width: 70.w,
                   height: 70.h,
                   fit: BoxFit.cover,
-                  errorBuilder: (_, __, ___) => Container(
+                  placeholder: (context, url) => _buildShimmerEffect(),
+                  errorWidget: (context, url, error) => Container(
                     width: 70.w,
                     height: 70.h,
                     color: Colors.grey[200],
-                    child: Icon(Icons.image_not_supported, color: Colors.grey),
+                    child: Icon(
+                      Icons.image_not_supported, 
+                      color: Colors.grey,
+                      size: 24.sp,
+                    ),
                   ),
                 ),
               ),
