@@ -79,7 +79,14 @@ class PaymentMethodsScreen extends StatelessWidget {
               ),
               SizedBox(height: 32.h),
               ElevatedButton(
-                onPressed: () => context.push('/profile/payment-methods/add'),
+                onPressed: () {
+                  final isLandlord = context.canPop() && 
+                      GoRouterState.of(context).uri.toString().contains('/landlord');
+                  
+                  context.push(isLandlord 
+                      ? '/landlord/profile/payment-methods/add'
+                      : '/profile/payment-methods/add');
+                },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.primary,
                   minimumSize: Size(double.infinity, 56.h),
@@ -341,10 +348,18 @@ void _showCardOptions(BuildContext context, String cardType, String lastDigits, 
                   subtitle: 'Update card information',
                   onTap: () {
                     Navigator.pop(context);
-                    context.push('/profile/payment-methods/edit', extra: {
-                      'cardType': cardType,
-                      'lastDigits': lastDigits,
-                    });
+                    final isLandlord = context.canPop() && 
+                        GoRouterState.of(context).uri.toString().contains('/landlord');
+                    
+                    context.push(
+                      isLandlord 
+                          ? '/landlord/profile/payment-methods/edit'
+                          : '/profile/payment-methods/edit',
+                      extra: {
+                        'cardType': cardType,
+                        'lastDigits': lastDigits,
+                      },
+                    );
                   },
                 ),
                 Divider(height: 1, indent: 56.w, endIndent: 24.w, color: Colors.grey.withOpacity(0.1)),

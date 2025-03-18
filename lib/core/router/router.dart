@@ -111,6 +111,17 @@ final router = GoRouter(
               builder: (context, state) => const AddPaymentMethodScreen(),
             ),
             GoRoute(
+              path: 'payment-methods/edit',
+              builder: (context, state) {
+                final cardData = state.extra as Map<String, String>;
+                return AddPaymentMethodScreen(
+                  isEditing: true,
+                  cardType: cardData['cardType'] ?? '',
+                  lastDigits: cardData['lastDigits'] ?? '',
+                );
+              },
+            ),
+            GoRoute(
               path: 'help-center',
               builder: (context, state) => const HelpCenterScreen(),
             ),
@@ -177,6 +188,39 @@ final router = GoRouter(
         GoRoute(
           path: '/landlord/profile',
           builder: (context, state) => const LandlordProfileScreen(),
+          routes: [
+            GoRoute(
+              path: 'personal-information',
+              builder: (context, state) => const PersonalInformationScreen(),
+            ),
+            GoRoute(
+              path: 'payment-methods',
+              builder: (context, state) => const PaymentMethodsScreen(),
+            ),
+            GoRoute(
+              path: 'payment-methods/add',
+              builder: (context, state) => const AddPaymentMethodScreen(),
+            ),
+            GoRoute(
+              path: 'payment-methods/edit',
+              builder: (context, state) {
+                final cardData = state.extra as Map<String, String>;
+                return AddPaymentMethodScreen(
+                  isEditing: true,
+                  cardType: cardData['cardType'] ?? '',
+                  lastDigits: cardData['lastDigits'] ?? '',
+                );
+              },
+            ),
+            GoRoute(
+              path: 'help-center',
+              builder: (context, state) => const HelpCenterScreen(),
+            ),
+            GoRoute(
+              path: 'privacy-policy',
+              builder: (context, state) => const PrivacyPolicyScreen(),
+            ),
+          ],
         ),
       ],
     ),

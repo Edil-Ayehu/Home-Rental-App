@@ -4,7 +4,16 @@ import 'package:go_router/go_router.dart';
 import '../../core/constants/color_constants.dart';
 
 class AddPaymentMethodScreen extends StatefulWidget {
-  const AddPaymentMethodScreen({super.key});
+  final bool isEditing;
+  final String cardType;
+  final String lastDigits;
+
+  const AddPaymentMethodScreen({
+    super.key,
+    this.isEditing = false,
+    this.cardType = '',
+    this.lastDigits = '',
+  });
 
   @override
   State<AddPaymentMethodScreen> createState() => _AddPaymentMethodScreenState();
@@ -12,6 +21,37 @@ class AddPaymentMethodScreen extends StatefulWidget {
 
 class _AddPaymentMethodScreenState extends State<AddPaymentMethodScreen> {
   final _formKey = GlobalKey<FormState>();
+  late final TextEditingController _cardNumberController;
+  late final TextEditingController _expiryDateController;
+  late final TextEditingController _cvvController;
+  late final TextEditingController _nameController;
+  
+  @override
+  void initState() {
+    super.initState();
+    _cardNumberController = TextEditingController();
+    _expiryDateController = TextEditingController();
+    _cvvController = TextEditingController();
+    _nameController = TextEditingController();
+    
+    // Pre-fill data if editing
+    if (widget.isEditing) {
+      // For security, we don't pre-fill the actual card number
+      // Just show the last 4 digits
+      _cardNumberController.text = widget.lastDigits.isNotEmpty 
+          ? '•••• •••• •••• ${widget.lastDigits}'
+          : '';
+    }
+  }
+  
+  @override
+  void dispose() {
+    _cardNumberController.dispose();
+    _expiryDateController.dispose();
+    _cvvController.dispose();
+    _nameController.dispose();
+    super.dispose();
+  }
   
   @override
   Widget build(BuildContext context) {
@@ -35,7 +75,7 @@ class _AddPaymentMethodScreenState extends State<AddPaymentMethodScreen> {
           ),
           onPressed: () => context.pop(),
         ),
-        title: const Text('Add Payment Method'),
+        title: Text(widget.isEditing ? 'Edit Payment Method' : 'Add Payment Method'),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -49,6 +89,8 @@ class _AddPaymentMethodScreenState extends State<AddPaymentMethodScreen> {
                   label: 'Card Number',
                   prefixIcon: Icons.credit_card,
                   keyboardType: TextInputType.number,
+                  controller: _cardNumberController,
+                  readOnly: widget.isEditing, // Make read-only if editing
                 ),
                 SizedBox(height: 16.h),
                 Row(
@@ -58,6 +100,7 @@ class _AddPaymentMethodScreenState extends State<AddPaymentMethodScreen> {
                         label: 'Expiry Date',
                         prefixIcon: Icons.calendar_today,
                         keyboardType: TextInputType.datetime,
+                        controller: _expiryDateController,
                       ),
                     ),
                     SizedBox(width: 16.w),
@@ -66,6 +109,7 @@ class _AddPaymentMethodScreenState extends State<AddPaymentMethodScreen> {
                         label: 'CVV',
                         prefixIcon: Icons.lock_outline,
                         keyboardType: TextInputType.number,
+                        controller: _cvvController,
                       ),
                     ),
                   ],
@@ -74,12 +118,25 @@ class _AddPaymentMethodScreenState extends State<AddPaymentMethodScreen> {
                 _buildTextField(
                   label: 'Cardholder Name',
                   prefixIcon: Icons.person_outline,
+                  controller: _nameController,
                 ),
                 SizedBox(height: 32.h),
                 ElevatedButton(
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
                       // Save card logic here
+                      
+                      // Show success message
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(widget.isEditing 
+                            ? 'Card updated successfully' 
+                            : 'Card added successfully'),
+                          backgroundColor: AppColors.primary,
+                          behavior: SnackBarBehavior.floating,
+                        ),
+                      );
+                      
                       context.pop();
                     }
                   },
@@ -93,7 +150,7 @@ class _AddPaymentMethodScreenState extends State<AddPaymentMethodScreen> {
                     shadowColor: AppColors.primary.withOpacity(0.3),
                   ),
                   child: Text(
-                    'Add Card',
+                    widget.isEditing ? 'Update Card' : 'Add Card',
                     style: TextStyle(
                       color: AppColors.surface,
                       fontSize: 16.sp,
@@ -113,9 +170,13 @@ class _AddPaymentMethodScreenState extends State<AddPaymentMethodScreen> {
     required String label,
     required IconData prefixIcon,
     TextInputType? keyboardType,
+    required TextEditingController controller,
+    bool readOnly = false,
   }) {
     return TextFormField(
+      controller: controller,
       keyboardType: keyboardType,
+      readOnly: readOnly,
       style: TextStyle(
         fontSize: 16.sp,
         color: AppColors.textPrimary,
