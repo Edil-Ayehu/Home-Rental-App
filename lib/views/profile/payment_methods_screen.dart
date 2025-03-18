@@ -218,81 +218,172 @@ class PaymentMethodsScreen extends StatelessWidget {
 void _showCardOptions(BuildContext context, String cardType, String lastDigits, bool isDefault) {
   showModalBottomSheet(
     context: context,
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
-    ),
+    isScrollControlled: true,
+    backgroundColor: Colors.white,
     builder: (context) => Container(
-      padding: EdgeInsets.symmetric(vertical: 24.h),
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24.r)),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.1),
+            blurRadius: 10,
+            offset: const Offset(0, -5),
+          ),
+        ],
+      ),
+      padding: EdgeInsets.only(
+        top: 16.h,
+        bottom: MediaQuery.of(context).padding.bottom + 16.h,
+      ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
+          // Handle bar
+          Container(
+            width: 40.w,
+            height: 4.h,
+            margin: EdgeInsets.only(bottom: 16.h),
+            decoration: BoxDecoration(
+              color: Colors.grey.withOpacity(0.3),
+              borderRadius: BorderRadius.circular(2.r),
+            ),
+          ),
+          
+          // Card info header
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16.w),
+            padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 8.h),
             child: Row(
               children: [
-                Text(
-                  '$cardType •••• $lastDigits',
-                  style: TextStyle(
-                    fontSize: 18.sp,
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.textPrimary,
+                Container(
+                  padding: EdgeInsets.all(10.w),
+                  decoration: BoxDecoration(
+                    color: AppColors.primary.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(12.r),
                   ),
-                ),
-                const Spacer(),
-                IconButton(
-                  icon: Icon(
-                    Icons.close,
-                    color: AppColors.textSecondary,
+                  child: Icon(
+                    Icons.credit_card,
+                    color: AppColors.primary,
                     size: 24.sp,
                   ),
-                  onPressed: () => Navigator.pop(context),
+                ),
+                SizedBox(width: 16.w),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      '$cardType •••• $lastDigits',
+                      style: TextStyle(
+                        fontSize: 18.sp,
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.textPrimary,
+                      ),
+                    ),
+                    if (isDefault)
+                      Container(
+                        margin: EdgeInsets.only(top: 4.h),
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 8.w,
+                          vertical: 2.h,
+                        ),
+                        decoration: BoxDecoration(
+                          color: AppColors.primary.withOpacity(0.1),
+                          borderRadius: BorderRadius.circular(4.r),
+                        ),
+                        child: Text(
+                          'Default',
+                          style: TextStyle(
+                            fontSize: 12.sp,
+                            color: AppColors.primary,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                  ],
                 ),
               ],
             ),
           ),
-          const Divider(),
-          _buildOptionItem(
-            context,
-            icon: Icons.check_circle_outline,
-            title: 'Set as Default',
-            subtitle: 'Use this card for all payments',
-            onTap: () {
-              // Set as default logic
-              Navigator.pop(context);
-              if (!isDefault) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text('$cardType •••• $lastDigits set as default payment method'),
-                    backgroundColor: AppColors.primary,
+          
+          SizedBox(height: 16.h),
+          Divider(height: 1, thickness: 1, color: Colors.grey.withOpacity(0.1)),
+          
+          // Options
+          Padding(
+            padding: EdgeInsets.symmetric(vertical: 8.h),
+            child: Column(
+              children: [
+                if (!isDefault)
+                  _buildOptionItem(
+                    context,
+                    icon: Icons.check_circle_outline,
+                    title: 'Set as Default',
+                    subtitle: 'Use this card for all payments',
+                    onTap: () {
+                      Navigator.pop(context);
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('$cardType •••• $lastDigits set as default payment method'),
+                          backgroundColor: AppColors.primary,
+                          behavior: SnackBarBehavior.floating,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.r),
+                          ),
+                          margin: EdgeInsets.all(16),
+                        ),
+                      );
+                    },
                   ),
-                );
-              }
-            },
-            isDisabled: isDefault,
+                _buildOptionItem(
+                  context,
+                  icon: Icons.edit_outlined,
+                  title: 'Edit Card',
+                  subtitle: 'Update card information',
+                  onTap: () {
+                    Navigator.pop(context);
+                    context.push('/profile/payment-methods/edit', extra: {
+                      'cardType': cardType,
+                      'lastDigits': lastDigits,
+                    });
+                  },
+                ),
+                Divider(height: 1, indent: 56.w, endIndent: 24.w, color: Colors.grey.withOpacity(0.1)),
+                _buildOptionItem(
+                  context,
+                  icon: Icons.delete_outline,
+                  title: 'Remove Card',
+                  subtitle: 'Delete this payment method',
+                  onTap: () {
+                    Navigator.pop(context);
+                    _showDeleteConfirmation(context, cardType, lastDigits);
+                  },
+                  isDestructive: true,
+                ),
+              ],
+            ),
           ),
-          _buildOptionItem(
-            context,
-            icon: Icons.edit_outlined,
-            title: 'Edit Card',
-            subtitle: 'Update card information',
-            onTap: () {
-              Navigator.pop(context);
-              context.push('/profile/payment-methods/edit', extra: {
-                'cardType': cardType,
-                'lastDigits': lastDigits,
-              });
-            },
-          ),
-          _buildOptionItem(
-            context,
-            icon: Icons.delete_outline,
-            title: 'Remove Card',
-            subtitle: 'Delete this payment method',
-            onTap: () {
-              Navigator.pop(context);
-              _showDeleteConfirmation(context, cardType, lastDigits);
-            },
-            isDestructive: true,
+          
+          // Cancel button
+          Padding(
+            padding: EdgeInsets.fromLTRB(24.w, 8.h, 24.w, 8.h),
+            child: TextButton(
+              onPressed: () => Navigator.pop(context),
+              style: TextButton.styleFrom(
+                backgroundColor: Colors.grey.withOpacity(0.1),
+                minimumSize: Size(double.infinity, 50.h),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12.r),
+                ),
+              ),
+              child: Text(
+                'Cancel',
+                style: TextStyle(
+                  fontSize: 16.sp,
+                  fontWeight: FontWeight.w500,
+                  color: AppColors.textSecondary,
+                ),
+              ),
+            ),
           ),
         ],
       ),
@@ -318,7 +409,7 @@ Widget _buildOptionItem(
   return InkWell(
     onTap: isDisabled ? null : onTap,
     child: Padding(
-      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+      padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 16.h),
       child: Row(
         children: [
           Container(
@@ -329,7 +420,7 @@ Widget _buildOptionItem(
                   : isDisabled
                       ? Colors.grey.withOpacity(0.1)
                       : AppColors.primary.withOpacity(0.1),
-              borderRadius: BorderRadius.circular(10.r),
+              borderRadius: BorderRadius.circular(12.r),
             ),
             child: Icon(
               icon,
@@ -338,7 +429,7 @@ Widget _buildOptionItem(
                   : isDisabled
                       ? Colors.grey
                       : AppColors.primary,
-              size: 20.sp,
+              size: 22.sp,
             ),
           ),
           SizedBox(width: 16.w),
@@ -350,20 +441,29 @@ Widget _buildOptionItem(
                   title,
                   style: TextStyle(
                     fontSize: 16.sp,
-                    fontWeight: FontWeight.w500,
+                    fontWeight: FontWeight.w600,
                     color: textColor,
                   ),
                 ),
-                SizedBox(height: 2.h),
+                SizedBox(height: 4.h),
                 Text(
                   subtitle,
                   style: TextStyle(
-                    fontSize: 12.sp,
+                    fontSize: 13.sp,
                     color: AppColors.textSecondary,
                   ),
                 ),
               ],
             ),
+          ),
+          Icon(
+            Icons.chevron_right,
+            color: isDestructive
+                ? AppColors.error.withOpacity(0.5)
+                : isDisabled
+                    ? Colors.grey.withOpacity(0.3)
+                    : AppColors.textSecondary,
+            size: 20.sp,
           ),
         ],
       ),
