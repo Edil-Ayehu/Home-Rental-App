@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:shimmer/shimmer.dart';
 import '../../core/constants/color_constants.dart';
 import '../../widgets/common/page_layout.dart';
 import '../../controllers/booking_controller.dart';
@@ -179,6 +181,24 @@ class _BookingCard extends StatelessWidget {
 
   const _BookingCard({required this.booking});
 
+  Widget _buildShimmerEffect() {
+    return Shimmer.fromColors(
+      baseColor: Colors.grey[300]!,
+      highlightColor: Colors.grey[100]!,
+      child: Container(
+        height: 150.h,
+        width: double.infinity,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(16.r),
+            topRight: Radius.circular(16.r),
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -197,22 +217,27 @@ class _BookingCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Property Image
+          // Property Image with Shimmer
           ClipRRect(
             borderRadius: BorderRadius.only(
               topLeft: Radius.circular(16.r),
               topRight: Radius.circular(16.r),
             ),
-            child: Image.network(
-              booking.property.imageUrl,
+            child: CachedNetworkImage(
+              imageUrl: booking.property.imageUrl,
               height: 150.h,
               width: double.infinity,
               fit: BoxFit.cover,
-              errorBuilder: (_, __, ___) => Container(
+              placeholder: (context, url) => _buildShimmerEffect(),
+              errorWidget: (context, url, error) => Container(
                 height: 150.h,
                 color: Colors.grey[200],
                 child: Center(
-                  child: Icon(Icons.image_not_supported, color: Colors.grey),
+                  child: Icon(
+                    Icons.image_not_supported, 
+                    color: Colors.grey,
+                    size: 32.sp,
+                  ),
                 ),
               ),
             ),
