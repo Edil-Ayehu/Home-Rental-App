@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import '../../core/constants/color_constants.dart';
 import '../../widgets/common/custom_button.dart';
+import '../../widgets/common/logout_dialog.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -86,28 +87,28 @@ class ProfileScreen extends StatelessWidget {
                     ],
                   ),
                   SizedBox(height: 16.h),
-                  _buildCard(
-                    title: 'Settings',
-                    items: [
-                      _MenuItem(
-                        icon: Icons.language_outlined,
-                        title: 'Language',
-                        subtitle: 'English',
-                        onTap: () {},
-                      ),
-                      _MenuItem(
-                        icon: Icons.dark_mode_outlined,
-                        title: 'Dark Mode',
-                        trailing: Switch(
-                          value: false,
-                          onChanged: (value) {},
-                          activeColor: AppColors.primary,
-                        ),
-                        onTap: () {},
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 16.h),
+                  // _buildCard(
+                  //   title: 'Settings',
+                  //   items: [
+                  //     _MenuItem(
+                  //       icon: Icons.language_outlined,
+                  //       title: 'Language',
+                  //       subtitle: 'English',
+                  //       onTap: () {},
+                  //     ),
+                  //     _MenuItem(
+                  //       icon: Icons.dark_mode_outlined,
+                  //       title: 'Dark Mode',
+                  //       trailing: Switch(
+                  //         value: false,
+                  //         onChanged: (value) {},
+                  //         activeColor: AppColors.primary,
+                  //       ),
+                  //       onTap: () {},
+                  //     ),
+                  //   ],
+                  // ),
+                  // SizedBox(height: 16.h),
                   _buildCard(
                     title: 'Support',
                     items: [
@@ -126,7 +127,7 @@ class ProfileScreen extends StatelessWidget {
                   SizedBox(height: 24.h),
                   CustomButton(
                     text: 'Log Out',
-                    onPressed: () => _showLogoutDialog(context),
+                    onPressed: () => showLogoutDialog(context),
                     backgroundColor: Colors.red,
                     textColor: Colors.white,
                     height: 56.h,
@@ -138,68 +139,6 @@ class ProfileScreen extends StatelessWidget {
           ),
         ],
       ),
-    );
-  }
-
-  void _showLogoutDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          backgroundColor: AppColors.surface,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16.r),
-          ),
-          title: Text(
-            'Logout',
-            style: TextStyle(
-              color: AppColors.textPrimary,
-              fontSize: 18.sp,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-          content: Text(
-            'Are you sure you want to logout?',
-            style: TextStyle(
-              color: AppColors.textSecondary,
-              fontSize: 14.sp,
-            ),
-          ),
-          actions: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                TextButton(
-                  onPressed: () => context.pop(),
-                  child: Text(
-                    'Cancel',
-                    style: TextStyle(
-                      color: AppColors.textSecondary,
-                      fontSize: 14.sp,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ),
-                SizedBox(width: 8.w),
-                TextButton(
-                  onPressed: () {
-                    context.pop();
-                    context.go('/auth');
-                  },
-                  child: Text(
-                    'Logout',
-                    style: TextStyle(
-                      color: AppColors.error,
-                      fontSize: 14.sp,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ],
-        );
-      },
     );
   }
 
@@ -297,7 +236,7 @@ class _MenuItem extends StatelessWidget {
               ),
             ),
             trailing ??
-                Icon(
+                const Icon(
                   Icons.chevron_right,
                   color: AppColors.textSecondary,
                 ),

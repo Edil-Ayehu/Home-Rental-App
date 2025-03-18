@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:home_rental_app/widgets/common/custom_button.dart';
+import 'package:home_rental_app/widgets/common/logout_dialog.dart';
 import '../../core/constants/color_constants.dart';
 import '../../models/user_model.dart';
 
 class LandlordProfileScreen extends StatelessWidget {
   const LandlordProfileScreen({super.key});
+
 
   @override
   Widget build(BuildContext context) {
@@ -104,24 +107,13 @@ class LandlordProfileScreen extends StatelessWidget {
                     ],
                   ),
                   SizedBox(height: 24.h),
-                  TextButton(
-                    onPressed: () => _showLogoutDialog(context),
-                    style: TextButton.styleFrom(
-                      foregroundColor: AppColors.error,
-                      padding: EdgeInsets.symmetric(vertical: 12.h),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12.r),
-                        side: const BorderSide(color: AppColors.error),
-                      ),
-                      minimumSize: Size(double.infinity, 48.h),
-                    ),
-                    child: Text(
-                      'Log Out',
-                      style: TextStyle(
-                        fontSize: 16.sp,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
+                  CustomButton(
+                    text: 'Log Out',
+                    onPressed: () => showLogoutDialog(context),
+                    backgroundColor: Colors.red,
+                    textColor: Colors.white,
+                    height: 56.h,
+                    width: double.infinity,
                   ),
                 ],
               ),
@@ -129,68 +121,6 @@ class LandlordProfileScreen extends StatelessWidget {
           ),
         ],
       ),
-    );
-  }
-
-  void _showLogoutDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          backgroundColor: AppColors.surface,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16.r),
-          ),
-          title: Text(
-            'Logout',
-            style: TextStyle(
-              color: AppColors.textPrimary,
-              fontSize: 18.sp,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-          content: Text(
-            'Are you sure you want to logout?',
-            style: TextStyle(
-              color: AppColors.textSecondary,
-              fontSize: 14.sp,
-            ),
-          ),
-          actions: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                TextButton(
-                  onPressed: () => context.pop(),
-                  child: Text(
-                    'Cancel',
-                    style: TextStyle(
-                      color: AppColors.textSecondary,
-                      fontSize: 14.sp,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ),
-                SizedBox(width: 8.w),
-                TextButton(
-                  onPressed: () {
-                    context.pop();
-                    context.go('/auth');
-                  },
-                  child: Text(
-                    'Logout',
-                    style: TextStyle(
-                      color: AppColors.error,
-                      fontSize: 14.sp,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ],
-        );
-      },
     );
   }
 
@@ -268,7 +198,7 @@ class _MenuItem extends StatelessWidget {
                 ),
               ),
             ),
-            Icon(
+            const Icon(
               Icons.chevron_right,
               color: AppColors.textSecondary,
             ),
