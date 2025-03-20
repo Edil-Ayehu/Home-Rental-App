@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:home_rental_app/views/profile/widgets/profile_app_bar.dart';
 import '../../core/constants/color_constants.dart';
 import '../../widgets/common/custom_button.dart';
 import '../../widgets/common/logout_dialog.dart';
@@ -14,51 +15,9 @@ class ProfileScreen extends StatelessWidget {
       backgroundColor: AppColors.background,
       body: CustomScrollView(
         slivers: [
-          SliverAppBar(
-            expandedHeight: 200.h,
-            pinned: true,
-            backgroundColor: AppColors.primary,
-            flexibleSpace: FlexibleSpaceBar(
-              background: Container(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [
-                      AppColors.primary,
-                      AppColors.primary.withOpacity(0.8),
-                    ],
-                  ),
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    CircleAvatar(
-                      radius: 50.r,
-                      backgroundColor: AppColors.surface,
-                      backgroundImage:
-                          const AssetImage('assets/images/user_avatar.jpg'),
-                    ),
-                    SizedBox(height: 12.h),
-                    Text(
-                      'John Doe',
-                      style: TextStyle(
-                        fontSize: 24.sp,
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.surface,
-                      ),
-                    ),
-                    Text(
-                      'john.doe@example.com',
-                      style: TextStyle(
-                        fontSize: 14.sp,
-                        color: AppColors.surface.withOpacity(0.8),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
+          const ProfileAppBar(
+            name: 'John Doe',
+            email: 'john.doe@example.com',
           ),
           SliverToBoxAdapter(
             child: Padding(
@@ -87,28 +46,6 @@ class ProfileScreen extends StatelessWidget {
                     ],
                   ),
                   SizedBox(height: 16.h),
-                  // _buildCard(
-                  //   title: 'Settings',
-                  //   items: [
-                  //     _MenuItem(
-                  //       icon: Icons.language_outlined,
-                  //       title: 'Language',
-                  //       subtitle: 'English',
-                  //       onTap: () {},
-                  //     ),
-                  //     _MenuItem(
-                  //       icon: Icons.dark_mode_outlined,
-                  //       title: 'Dark Mode',
-                  //       trailing: Switch(
-                  //         value: false,
-                  //         onChanged: (value) {},
-                  //         activeColor: AppColors.primary,
-                  //       ),
-                  //       onTap: () {},
-                  //     ),
-                  //   ],
-                  // ),
-                  // SizedBox(height: 16.h),
                   _buildCard(
                     title: 'Support',
                     items: [
